@@ -1,0 +1,68 @@
+/* ---------------------------------------------------------------------------
+   RISINGHUN Design Tokens
+   Concept: "떠오르는 태양" — 어둠에서 빛으로, 아래에서 위로.
+   Colors are used sparingly and directionally: dark at the edges (Hero /
+   Contact), warm neutral in the middle (About / Works), orange/coral/yellow
+   reserved for accents and light only.
+--------------------------------------------------------------------------- */
+
+:root {
+  /* Brand palette */
+  --sun-orange: #ff5a1f;
+  --sun-coral: #ff7452;
+  --sun-yellow: #ffb547;
+  --sun-cream: #fff3e4;
+  --night-brown: #24100b;
+  --charcoal: #171717;
+  --soft-gray: #e9e5df;
+  --pure-white: #ffffff;
+
+  /* Semantic tokens */
+  --bg-dark: var(--charcoal);
+  --bg-dark-alt: var(--night-brown);
+  --bg-light: var(--sun-cream);
+  --bg-neutral: var(--soft-gray);
+  --text-on-dark: var(--sun-cream);
+  --text-on-dark-muted: rgba(255, 243, 228, 0.62);
+  --text-on-light: var(--charcoal);
+  --text-on-light-muted: rgba(23, 23, 23, 0.6);
+  --accent: var(--sun-orange);
+  --accent-soft: var(--sun-coral);
+  --accent-glow: var(--sun-yellow);
+
+  /* Typography */
+  --font-display: "Space Grotesk", "Manrope", -apple-system, sans-serif;
+  --font-body: "Pretendard", "Manrope", -apple-system, sans-serif;
+
+  --fs-hero: clamp(3.2rem, 12vw, 11rem);
+  --fs-section-title: clamp(2rem, 5.2vw, 4.2rem);
+  --fs-xl: clamp(1.5rem, 2.6vw, 2.2rem);
+  --fs-lg: clamp(1.15rem, 1.4vw, 1.4rem);
+  --fs-md: 1.05rem;
+  --fs-base: 0.95rem;
+  --fs-sm: 0.82rem;
+  --fs-xs: 0.72rem;
+
+  --lh-tight: 1.02;
+  --lh-heading: 1.15;
+  --lh-body: 1.7;
+
+  --ls-tight: -0.02em;
+  --ls-wide: 0.14em;
+  --ls-wider: 0.28em;
+
+  /* Spacing */
+  --space-section-y: clamp(5rem, 12vw, 10rem);
+  --space-container-x: clamp(1.5rem, 6vw, 6rem);
+  --max-width: 1440px;
+
+  /* Motion */
+  --ease-rise: cubic-bezier(0.16, 0.8, 0.24, 1);
+  --dur-fast: 0.5s;
+  --dur-base: 0.8s;
+  --dur-slow: 1.2s;
+
+  /* Layering */
+  --z-nav: 100;
+  --z-overlay: 200;
+}

@@ -1,0 +1,230 @@
+/* ---------------------------------------------------------------------------
+   Global reset + base typography + shared layout primitives
+--------------------------------------------------------------------------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--bg-light);
+  color: var(--text-on-light);
+  font-family: var(--font-body);
+  font-size: var(--fs-base);
+  line-height: var(--lh-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+p {
+  margin: 0;
+}
+
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding-left: var(--space-container-x);
+  padding-right: var(--space-container-x);
+}
+
+section {
+  position: relative;
+}
+
+/* Eyebrow / kicker label used above section titles ------------------------ */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  font-family: var(--font-display);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--ls-wider);
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.eyebrow::before {
+  content: "";
+  width: 28px;
+  height: 1px;
+  background: currentColor;
+}
+
+/* Section title mask-reveal (title rises up from within a clipped box) --- */
+.title-mask {
+  overflow: hidden;
+  display: block;
+}
+
+.title-mask > * {
+  display: block;
+  transform: translateY(110%);
+  transition: transform var(--dur-slow) var(--ease-rise);
+}
+
+.reveal.is-visible.title-mask > *,
+.reveal.is-visible .title-mask > * {
+  transform: translateY(0);
+}
+
+/* Generic scroll-reveal: rises + fades in ------------------------------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity var(--dur-base) var(--ease-rise), transform var(--dur-base) var(--ease-rise);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-delay-1 { transition-delay: 0.08s; }
+.reveal-delay-2 { transition-delay: 0.16s; }
+.reveal-delay-3 { transition-delay: 0.24s; }
+.reveal-delay-4 { transition-delay: 0.32s; }
+
+/* Buttons ----------------------------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-display);
+  font-size: var(--fs-sm);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  padding: 0.9rem 1.6rem;
+  border: 1px solid currentColor;
+  border-radius: 2px;
+  transition: background var(--dur-fast) var(--ease-rise), color var(--dur-fast) var(--ease-rise),
+    border-color var(--dur-fast) var(--ease-rise);
+}
+
+.btn-solid {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--charcoal);
+}
+
+.btn-solid:hover {
+  background: var(--sun-coral);
+  border-color: var(--sun-coral);
+}
+
+.btn-outline-light {
+  color: var(--text-on-dark);
+}
+
+.btn-outline-light:hover {
+  background: var(--text-on-dark);
+  color: var(--charcoal);
+}
+
+.btn-outline-dark {
+  color: var(--text-on-light);
+}
+
+.btn-outline-dark:hover {
+  background: var(--text-on-light);
+  color: var(--bg-light);
+}
+
+.btn:focus-visible,
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* Placeholder image block -------------------------------------------------
+   Used everywhere a real project image should eventually go. Clearly
+   labelled so the replacement point is unmistakable in the markup. */
+.img-placeholder {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(150deg, var(--ph-a, #3a3a3a), var(--ph-b, #1c1c1c));
+  color: rgba(255, 255, 255, 0.55);
+  font-family: var(--font-display);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  text-align: center;
+  padding: 1rem;
+  overflow: hidden;
+}
+
+.img-placeholder span {
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  padding: 0.5rem 0.9rem;
+  border-radius: 2px;
+}
+
+/* Page transition: rises the routed page in on every pathname change, so
+   navigating to a new page reads as a clear swap rather than a scroll.
+   Deliberately transform-only (no opacity dip) — an opacity fade on the
+   whole page made hero photos look hazy/washed-out for the transition's
+   duration, which is exactly the complaint this was meant to fix. Motion
+   alone is enough of a "something changed" cue, and it's instant on the
+   content itself. See App.jsx PageTransition. -------------------------- */
+.page-transition {
+  transform: translateY(10px);
+  transition: transform 0.32s var(--ease-rise);
+}
+
+.page-transition.is-visible {
+  transform: translateY(0);
+}
+
+/* Reduced motion ------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .reveal,
+  .title-mask > *,
+  * {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}

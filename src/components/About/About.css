@@ -1,0 +1,119 @@
+.about {
+  background: var(--bg-light);
+  color: var(--text-on-light);
+  padding: var(--space-section-y) 0;
+}
+
+.about__title {
+  font-family: var(--font-display);
+  font-size: var(--fs-section-title);
+  line-height: var(--lh-heading);
+  letter-spacing: var(--ls-tight);
+  margin-top: 1.4rem;
+  max-width: 16ch;
+}
+
+.about__grid {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 4rem;
+  margin-top: 4.5rem;
+}
+
+.about__intro p {
+  font-size: var(--fs-xl);
+  line-height: var(--lh-heading);
+  letter-spacing: var(--ls-tight);
+}
+
+.about__intro strong {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.about__keywords {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin-top: 2.2rem;
+}
+
+.about__keywords li {
+  font-size: var(--fs-sm);
+  letter-spacing: 0.02em;
+  border: 1px solid rgba(23, 23, 23, 0.2);
+  padding: 0.55rem 1rem;
+  border-radius: 999px;
+}
+
+.about__stats {
+  display: flex;
+  flex-direction: column;
+  gap: 1.8rem;
+  border-left: 1px solid rgba(23, 23, 23, 0.14);
+  padding-left: 2.4rem;
+}
+
+.about__stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.about__stat-value {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 3vw, 2.6rem);
+  color: var(--accent);
+  letter-spacing: var(--ls-tight);
+}
+
+.about__stat-label {
+  font-size: var(--fs-sm);
+  color: var(--text-on-light-muted);
+}
+
+.about__foot {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  margin-top: 4.5rem;
+  padding-top: 2.4rem;
+  border-top: 1px solid rgba(23, 23, 23, 0.14);
+}
+
+.about__foot-title {
+  display: block;
+  font-family: var(--font-display);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--ls-wider);
+  text-transform: uppercase;
+  color: var(--text-on-light-muted);
+  margin-bottom: 0.6rem;
+}
+
+.about__foot-col p {
+  font-size: var(--fs-md);
+}
+
+@media (max-width: 1024px) {
+  .about__grid {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  .about__stats {
+    border-left: none;
+    padding-left: 0;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 2.4rem;
+    border-top: 1px solid rgba(23, 23, 23, 0.14);
+    padding-top: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .about__foot {
+    grid-template-columns: 1fr;
+  }
+}

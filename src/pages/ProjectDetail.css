@@ -1,0 +1,434 @@
+.case {
+  background: var(--bg-light);
+}
+
+/* Split hero: photo and title never share the same pixels. Text-over-photo
+   heroes here were unreadable whenever the source image already had its
+   own baked-in marketing copy (client banner photos, campaign creative,
+   etc.) — the fix isn't a darker gradient, it's not stacking text on the
+   photo at all. Image sits on one side, a solid info panel on the other. */
+.case__hero {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  min-height: 560px;
+  color: var(--sun-cream);
+  background: var(--night-brown);
+}
+
+/* Banner-style heroes (heroFit: contain) are much wider than tall, so the
+   default 560px box leaves a big empty strip above/below the image even
+   though nothing is cropped — that empty strip is what read as the image
+   "floating" and disconnected from the info panel. Shrinking the box closer
+   to the image's own proportions keeps it fully visible with barely any
+   letterboxing. */
+.case__hero--banner {
+  min-height: 320px;
+}
+
+.case__hero-media {
+  position: relative;
+  overflow: hidden;
+}
+
+.case__hero-image {
+  position: absolute;
+  inset: 0;
+}
+
+.case__hero-image--real {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Same reasoning as Works.css — these photos have left-aligned headline
+     copy baked in near the left edge, so bias the crop left instead of
+     centering it. */
+  object-position: var(--img-pos, left center);
+  /* Settles from a slight zoom on arrival — opacity stays at 1 the whole
+     time, so the photo is never hazy or washed out, only in motion. */
+  animation: caseHeroImageIn 0.9s var(--ease-rise) both;
+}
+
+/* For hero photos that are wide banner strips rather than a full app/site
+   screenshot — covering the box would crop the headline or the artwork off
+   the sides. Show the whole banner instead, letterboxed on the panel's own
+   dark background so the empty space reads as intentional, not broken. */
+.case__hero-image--contain {
+  object-fit: contain;
+  /* Match the letterbox to the image's own background tone (set per-project
+     via --hero-bg) instead of the site's --night-brown, which is a visibly
+     different, redder brown — that mismatch was the "line"/seam where the
+     image met the panel background. */
+  background: var(--hero-bg, var(--night-brown));
+}
+
+@keyframes caseHeroImageIn {
+  from {
+    transform: scale(1.06);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes caseHeroTextIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.case__hero-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2.5rem;
+  padding: 2.5rem clamp(1.75rem, 3vw, 3rem);
+}
+
+.case__hero-crumb {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  align-self: flex-start;
+  font-family: var(--font-display);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  color: rgba(255, 246, 235, 0.6);
+  animation: caseHeroTextIn 0.6s var(--ease-rise) both;
+}
+
+.case__hero-crumb::before {
+  content: "←";
+}
+
+.case__hero-crumb:hover {
+  color: var(--sun-cream);
+}
+
+.case__number {
+  font-family: var(--font-display);
+  font-size: var(--fs-sm);
+  letter-spacing: var(--ls-wider);
+  color: var(--project-accent, var(--sun-orange));
+  display: inline-block;
+  animation: caseHeroTextIn 0.6s var(--ease-rise) both;
+  animation-delay: 0.05s;
+}
+
+.case__title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 3.4vw, 3.4rem);
+  letter-spacing: var(--ls-tight);
+  line-height: 1.05;
+  margin: 0.6rem 0 0.5rem;
+  animation: caseHeroTextIn 0.6s var(--ease-rise) both;
+  animation-delay: 0.1s;
+}
+
+.case__category {
+  font-size: var(--fs-md);
+  color: var(--text-on-dark-muted);
+  animation: caseHeroTextIn 0.6s var(--ease-rise) both;
+  animation-delay: 0.15s;
+}
+
+.case__hero-meta {
+  display: flex;
+  gap: 1.4rem;
+  margin-top: 1.2rem;
+  font-size: var(--fs-sm);
+  letter-spacing: 0.02em;
+  color: var(--text-on-dark-muted);
+  animation: caseHeroTextIn 0.6s var(--ease-rise) both;
+  animation-delay: 0.2s;
+}
+
+@media (max-width: 900px) {
+  .case__hero {
+    grid-template-columns: 1fr;
+  }
+
+  .case__hero-media {
+    aspect-ratio: 4 / 3;
+  }
+}
+
+.case__body {
+  padding: var(--space-section-y) var(--space-container-x);
+}
+
+.case__section {
+  padding: 3.2rem 0;
+  border-bottom: 1px solid rgba(23, 23, 23, 0.12);
+}
+
+.case__section:first-child {
+  padding-top: 0;
+}
+
+.case__section-title {
+  display: flex;
+  align-items: baseline;
+  gap: 0.9rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 2.4vw, 2rem);
+  letter-spacing: var(--ls-tight);
+  margin-bottom: 1.8rem;
+}
+
+.case__section-num {
+  font-size: var(--fs-sm);
+  color: var(--project-accent, var(--accent));
+}
+
+.case__overview-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 3rem;
+}
+
+.case__overview-desc {
+  font-size: var(--fs-lg);
+  line-height: var(--lh-heading);
+}
+
+.case__overview-facts {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.case__overview-facts div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  border-top: 1px solid rgba(23, 23, 23, 0.14);
+  padding-top: 0.6rem;
+}
+
+.case__overview-facts dt {
+  font-family: var(--font-display);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  color: var(--text-on-light-muted);
+}
+
+.case__overview-facts dd {
+  margin: 0;
+  font-size: var(--fs-md);
+}
+
+.case__statement-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 68ch;
+}
+
+.case__statement-list li {
+  font-size: var(--fs-md);
+  line-height: var(--lh-body);
+  padding-left: 1.4rem;
+  position: relative;
+}
+
+.case__statement-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.65em;
+  width: 6px;
+  height: 1px;
+  background: var(--project-accent, var(--accent));
+}
+
+.case__palette {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+  margin-bottom: 1.6rem;
+}
+
+.case__swatch {
+  min-width: 120px;
+  height: 64px;
+  display: flex;
+  align-items: flex-end;
+  padding: 0.5rem 0.7rem;
+  font-family: var(--font-display);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.02em;
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  border-radius: 2px;
+}
+
+.case__typefaces {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: var(--fs-md);
+  color: var(--text-on-light-muted);
+}
+
+.case__screens {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.6rem;
+}
+
+/* Front/back flyer pages (or any other naturally-paired pair of images) —
+   same two-up layout as the Responsive Screens grid below, so a tall
+   portrait image doesn't run the full width of the page at full height. */
+.case__screens--pair {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+@media (max-width: 900px) {
+  .case__screens--pair {
+    grid-template-columns: 1fr;
+  }
+}
+
+.case__screen-figure {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.case__screen-caption {
+  font-size: var(--fs-sm);
+  color: var(--text-on-light-muted);
+  letter-spacing: 0.01em;
+}
+
+.case__screen {
+  aspect-ratio: 16 / 9;
+}
+
+/* Full-page section captures are taller than 16:9 — cropping them to fit
+   clips content at the top/bottom. Let these grow to their natural height
+   instead, showing the whole screenshot uncropped. */
+.case__screen--auto {
+  aspect-ratio: auto;
+  height: auto;
+}
+
+.case__screen--real,
+.case__responsive-item--real {
+  width: 100%;
+  object-fit: cover;
+  border: 1px solid rgba(23, 23, 23, 0.1);
+}
+
+.case__responsive {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.6rem;
+}
+
+.case__responsive-item {
+  aspect-ratio: 3 / 4;
+}
+
+.case__role {
+  font-size: var(--fs-lg);
+  margin-bottom: 1.2rem;
+}
+
+.case__tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+}
+
+.case__tools li {
+  font-size: var(--fs-sm);
+  border: 1px solid rgba(23, 23, 23, 0.2);
+  padding: 0.5rem 0.9rem;
+  border-radius: 999px;
+}
+
+.case__result {
+  border-bottom: none;
+}
+
+.case__result-text {
+  font-size: var(--fs-lg);
+  line-height: var(--lh-heading);
+  max-width: 68ch;
+}
+
+.case__nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2.5rem 0 1rem;
+  font-family: var(--font-display);
+  font-size: var(--fs-sm);
+  letter-spacing: var(--ls-wide);
+}
+
+.case__back {
+  color: var(--text-on-light-muted);
+}
+
+.case__next {
+  color: var(--project-accent, var(--accent));
+}
+
+@media (max-width: 900px) {
+  .case__overview-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .case__responsive {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .case__nav {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+}
+
+/* 2026 portfolio image polish: consistent media ratio, border and depth */
+.case__screen--real,
+.case__responsive-item--real {
+  display: block;
+  height: 100%;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 18px 48px rgba(23, 23, 23, 0.10);
+}
+
+.case__screen--real {
+  object-fit: cover;
+}
+
+.case__responsive-item--real {
+  object-fit: cover;
+}
+
+@media (max-width: 900px) {
+  .case__responsive-item {
+    aspect-ratio: 3 / 4;
+  }
+}
+
+/* Wins over the "portfolio image polish" block above (same specificity,
+   later in source) so full-page captures actually render at full height
+   instead of being cover-cropped back down to the box. */
+.case__screen--auto.case__screen--real {
+  height: auto;
+  object-fit: contain;
+}

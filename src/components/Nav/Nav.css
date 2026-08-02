@@ -1,0 +1,165 @@
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--z-nav);
+  /* Always backed by a blurred scrim, even before scrolling — a fully
+     transparent nav was sitting directly on top of hero photos/banners
+     with nothing behind it, so the logo/links visually collided with
+     whatever the image underneath happened to show. Scrolling just
+     deepens the same scrim slightly, it doesn't switch it on. */
+  backdrop-filter: blur(10px);
+  transition: background var(--dur-fast) var(--ease-rise);
+}
+
+.nav__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 84px;
+}
+
+.nav__logo {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.05rem;
+  letter-spacing: var(--ls-wide);
+}
+
+.nav__links {
+  display: flex;
+  gap: 2.4rem;
+}
+
+.nav__link {
+  font-family: var(--font-display);
+  font-size: var(--fs-sm);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  position: relative;
+  padding-bottom: 2px;
+}
+
+.nav__link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 1px;
+  background: var(--accent);
+  transition: width var(--dur-fast) var(--ease-rise);
+}
+
+.nav__link:hover::after {
+  width: 100%;
+}
+
+/* Theme swap: text color adapts to whatever section sits behind the nav */
+.nav--on-dark .nav__logo,
+.nav--on-dark .nav__link {
+  color: var(--sun-cream);
+}
+
+.nav--on-light .nav__logo,
+.nav--on-light .nav__link {
+  color: var(--charcoal);
+}
+
+.nav--on-dark {
+  background: rgba(23, 17, 15, 0.42);
+}
+
+.nav--on-light {
+  background: rgba(255, 243, 228, 0.6);
+}
+
+.nav--on-dark.nav--scrolled {
+  background: rgba(23, 17, 15, 0.68);
+}
+
+.nav--on-light.nav--scrolled {
+  background: rgba(255, 243, 228, 0.82);
+}
+
+/* Hamburger toggle --------------------------------------------------------- */
+.nav__toggle {
+  display: none;
+  flex-direction: column;
+  gap: 6px;
+  width: 28px;
+  padding: 0.4rem;
+}
+
+.nav__toggle span {
+  height: 1.5px;
+  width: 100%;
+  background: currentColor;
+  color: inherit;
+  transition: transform var(--dur-fast) var(--ease-rise), opacity var(--dur-fast) var(--ease-rise);
+}
+
+.nav--on-dark .nav__toggle { color: var(--sun-cream); }
+.nav--on-light .nav__toggle { color: var(--charcoal); }
+
+/* Mobile fullscreen menu ---------------------------------------------------- */
+.nav__mobile {
+  position: fixed;
+  inset: 0;
+  background: var(--night-brown);
+  transform: translateY(-100%);
+  transition: transform var(--dur-base) var(--ease-rise);
+  z-index: var(--z-overlay);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.nav__mobile--open {
+  transform: translateY(0);
+}
+
+.nav__mobile-glow {
+  position: absolute;
+  bottom: -30%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 140%;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(255, 90, 31, 0.45), transparent 70%);
+  filter: blur(20px);
+  pointer-events: none;
+}
+
+.nav__mobile-links {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.6rem;
+}
+
+.nav__mobile-links a {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 8vw, 2.6rem);
+  letter-spacing: var(--ls-tight);
+  color: var(--sun-cream);
+  transition: color var(--dur-fast) var(--ease-rise);
+}
+
+.nav__mobile-links a:hover {
+  color: var(--sun-orange);
+}
+
+@media (max-width: 768px) {
+  .nav__links {
+    display: none;
+  }
+
+  .nav__toggle {
+    display: flex;
+  }
+}

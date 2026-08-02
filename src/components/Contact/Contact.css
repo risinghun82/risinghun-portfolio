@@ -1,0 +1,110 @@
+.contact {
+  position: relative;
+  background: linear-gradient(180deg, var(--night-brown) 0%, var(--charcoal) 100%);
+  color: var(--sun-cream);
+  padding: var(--space-section-y) 0 4rem;
+  overflow: hidden;
+}
+
+.contact__glow {
+  position: absolute;
+  top: -10%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(1200px, 130vw);
+  height: 40%;
+  background: radial-gradient(closest-side, rgba(255, 90, 31, 0.35), transparent 72%);
+  filter: blur(10px);
+  pointer-events: none;
+}
+
+.contact__title {
+  font-family: var(--font-display);
+  font-size: var(--fs-section-title);
+  letter-spacing: var(--ls-tight);
+  margin: 1.2rem 0 4rem;
+}
+
+.contact__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2.4rem;
+  border-top: 1px solid rgba(255, 243, 228, 0.18);
+  padding-top: 2.4rem;
+}
+
+.contact__label {
+  display: block;
+  font-family: var(--font-display);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--ls-wider);
+  text-transform: uppercase;
+  color: var(--text-on-dark-muted);
+  margin-bottom: 0.7rem;
+}
+
+.contact__value {
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 1.6vw, 1.35rem);
+  border-bottom: 1px solid transparent;
+  transition: color var(--dur-fast) var(--ease-rise), border-color var(--dur-fast) var(--ease-rise);
+}
+
+.contact__value:hover {
+  color: var(--sun-orange);
+  border-color: var(--sun-orange);
+}
+
+.contact__links {
+  display: flex;
+  gap: 1.2rem;
+}
+
+.contact__links a {
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 1.6vw, 1.35rem);
+  transition: color var(--dur-fast) var(--ease-rise);
+}
+
+.contact__links a:hover {
+  color: var(--sun-orange);
+}
+
+.contact__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 5rem;
+  padding-top: 1.6rem;
+  border-top: 1px solid rgba(255, 243, 228, 0.18);
+  font-size: var(--fs-sm);
+  color: var(--text-on-dark-muted);
+}
+
+.contact__top {
+  color: var(--sun-cream);
+  letter-spacing: var(--ls-wide);
+  transition: color var(--dur-fast) var(--ease-rise);
+}
+
+.contact__top:hover {
+  color: var(--sun-orange);
+}
+
+@media (max-width: 900px) {
+  .contact__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  .contact__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .contact__foot {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.8rem;
+  }
+}

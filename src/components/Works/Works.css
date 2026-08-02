@@ -1,0 +1,211 @@
+.works {
+  background: var(--bg-light);
+  padding: var(--space-section-y) 0;
+}
+
+.works__head {
+  margin-bottom: 4rem;
+}
+
+.works__head-row {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2.6rem;
+  margin-top: 1.2rem;
+}
+
+.works__title {
+  font-family: var(--font-display);
+  font-size: var(--fs-section-title);
+  letter-spacing: var(--ls-tight);
+}
+
+.works__lede {
+  font-size: var(--fs-md);
+  line-height: var(--lh-heading);
+  color: var(--text-on-light-muted);
+  text-align: left;
+  max-width: 42ch;
+  border-left: 2px solid var(--accent);
+  padding-left: 1.2rem;
+  margin-bottom: 2rem;
+}
+
+.works__list {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(3.5rem, 7vw, 6rem);
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--space-container-x);
+}
+
+.works__list > li {
+  position: relative;
+}
+
+.work-item {
+  display: grid;
+  grid-template-columns: 1.35fr 0.9fr;
+  align-items: stretch;
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+}
+
+.work-item--reverse {
+  direction: rtl;
+}
+
+.work-item--reverse .work-item__media,
+.work-item--reverse .work-item__info {
+  direction: ltr;
+}
+
+.work-item__media {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  cursor: none;
+}
+
+.work-item__media .img-placeholder,
+.work-item__image {
+  transition: transform var(--dur-base) var(--ease-rise);
+}
+
+.work-item__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.work-item:hover .work-item__image,
+.work-item:hover .img-placeholder {
+  transform: scale(1.02) translateY(-6px);
+}
+
+.work-item__cursor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate(-100px, -100px);
+  background: var(--sun-orange);
+  color: var(--charcoal);
+  font-family: var(--font-display);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--ls-wide);
+  padding: 0.55rem 1rem;
+  border-radius: 999px;
+  opacity: 0;
+  transition: opacity var(--dur-fast) var(--ease-rise);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.work-item__cursor.is-visible {
+  opacity: 1;
+}
+
+.work-item__info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.55rem;
+}
+
+.work-item__number {
+  font-family: var(--font-display);
+  font-size: var(--fs-sm);
+  letter-spacing: var(--ls-wide);
+  color: var(--text-on-light-muted);
+  transition: color var(--dur-fast) var(--ease-rise);
+}
+
+.work-item:hover .work-item__number {
+  color: var(--project-accent, var(--accent));
+}
+
+.work-item__title {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  letter-spacing: var(--ls-tight);
+  color: var(--text-on-light);
+}
+
+.work-item__category {
+  font-size: var(--fs-md);
+  color: var(--text-on-light-muted);
+}
+
+.work-item__summary {
+  font-size: var(--fs-base);
+  color: var(--text-on-light-muted);
+  max-width: 42ch;
+  margin-top: 0.4rem;
+}
+
+.work-item__meta {
+  display: flex;
+  gap: 1rem;
+  font-size: var(--fs-sm);
+  letter-spacing: 0.02em;
+  color: var(--text-on-light-muted);
+  margin-top: 0.6rem;
+}
+
+.work-item__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1.4rem;
+  font-family: var(--font-display);
+  font-size: var(--fs-sm);
+  letter-spacing: var(--ls-wide);
+}
+
+.work-item__link span {
+  transition: transform var(--dur-fast) var(--ease-rise), color var(--dur-fast) var(--ease-rise);
+}
+
+.work-item:hover .work-item__link span {
+  transform: translateX(4px);
+  color: var(--project-accent, var(--accent));
+}
+
+@media (max-width: 900px) {
+  .works__lede {
+    max-width: none;
+  }
+
+  .work-item,
+  .work-item--reverse {
+    grid-template-columns: 1fr;
+    direction: ltr;
+  }
+
+  .work-item__media {
+    aspect-ratio: 4 / 3;
+    cursor: auto;
+  }
+
+  .work-item__cursor {
+    display: none;
+  }
+}
+
+/* Art-directed project thumbnails: reduce destructive cropping of 16:9 UI captures. */
+.work-item__media {
+  aspect-ratio: 16 / 10;
+  border-radius: 8px;
+  background: #ece9e3;
+  box-shadow: 0 16px 42px rgba(23, 23, 23, 0.08);
+}
+
+/* The source photos are full hero screenshots with their own left-aligned
+   headline copy baked in near the left edge. Centering the crop sliced
+   straight through that text ("CURATED OUTDOOR GEAR" → "OOR GEAR"). Biasing
+   the crop left keeps the headline intact and just trims more off the
+   right side, which is usually empty sky/background in these shots. */
+.work-item__image {
+  object-position: var(--img-pos, left center);
+}
