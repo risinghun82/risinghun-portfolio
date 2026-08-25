@@ -15,8 +15,7 @@ export const projects = [
     title: "Ppasak Camping",
     category: "E-commerce Website Redesign",
     role: "Web Design / UI·UX / Publishing",
-    // TODO: 실제 기여도로 바꿔주세요. 예: "기획 40% · UI디자인 40% · 퍼블리싱 20%"
-    contribution: "__%",
+    contribution: "100% (기획·디자인·퍼블리싱 단독 진행)",
     year: "2026",
     accent: "#B5652E",
     // This project uses real screenshots instead of color placeholders —
@@ -76,8 +75,7 @@ export const projects = [
     title: "NODEN",
     category: "D2C Product Brand Website (개인 프로젝트)",
     role: "Web Design / UI Design / Publishing",
-    // TODO: 실제 기여도로 바꿔주세요. 예: "기획 40% · UI디자인 40% · 퍼블리싱 20%"
-    contribution: "__%",
+    contribution: "100% (기획·디자인·퍼블리싱 단독 진행)",
     year: "2026",
     accent: "#2B3742",
     // The hero photo's headline + CTA block sits in the lower half of the
@@ -147,8 +145,7 @@ export const projects = [
     title: "Gimesee",
     category: "In-house Messaging Service · Web/UI Design",
     role: "Web Design / UI·UX / Publishing / Brand Content",
-    // TODO: 실제 기여도로 바꿔주세요. 예: "기획 40% · UI디자인 40% · 퍼블리싱 20%"
-    contribution: "__%",
+    contribution: "기획 90% · 디자인 100% · 퍼블리싱 100%",
     year: "2026",
     accent: "#159895",
     // Real screenshots + real promotional creative — see Works.jsx / ProjectDetail.jsx.
@@ -217,10 +214,10 @@ export const projects = [
       "/images/project-03-ui-03.jpg",
     ],
     uiScreenCaptions: ["새 메시지 작성", "주소록", "전송 결과 상세"],
-    responsive: [
-      "/images/project-03-responsive-01.jpg",
-      "/images/project-03-responsive-02.jpg",
-    ],
+    // This project does not have a mobile/responsive version — skip the
+    // "Responsive Screens" section entirely on the case study page rather
+    // than showing placeholder or misleading images. See ProjectDetail.jsx.
+    noResponsive: true,
     toolsUsed: [
       "Figma",
       "Photoshop",
