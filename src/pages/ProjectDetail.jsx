@@ -29,6 +29,19 @@ export default function ProjectDetail() {
 
   return (
     <main className="case" style={{ "--project-accent": project.accent }}>
+      {/* Floating back button — stays pinned to the viewport while
+      scrolling through a long case study, so returning to the list never
+      requires scrolling all the way back up or down. */}
+      <Link
+        to="/#works"
+        className="case__float-back"
+        aria-label="이전 화면(Selected Works)으로 돌아가기"
+      >
+        <span className="case__float-back-icon" aria-hidden="true">
+          ←
+        </span>
+      </Link>
+
       {/* 1. Hero — image and title live in separate panels on purpose, so
 the title never overlaps whatever the photo itself contains. */}
       <section
