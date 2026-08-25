@@ -16,7 +16,7 @@ export const projects = [
     category: "E-commerce Website Redesign",
     role: "Web Design / UI·UX / Publishing",
     // TODO: 실제 기여도로 바꿔주세요. 예: "기획 40% · UI디자인 40% · 퍼블리싱 20%"
-    contribution: "기여도 __%",
+    contribution: "__%",
     year: "2026",
     accent: "#B5652E",
     // This project uses real screenshots instead of color placeholders —
@@ -77,7 +77,7 @@ export const projects = [
     category: "D2C Product Brand Website (개인 프로젝트)",
     role: "Web Design / UI Design / Publishing",
     // TODO: 실제 기여도로 바꿔주세요. 예: "기획 40% · UI디자인 40% · 퍼블리싱 20%"
-    contribution: "기여도 __%",
+    contribution: "__%",
     year: "2026",
     accent: "#2B3742",
     // The hero photo's headline + CTA block sits in the lower half of the
@@ -148,7 +148,7 @@ export const projects = [
     category: "In-house Messaging Service · Web/UI Design",
     role: "Web Design / UI·UX / Publishing / Brand Content",
     // TODO: 실제 기여도로 바꿔주세요. 예: "기획 40% · UI디자인 40% · 퍼블리싱 20%"
-    contribution: "기여도 __%",
+    contribution: "__%",
     year: "2026",
     accent: "#159895",
     // Real screenshots + real promotional creative — see Works.jsx / ProjectDetail.jsx.
@@ -239,7 +239,7 @@ export const projects = [
     category: "B2B Service Landing Page",
     role: "Web Design / UI·UX / Publishing",
     // TODO: 실제 기여도로 바꿔주세요. 예: "기획 40% · UI디자인 40% · 퍼블리싱 20%"
-    contribution: "기여도 __%",
+    contribution: "__%",
     year: "2026",
     accent: "#DC3B2B",
     // Real screenshots, same pattern as Projects 01 / 05.
@@ -314,7 +314,7 @@ export const projects = [
     category: "Corporate E-Learning Platform",
     role: "Web Design / UI·UX / Publishing",
     // TODO: 실제 기여도로 바꿔주세요. 예: "기획 40% · UI디자인 40% · 퍼블리싱 20%"
-    contribution: "기여도 __%",
+    contribution: "__%",
     year: "2025",
     accent: "#1D5D99",
     // Real screenshots, same pattern as Project 01 — see Works.jsx / ProjectDetail.jsx.
