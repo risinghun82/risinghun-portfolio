@@ -46,9 +46,20 @@ export default function ProjectDetail() {
           className="case__float-back"
           aria-label="이전 화면(Selected Works)으로 돌아가기"
         >
-          <span className="case__float-back-icon" aria-hidden="true">
-            ←
-          </span>
+          <svg
+            className="case__float-back-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path
+              d="M19 12H5M11 18l-6-6 6-6"
+              stroke="currentColor"
+              strokeWidth="1.75"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
         </Link>,
         document.body,
       )}

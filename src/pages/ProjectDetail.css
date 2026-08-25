@@ -89,43 +89,53 @@ image met the panel background. */
   padding: 2.5rem clamp(1.75rem, 3vw, 3rem);
 }
 
-/* Floating back button — pinned to the right edge, vertically centered,
-so it's reachable no matter how far into the case study the reader has
-scrolled. Circular and dark like the hero panel, with the project's own
-accent color on hover, so it reads as part of this site rather than a
-generic UI widget bolted on. */
+/* Floating back button — docked just inside the right edge, vertically
+centered, so it's reachable no matter how far into the case study the
+reader has scrolled. A flat rem-based inset (not vw-scaled) keeps it
+sitting close to the edge at a consistent, comfortable reach on any
+screen size, instead of drifting further away — and looking adrift from
+the rest of the layout — on wide monitors. Circular and dark like the
+hero panel, with the project's own accent color and a soft ring on
+hover, so it reads as a considered part of this site rather than a
+generic UI widget bolted on. The chevron is a real SVG stroke icon
+(matches the line weight used elsewhere in the UI) rather than a text
+glyph, which rendered slightly off-center and inconsistently across
+fonts. */
 .case__float-back {
   position: fixed;
   top: 50%;
-  right: clamp(2rem, 6vw, 4.5rem);
+  right: 1.75rem;
   transform: translateY(-50%);
   z-index: 40;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 48px;
-  height: 48px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
   background: var(--night-brown);
   color: var(--sun-cream);
-  box-shadow: 0 10px 28px rgba(23, 23, 23, 0.28);
+  box-shadow:
+    0 12px 32px rgba(23, 23, 23, 0.3),
+    0 0 0 1px rgba(255, 246, 235, 0.08) inset;
   transition:
     transform 0.25s var(--ease-rise),
     background-color 0.25s var(--ease-rise),
-    right 0.25s var(--ease-rise);
+    box-shadow 0.25s var(--ease-rise);
 }
 
 .case__float-back:hover,
 .case__float-back:focus-visible {
   background: var(--project-accent, var(--sun-orange));
   transform: translateY(-50%) scale(1.08);
+  box-shadow:
+    0 16px 36px rgba(23, 23, 23, 0.32),
+    0 0 0 6px rgba(255, 246, 235, 0.12);
 }
 
 .case__float-back-icon {
-  font-family: var(--font-display);
-  font-size: 1.15rem;
-  line-height: 1;
-  transform: translateX(-1px);
+  width: 24px;
+  height: 24px;
 }
 
 @media (max-width: 700px) {
@@ -133,8 +143,13 @@ generic UI widget bolted on. */
   in from the edge a little further so it doesn't crowd body copy. */
   .case__float-back {
     right: 1rem;
-    width: 44px;
-    height: 44px;
+    width: 52px;
+    height: 52px;
+  }
+
+  .case__float-back-icon {
+    width: 21px;
+    height: 21px;
   }
 }
 
