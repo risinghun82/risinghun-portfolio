@@ -235,8 +235,7 @@ export const projects = [
     title: "Ppasak Guys",
     category: "B2B Service Landing Page",
     role: "Web Design / UI·UX / Publishing",
-    // TODO: 실제 기여도로 바꿔주세요. 예: "기획 40% · UI디자인 40% · 퍼블리싱 20%"
-    contribution: "__%",
+    contribution: "기획 50% · 디자인 100% · 퍼블리싱 100%",
     year: "2026",
     accent: "#DC3B2B",
     // Real screenshots, same pattern as Projects 01 / 05.
@@ -310,8 +309,7 @@ export const projects = [
     title: "HRD Asset",
     category: "Corporate E-Learning Platform",
     role: "Web Design / UI·UX / Publishing",
-    // TODO: 실제 기여도로 바꿔주세요. 예: "기획 40% · UI디자인 40% · 퍼블리싱 20%"
-    contribution: "__%",
+    contribution: "기획 50% · 디자인 70% · 퍼블리싱 60%",
     year: "2025",
     accent: "#1D5D99",
     // Real screenshots, same pattern as Project 01 — see Works.jsx / ProjectDetail.jsx.
