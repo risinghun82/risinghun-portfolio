@@ -16,7 +16,7 @@ export const projects = [
     category: "E-commerce Website Redesign",
     role: "Web Design / UI·UX / Publishing",
     contribution: "100% (기획·디자인·퍼블리싱 단독 진행)",
-    year: "2026",
+    year: "2022",
     accent: "#B5652E",
     // This project uses real screenshots instead of color placeholders —
     // see the `images` flag below and Works.jsx / ProjectDetail.jsx, which
@@ -32,7 +32,7 @@ export const projects = [
     overview: {
       client: "Ppasak Camping (빠삭한 캠핑)",
       scope: "이커머스 웹사이트 UI 리디자인, 상품 상세 시스템, 반응형 퍼블리싱",
-      duration: "2026.01 – 2026.02",
+      duration: "2022.10 – 2022.11",
       description:
         "텐트·가구·조명 등 아웃도어 장비를 판매하는 캠핑 브랜드의 온라인 스토어를 리디자인한 프로젝트입니다. 제품은 좋지만 사이트는 평범한 쇼핑몰로만 보여, 브랜드가 지향하는 '감도 높은 아웃도어 라이프'가 전달되지 않는 문제가 있었습니다.",
     },
@@ -76,7 +76,7 @@ export const projects = [
     category: "D2C Product Brand Website (개인 프로젝트)",
     role: "Web Design / UI Design / Publishing",
     contribution: "100% (기획·디자인·퍼블리싱 단독 진행)",
-    year: "2026",
+    year: "2022",
     accent: "#2B3742",
     // The hero photo's headline + CTA block sits in the lower half of the
     // source image (nav bar takes up the top). A pure vertical "center" crop
@@ -96,7 +96,7 @@ export const projects = [
       client: "개인 프로젝트 · 가상 브랜드 (실제 클라이언트 없음)",
       scope:
         "D2C 브랜드 웹사이트 기획 및 UI 디자인, 인터랙션 설계, 반응형 퍼블리싱 (셀프 디렉팅)",
-      duration: "2026.07",
+      duration: "2022.06",
       description:
         "휴대형 조명·서큘레이터·스피커·시계 등 '공간을 옮겨 다니며 쓰는' 라이프스타일 오브젝트를 파는 가상 브랜드 'NODEN'의 웹사이트를 직접 기획하고 디자인·퍼블리싱까지 완성한 개인 프로젝트입니다. 클라이언트 없이도 제품 스토리텔링부터 구매 전환까지 이어지는 D2C 사이트를 처음부터 끝까지 완성할 수 있는지 검증하기 위해 시작했습니다.",
     },
@@ -146,7 +146,7 @@ export const projects = [
     category: "In-house Messaging Service · Web/UI Design",
     role: "Web Design / UI·UX / Publishing / Brand Content",
     contribution: "기획 90% · 디자인 100% · 퍼블리싱 100%",
-    year: "2026",
+    year: "2023",
     accent: "#159895",
     // Real screenshots + real promotional creative — see Works.jsx / ProjectDetail.jsx.
     images: {
@@ -166,7 +166,7 @@ export const projects = [
       client: "지메시 (Gimesee) — 자사 서비스",
       scope:
         "웹 UI/UX 기획·화면 디자인, HTML/CSS 퍼블리싱, 온·오프라인 브랜드 콘텐츠 제작",
-      duration: "2026.05 – 진행 중",
+      duration: "2023.07 – 2023.11",
       description:
         "문자·카카오톡·RCS 등 다채널 메시지 발송 서비스 '지메시'의 웹 UI/UX와 화면 디자인을 전담하고 있습니다. 기존 B2B 중심의 발송 도구를 일반 사용자도 쉽게 이용할 수 있는 서비스로 전환하는 화면 설계부터, 신규 기능 추가에 따른 UI 고도화, 서비스 소개 페이지와 온·오프라인 홍보 콘텐츠 제작까지 서비스 전반의 디자인을 담당하고 있습니다.",
     },
@@ -236,7 +236,7 @@ export const projects = [
     category: "B2B Service Landing Page",
     role: "Web Design / UI·UX / Publishing",
     contribution: "기획 50% · 디자인 100% · 퍼블리싱 100%",
-    year: "2026",
+    year: "2022",
     accent: "#DC3B2B",
     // Real screenshots, same pattern as Projects 01 / 05.
     images: { hero: true, screens: [true, true], responsive: [true, true] },
@@ -254,7 +254,7 @@ export const projects = [
     overview: {
       client: "빠삭한 녀석들 (Deepdive Co., Ltd.)",
       scope: "B2B 랜딩페이지 신규 제작, 반응형 퍼블리싱",
-      duration: "2026.04 – 2026.05",
+      duration: "2022.08 – 2022.09",
       description:
         "소방기관을 대상으로 무인 매점·간식 구독 설비를 제공하는 B2B 서비스의 랜딩페이지입니다. 예산 담당자가 결재를 검토하는 상황을 가정해, 감성적 소개보다 정량적 도입 효과를 먼저 보여주는 것이 핵심 과제였습니다.",
     },
@@ -310,7 +310,7 @@ export const projects = [
     category: "Corporate E-Learning Platform",
     role: "Web Design / UI·UX / Publishing",
     contribution: "기획 50% · 디자인 70% · 퍼블리싱 60%",
-    year: "2025",
+    year: "2023",
     accent: "#1D5D99",
     // Real screenshots, same pattern as Project 01 — see Works.jsx / ProjectDetail.jsx.
     images: {
@@ -343,7 +343,7 @@ export const projects = [
       client: "HRD에셋교육원 (HRD Asset)",
       scope:
         "이러닝 플랫폼 UI 리디자인, 고객지원/게시판 화면 개선, 반응형 퍼블리싱",
-      duration: "2025.03 – 2025.05",
+      duration: "2023.02 (1개월)",
       description:
         "직장 내 성희롱 예방, 괴롭힘 예방 등 법정의무교육을 온라인으로 제공하는 이러닝 플랫폼입니다. 수강생이 자주 헤매는 지점인 고객지원·자료실·강좌 목록 화면을 중심으로 UI를 재정비했습니다.",
     },
