@@ -312,40 +312,44 @@ shipped an offline flyer for the same campaign. */}
           </Reveal>
         )}
 
-        {/* 8. Responsive screens */}
-        <Reveal
-          as="section"
-          className="case__section"
-          aria-labelledby="responsive-title"
-        >
-          <h2 id="responsive-title" className="case__section-title">
-            <span className="case__section-num">{num()}</span> Responsive
-            Screens
-          </h2>
-          <div className="case__responsive">
-            {project.responsive.map((src, i) =>
-              project.images?.responsive?.[i] ? (
-                <img
-                  key={src}
-                  className="case__responsive-item case__responsive-item--real"
-                  src={src}
-                  alt={`${project.title} ${i === 0 ? "태블릿" : "모바일"} 화면`}
-                  loading="lazy"
-                />
-              ) : (
-                <div
-                  key={src}
-                  className="img-placeholder case__responsive-item"
-                  style={{ "--ph-a": "#171717", "--ph-b": project.accent }}
-                >
-                  <span>
-                    {i === 0 ? "Tablet" : "Mobile"} 교체 영역 ({src})
-                  </span>
-                </div>
-              ),
-            )}
-          </div>
-        </Reveal>
+        {/* 8. Responsive screens — skipped for projects (like Gimesee) that
+        were never built with a mobile/responsive version, via
+        project.noResponsive. See src/data/projects.js. */}
+        {!project.noResponsive && (
+          <Reveal
+            as="section"
+            className="case__section"
+            aria-labelledby="responsive-title"
+          >
+            <h2 id="responsive-title" className="case__section-title">
+              <span className="case__section-num">{num()}</span> Responsive
+              Screens
+            </h2>
+            <div className="case__responsive">
+              {project.responsive.map((src, i) =>
+                project.images?.responsive?.[i] ? (
+                  <img
+                    key={src}
+                    className="case__responsive-item case__responsive-item--real"
+                    src={src}
+                    alt={`${project.title} ${i === 0 ? "태블릿" : "모바일"} 화면`}
+                    loading="lazy"
+                  />
+                ) : (
+                  <div
+                    key={src}
+                    className="img-placeholder case__responsive-item"
+                    style={{ "--ph-a": "#171717", "--ph-b": project.accent }}
+                  >
+                    <span>
+                      {i === 0 ? "Tablet" : "Mobile"} 교체 영역 ({src})
+                    </span>
+                  </div>
+                ),
+              )}
+            </div>
+          </Reveal>
+        )}
 
         {/* 9. Role & tools */}
         <Reveal
