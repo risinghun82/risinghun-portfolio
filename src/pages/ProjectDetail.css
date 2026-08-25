@@ -3,10 +3,10 @@
 }
 
 /* Split hero: photo and title never share the same pixels. Text-over-photo
-   heroes here were unreadable whenever the source image already had its
-   own baked-in marketing copy (client banner photos, campaign creative,
-   etc.) — the fix isn't a darker gradient, it's not stacking text on the
-   photo at all. Image sits on one side, a solid info panel on the other. */
+heroes here were unreadable whenever the source image already had its
+own baked-in marketing copy (client banner photos, campaign creative,
+etc.) — the fix isn't a darker gradient, it's not stacking text on the
+photo at all. Image sits on one side, a solid info panel on the other. */
 .case__hero {
   display: grid;
   grid-template-columns: 1.35fr 1fr;
@@ -16,11 +16,11 @@
 }
 
 /* Banner-style heroes (heroFit: contain) are much wider than tall, so the
-   default 560px box leaves a big empty strip above/below the image even
-   though nothing is cropped — that empty strip is what read as the image
-   "floating" and disconnected from the info panel. Shrinking the box closer
-   to the image's own proportions keeps it fully visible with barely any
-   letterboxing. */
+default 560px box leaves a big empty strip above/below the image even
+though nothing is cropped — that empty strip is what read as the image
+"floating" and disconnected from the info panel. Shrinking the box closer
+to the image's own proportions keeps it fully visible with barely any
+letterboxing. */
 .case__hero--banner {
   min-height: 320px;
 }
@@ -40,24 +40,24 @@
   height: 100%;
   object-fit: cover;
   /* Same reasoning as Works.css — these photos have left-aligned headline
-     copy baked in near the left edge, so bias the crop left instead of
-     centering it. */
+copy baked in near the left edge, so bias the crop left instead of
+centering it. */
   object-position: var(--img-pos, left center);
   /* Settles from a slight zoom on arrival — opacity stays at 1 the whole
-     time, so the photo is never hazy or washed out, only in motion. */
+time, so the photo is never hazy or washed out, only in motion. */
   animation: caseHeroImageIn 0.9s var(--ease-rise) both;
 }
 
 /* For hero photos that are wide banner strips rather than a full app/site
-   screenshot — covering the box would crop the headline or the artwork off
-   the sides. Show the whole banner instead, letterboxed on the panel's own
-   dark background so the empty space reads as intentional, not broken. */
+screenshot — covering the box would crop the headline or the artwork off
+the sides. Show the whole banner instead, letterboxed on the panel's own
+dark background so the empty space reads as intentional, not broken. */
 .case__hero-image--contain {
   object-fit: contain;
   /* Match the letterbox to the image's own background tone (set per-project
-     via --hero-bg) instead of the site's --night-brown, which is a visibly
-     different, redder brown — that mismatch was the "line"/seam where the
-     image met the panel background. */
+via --hero-bg) instead of the site's --night-brown, which is a visibly
+different, redder brown — that mismatch was the "line"/seam where the
+image met the panel background. */
   background: var(--hero-bg, var(--night-brown));
 }
 
@@ -284,8 +284,8 @@
 }
 
 /* Front/back flyer pages (or any other naturally-paired pair of images) —
-   same two-up layout as the Responsive Screens grid below, so a tall
-   portrait image doesn't run the full width of the page at full height. */
+same two-up layout as the Responsive Screens grid below, so a tall
+portrait image doesn't run the full width of the page at full height. */
 .case__screens--pair {
   grid-template-columns: repeat(2, 1fr);
 }
@@ -313,8 +313,8 @@
 }
 
 /* Full-page section captures are taller than 16:9 — cropping them to fit
-   clips content at the top/bottom. Let these grow to their natural height
-   instead, showing the whole screenshot uncropped. */
+clips content at the top/bottom. Let these grow to their natural height
+instead, showing the whole screenshot uncropped. */
 .case__screen--auto {
   aspect-ratio: auto;
   height: auto;
@@ -339,6 +339,13 @@
 
 .case__role {
   font-size: var(--fs-lg);
+  margin-bottom: 1.2rem;
+}
+
+.case__contribution {
+  font-size: var(--fs-sm);
+  color: var(--text-on-light-muted);
+  margin-top: -0.6rem;
   margin-bottom: 1.2rem;
 }
 
@@ -408,7 +415,7 @@
   height: 100%;
   border-radius: 8px;
   background: #fff;
-  box-shadow: 0 18px 48px rgba(23, 23, 23, 0.10);
+  box-shadow: 0 18px 48px rgba(23, 23, 23, 0.1);
 }
 
 .case__screen--real {
@@ -426,8 +433,8 @@
 }
 
 /* Wins over the "portfolio image polish" block above (same specificity,
-   later in source) so full-page captures actually render at full height
-   instead of being cover-cropped back down to the box. */
+later in source) so full-page captures actually render at full height
+instead of being cover-cropped back down to the box. */
 .case__screen--auto.case__screen--real {
   height: auto;
   object-fit: contain;
