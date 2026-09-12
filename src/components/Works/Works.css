@@ -137,6 +137,23 @@
   color: var(--text-on-light-muted);
 }
 
+.work-item__scope {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.6rem;
+}
+
+.work-item__scope li {
+  font-family: var(--font-display);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.02em;
+  border: 1px solid rgba(23, 23, 23, 0.2);
+  padding: 0.4rem 0.8rem;
+  border-radius: 999px;
+  color: var(--text-on-light-muted);
+}
+
 .work-item__summary {
   font-size: var(--fs-base);
   color: var(--text-on-light-muted);
@@ -164,7 +181,9 @@
 }
 
 .work-item__link span {
-  transition: transform var(--dur-fast) var(--ease-rise), color var(--dur-fast) var(--ease-rise);
+  transition:
+    transform var(--dur-fast) var(--ease-rise),
+    color var(--dur-fast) var(--ease-rise);
 }
 
 .work-item:hover .work-item__link span {
@@ -208,4 +227,75 @@
    right side, which is usually empty sky/background in these shots. */
 .work-item__image {
   object-position: var(--img-pos, left center);
+}
+
+/* Secondary "More Projects" grid — smaller, uniform cards for projects
+that still ship real work but carry a lighter personal contribution than
+the featured set above. Deliberately plain (no hover cursor, no reversed
+layout) so it doesn't visually compete with the featured rows. */
+.works__more {
+  margin-top: clamp(4rem, 8vw, 6rem);
+}
+
+.works__more-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.more-item {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.more-item__media {
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #ece9e3;
+}
+
+.more-item__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--img-pos, left center);
+  transition: transform var(--dur-base) var(--ease-rise);
+}
+
+.more-item:hover .more-item__image {
+  transform: scale(1.03);
+}
+
+.more-item__number {
+  font-family: var(--font-display);
+  font-size: var(--fs-sm);
+  letter-spacing: var(--ls-wide);
+  color: var(--text-on-light-muted);
+}
+
+.more-item__title {
+  font-family: var(--font-display);
+  font-size: clamp(1.2rem, 1.8vw, 1.5rem);
+  letter-spacing: var(--ls-tight);
+  margin-top: 0.3rem;
+}
+
+.more-item__category {
+  font-size: var(--fs-sm);
+  color: var(--text-on-light-muted);
+  margin-top: 0.2rem;
+}
+
+.more-item__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.6rem;
+  font-family: var(--font-display);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--ls-wide);
+  color: var(--project-accent, var(--accent));
 }
