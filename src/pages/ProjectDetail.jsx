@@ -29,12 +29,9 @@ export default function ProjectDetail() {
   let sectionCount = 0;
   const num = () => String(++sectionCount).padStart(2, "0");
 
-  // Every real screenshot/print asset on the page (UI screens, campaign
-  // materials, flyers, responsive shots) is shown small in its grid, which
-  // is the right density for scanning the case study but too small to
-  // actually read a banner or leaflet. Clicking any of them opens it full
-  // size in a lightbox instead of navigating away or needing a separate
-  // "view full size" link.
+  // Scoped to the dense banner gallery (screensLayout === "gallery") only —
+  // those tiles are shrunk small enough that they need a way to read them
+  // at full size. Regular full-width screenshots elsewhere don't need this.
   const [lightbox, setLightbox] = useState(null); // { src, alt } | null
   const openLightbox = (src, alt) => setLightbox({ src, alt });
   const closeLightbox = () => setLightbox(null);
@@ -329,10 +326,6 @@ materials below since these are the actual product UI. */}
                         src={src}
                         alt={alt}
                         loading="lazy"
-                        role="button"
-                        tabIndex={0}
-                        onClick={() => openLightbox(src, alt)}
-                        onKeyDown={(e) => handleThumbKeyDown(e, src, alt)}
                       />
                       {project.uiScreenCaptions?.[i] && (
                         <figcaption className="case__screen-caption">
@@ -371,6 +364,7 @@ section above to distinguish it from). */}
                 const alt =
                   project.screenCaptions?.[i] ||
                   `${project.title} 화면 ${i + 1}`;
+                const isGallery = project.screensLayout === "gallery";
                 return project.images?.screens?.[i] ? (
                   <figure key={src} className="case__screen-figure">
                     <img
@@ -383,10 +377,18 @@ section above to distinguish it from). */}
                       src={src}
                       alt={alt}
                       loading="lazy"
-                      role="button"
-                      tabIndex={0}
-                      onClick={() => openLightbox(src, alt)}
-                      onKeyDown={(e) => handleThumbKeyDown(e, src, alt)}
+                      // Click-to-enlarge only applies to the dense banner
+                      // gallery, where images are shrunk small enough that
+                      // they need it to be readable — the regular
+                      // full-width screenshots elsewhere don't.
+                      {...(isGallery
+                        ? {
+                            role: "button",
+                            tabIndex: 0,
+                            onClick: () => openLightbox(src, alt),
+                            onKeyDown: (e) => handleThumbKeyDown(e, src, alt),
+                          }
+                        : {})}
                     />
                     {project.screenCaptions?.[i] && (
                       <figcaption className="case__screen-caption">
@@ -434,10 +436,6 @@ shipped an offline flyer for the same campaign. */}
                         src={src}
                         alt={alt}
                         loading="lazy"
-                        role="button"
-                        tabIndex={0}
-                        onClick={() => openLightbox(src, alt)}
-                        onKeyDown={(e) => handleThumbKeyDown(e, src, alt)}
                       />
                       {project.flyerCaptions?.[i] && (
                         <figcaption className="case__screen-caption">
@@ -474,10 +472,6 @@ shipped an offline flyer for the same campaign. */}
                       src={src}
                       alt={alt}
                       loading="lazy"
-                      role="button"
-                      tabIndex={0}
-                      onClick={() => openLightbox(src, alt)}
-                      onKeyDown={(e) => handleThumbKeyDown(e, src, alt)}
                     />
                   ) : (
                     <div

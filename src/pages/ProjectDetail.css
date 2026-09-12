@@ -428,24 +428,26 @@ instead, showing the whole screenshot uncropped. */
   width: 100%;
   object-fit: cover;
   border: 1px solid rgba(23, 23, 23, 0.1);
-  /* These thumbnails are deliberately small for scanning the case study,
-  but that makes banners/leaflets unreadable — clicking one opens it full
-  size in the lightbox (see ProjectDetail.jsx), so they need to read as
-  clickable rather than as plain decorative images. */
+}
+
+/* The banner gallery's tiles are deliberately small for scanning, but that
+makes banners/leaflets unreadable — clicking one opens it full size in the
+lightbox (see ProjectDetail.jsx), so only these need to read as clickable.
+Regular full-width screenshots elsewhere aren't wired to the lightbox, so
+they keep the plain, non-interactive look they always had. */
+.case__screens--gallery .case__screen--real {
   cursor: zoom-in;
   transition:
     transform 0.25s var(--ease-rise),
     box-shadow 0.25s var(--ease-rise);
 }
 
-.case__screen--real:hover,
-.case__responsive-item--real:hover {
+.case__screens--gallery .case__screen--real:hover {
   transform: scale(1.015);
   box-shadow: 0 18px 40px rgba(23, 23, 23, 0.16);
 }
 
-.case__screen--real:focus-visible,
-.case__responsive-item--real:focus-visible {
+.case__screens--gallery .case__screen--real:focus-visible {
   outline: 2px solid var(--project-accent, var(--sun-orange));
   outline-offset: 2px;
 }
