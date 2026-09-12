@@ -2,13 +2,16 @@ import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import "./Hero.css";
 
+const EXPERTISE = ["Web Design", "UI/UX", "Planning", "Publishing"];
+
 /**
  * Hero
- * The first 100vh screen. Concept: darkness → light, bottom → top.
- * The glow at the bottom is an abstract diffused light source (radial
- * gradient + blur), never a literal sun disc, and slowly drifts upward /
- * widens as the user scrolls — driven by a CSS custom property updated on
- * scroll rather than a JS-animated transform, to keep it cheap and smooth.
+ * This is a hiring-positioning screen, not a decorative intro. Information
+ * order is deliberate: value proposition first, then role, then years of
+ * experience, then areas of expertise, then a clear CTA — so a recruiter
+ * understands "14-year hands-on web designer who can plan, design and
+ * publish" within the first few seconds, before any brand flourish.
+ * The dark → light, bottom → top "rising light" concept is unchanged.
  */
 export default function Hero() {
   const glowRef = useRef(null);
@@ -37,17 +40,43 @@ export default function Hero() {
   }, []);
 
   return (
-    <section id="hero" className="hero" data-nav-theme="dark" aria-label="인트로">
+    <section
+      id="hero"
+      className="hero"
+      data-nav-theme="dark"
+      aria-label="인트로"
+    >
       <div className="hero__glow" ref={glowRef} aria-hidden="true" />
       <div className="hero__grain" aria-hidden="true" />
 
       <div className="hero__content container">
-        <p className="hero__role">WEB PLANNER &amp; UI/UX DESIGNER</p>
+        <div className="hero__top">
+          <span className="hero__brand">RISINGHUN · Dong-hun Shin</span>
+          <span className="hero__experience">14 Years Experience</span>
+        </div>
 
-        <h1 className="hero__wordmark">
-          <span>RISING</span>
-          <span>HUN</span>
-        </h1>
+        <div className="hero__main">
+          <p className="hero__role">Web Planner &amp; UI/UX Designer</p>
+          <h1 className="hero__headline">
+            <span>기획부터 디자인,</span>
+            <span>퍼블리싱까지 연결하는 웹디자이너</span>
+          </h1>
+
+          <ul className="hero__expertise">
+            {EXPERTISE.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+
+          <div className="hero__cta">
+            <Link to="/#works" className="btn btn-solid">
+              View Projects
+            </Link>
+            <Link to="/#about" className="btn btn-outline-light">
+              About Me
+            </Link>
+          </div>
+        </div>
 
         <div className="hero__foot">
           <p className="hero__message">
@@ -55,11 +84,14 @@ export default function Hero() {
             <br />
             Experiences begin.
           </p>
-          <p className="hero__name">신동훈 · Dong-hun Shin</p>
         </div>
       </div>
 
-      <Link to="/#about" className="hero__scroll" aria-label="다음 섹션으로 스크롤">
+      <Link
+        to="/#works"
+        className="hero__scroll"
+        aria-label="다음 섹션으로 스크롤"
+      >
         <span className="hero__scroll-label">SCROLL</span>
         <span className="hero__scroll-line" />
       </Link>

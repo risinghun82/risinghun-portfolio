@@ -1,7 +1,11 @@
 .hero {
   position: relative;
   min-height: 100vh;
-  background: linear-gradient(180deg, var(--charcoal) 0%, var(--night-brown) 100%);
+  background: linear-gradient(
+    180deg,
+    var(--charcoal) 0%,
+    var(--night-brown) 100%
+  );
   color: var(--sun-cream);
   overflow: hidden;
   display: flex;
@@ -45,60 +49,97 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding-top: 9rem;
+  padding-top: 7.5rem;
   padding-bottom: 3.5rem;
+}
+
+/* Top row: brand mark kept, but demoted to a small identity line — the
+   headline below carries the actual message now. */
+.hero__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.hero__brand,
+.hero__experience {
+  font-family: var(--font-display);
+  font-size: var(--fs-sm);
+  letter-spacing: var(--ls-wider);
+  text-transform: uppercase;
+  color: var(--text-on-dark-muted);
+}
+
+.hero__experience {
+  color: var(--sun-orange);
+}
+
+.hero__main {
+  margin-top: clamp(2.5rem, 8vw, 5rem);
 }
 
 .hero__role {
   font-family: var(--font-display);
-  font-size: var(--fs-sm);
-  letter-spacing: var(--ls-wider);
-  color: var(--sun-cream);
+  font-size: var(--fs-md);
+  letter-spacing: var(--ls-wide);
   text-transform: uppercase;
-  align-self: flex-end;
-  text-align: right;
+  color: var(--sun-cream);
+  margin-bottom: 1.2rem;
 }
 
-.hero__wordmark {
+.hero__headline {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: var(--fs-hero);
+  font-size: clamp(2.1rem, 5.6vw, 4.6rem);
   line-height: var(--lh-tight);
-  letter-spacing: -0.03em;
-  margin: 1.2rem 0;
+  letter-spacing: -0.02em;
 }
 
-.hero__wordmark span {
+.hero__headline span {
   display: block;
 }
 
-.hero__wordmark span:last-child {
-  margin-left: clamp(1rem, 8vw, 5rem);
+.hero__headline span:last-child {
   color: var(--sun-orange);
 }
 
-.hero__foot {
+.hero__expertise {
   display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 2rem;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin-top: 2rem;
+}
+
+.hero__expertise li {
+  font-family: var(--font-display);
+  font-size: var(--fs-sm);
+  letter-spacing: 0.02em;
+  border: 1px solid rgba(255, 243, 228, 0.32);
+  color: var(--sun-cream);
+  padding: 0.55rem 1.1rem;
+  border-radius: 999px;
+}
+
+.hero__cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 2.4rem;
+}
+
+.hero__foot {
   border-top: 1px solid rgba(255, 243, 228, 0.18);
   padding-top: 1.6rem;
 }
 
 .hero__message {
   font-family: var(--font-display);
-  font-size: var(--fs-xl);
+  font-size: var(--fs-lg);
   line-height: var(--lh-heading);
   letter-spacing: var(--ls-tight);
-}
-
-.hero__name {
-  font-size: var(--fs-sm);
-  letter-spacing: var(--ls-wide);
   color: var(--text-on-dark-muted);
-  text-transform: uppercase;
-  white-space: nowrap;
 }
 
 .hero__scroll {
@@ -128,29 +169,45 @@
 }
 
 @keyframes scroll-cue {
-  0% { transform: scaleY(0.2); transform-origin: top; opacity: 0.4; }
-  50% { transform: scaleY(1); transform-origin: top; opacity: 1; }
-  100% { transform: scaleY(0.2); transform-origin: bottom; opacity: 0.4; }
+  0% {
+    transform: scaleY(0.2);
+    transform-origin: top;
+    opacity: 0.4;
+  }
+  50% {
+    transform: scaleY(1);
+    transform-origin: top;
+    opacity: 1;
+  }
+  100% {
+    transform: scaleY(0.2);
+    transform-origin: bottom;
+    opacity: 0.4;
+  }
 }
 
 @media (max-width: 768px) {
   .hero__content {
-    padding-top: 7rem;
+    padding-top: 6.5rem;
   }
 
-  .hero__role {
-    align-self: flex-start;
-    text-align: left;
-  }
-
-  .hero__wordmark span:last-child {
-    margin-left: 0.8rem;
-  }
-
-  .hero__foot {
+  .hero__top {
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.9rem;
+    gap: 0.5rem;
+  }
+
+  .hero__main {
+    margin-top: 3rem;
+  }
+
+  .hero__cta {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .hero__cta .btn {
+    justify-content: center;
   }
 
   .hero__scroll {
