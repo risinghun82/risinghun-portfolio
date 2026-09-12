@@ -80,9 +80,9 @@ export default function Hero() {
 
         <div className="hero__foot">
           <p className="hero__message">
-            Ideas rise.
+            웹이 실제 화면으로
             <br />
-            Experiences begin.
+            완성되는 과정까지 함께합니다.
           </p>
         </div>
       </div>
