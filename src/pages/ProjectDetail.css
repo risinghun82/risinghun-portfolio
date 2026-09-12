@@ -389,6 +389,26 @@ instead, showing the whole screenshot uncropped. */
   width: 100%;
   object-fit: cover;
   border: 1px solid rgba(23, 23, 23, 0.1);
+  /* These thumbnails are deliberately small for scanning the case study,
+  but that makes banners/leaflets unreadable — clicking one opens it full
+  size in the lightbox (see ProjectDetail.jsx), so they need to read as
+  clickable rather than as plain decorative images. */
+  cursor: zoom-in;
+  transition:
+    transform 0.25s var(--ease-rise),
+    box-shadow 0.25s var(--ease-rise);
+}
+
+.case__screen--real:hover,
+.case__responsive-item--real:hover {
+  transform: scale(1.015);
+  box-shadow: 0 18px 40px rgba(23, 23, 23, 0.16);
+}
+
+.case__screen--real:focus-visible,
+.case__responsive-item--real:focus-visible {
+  outline: 2px solid var(--project-accent, var(--sun-orange));
+  outline-offset: 2px;
 }
 
 .case__responsive {
@@ -502,4 +522,91 @@ instead of being cover-cropped back down to the box. */
 .case__screen--auto.case__screen--real {
   height: auto;
   object-fit: contain;
+}
+
+/* Image lightbox — full-size view for any screenshot/print asset thumbnail
+on the case study page. Portaled to <body> (see ProjectDetail.jsx), so it
+sits above the floating back button and everything else, truly fixed to
+the viewport. */
+@keyframes caseLightboxIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes caseLightboxImageIn {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.case__lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1.5rem, 5vw, 4rem);
+  background: rgba(23, 23, 23, 0.88);
+  cursor: zoom-out;
+  animation: caseLightboxIn 0.2s var(--ease-rise) both;
+}
+
+.case__lightbox-image {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 4px;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.4);
+  cursor: default;
+  animation: caseLightboxImageIn 0.25s var(--ease-rise) both;
+}
+
+.case__lightbox-close {
+  position: fixed;
+  top: clamp(1rem, 3vw, 1.75rem);
+  right: clamp(1rem, 3vw, 1.75rem);
+  z-index: 101;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 246, 235, 0.12);
+  color: var(--sun-cream);
+  cursor: pointer;
+  transition:
+    background-color 0.2s var(--ease-rise),
+    transform 0.2s var(--ease-rise);
+}
+
+.case__lightbox-close:hover,
+.case__lightbox-close:focus-visible {
+  background: rgba(255, 246, 235, 0.24);
+  transform: scale(1.06);
+}
+
+.case__lightbox-close svg {
+  width: 20px;
+  height: 20px;
+}
+
+@media (max-width: 700px) {
+  .case__lightbox-close {
+    width: 40px;
+    height: 40px;
+  }
 }

@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { useParams, Link, Navigate } from "react-router-dom";
 import { createPortal } from "react-dom";
 import Reveal from "../components/Reveal.jsx";
@@ -27,6 +28,38 @@ export default function ProjectDetail() {
   // throw off the numbering of everything after it.
   let sectionCount = 0;
   const num = () => String(++sectionCount).padStart(2, "0");
+
+  // Every real screenshot/print asset on the page (UI screens, campaign
+  // materials, flyers, responsive shots) is shown small in its grid, which
+  // is the right density for scanning the case study but too small to
+  // actually read a banner or leaflet. Clicking any of them opens it full
+  // size in a lightbox instead of navigating away or needing a separate
+  // "view full size" link.
+  const [lightbox, setLightbox] = useState(null); // { src, alt } | null
+  const openLightbox = (src, alt) => setLightbox({ src, alt });
+  const closeLightbox = () => setLightbox(null);
+  const handleThumbKeyDown = (e, src, alt) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      openLightbox(src, alt);
+    }
+  };
+
+  useEffect(() => {
+    if (!lightbox) return;
+    const onKeyDown = (e) => {
+      if (e.key === "Escape") closeLightbox();
+    };
+    document.addEventListener("keydown", onKeyDown);
+    // Lock background scroll while the lightbox is open, same as any
+    // standard image-viewer modal.
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [lightbox]);
 
   return (
     <>
@@ -63,6 +96,46 @@ export default function ProjectDetail() {
         </Link>,
         document.body,
       )}
+
+      {/* Image lightbox — also portaled to <body> for the same reason as
+      the floating back button above (it needs to sit above everything,
+      truly fixed to the viewport, not confined by the page-transition
+      wrapper's transform). Every real screenshot/print asset on the page
+      opens here at full size when clicked. */}
+      {lightbox &&
+        createPortal(
+          <div
+            className="case__lightbox"
+            role="dialog"
+            aria-modal="true"
+            aria-label={lightbox.alt}
+            onClick={closeLightbox}
+          >
+            <button
+              type="button"
+              className="case__lightbox-close"
+              onClick={closeLightbox}
+              aria-label="이미지 닫기"
+            >
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path
+                  d="M6 6l12 12M18 6L6 18"
+                  stroke="currentColor"
+                  strokeWidth="1.75"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+            <img
+              className="case__lightbox-image"
+              src={lightbox.src}
+              alt={lightbox.alt}
+              onClick={(e) => e.stopPropagation()}
+            />
+          </div>,
+          document.body,
+        )}
 
       <main className="case" style={{ "--project-accent": project.accent }}>
         {/* 1. Hero — image and title live in separate panels on purpose, so
@@ -245,24 +318,30 @@ materials below since these are the actual product UI. */}
                 Screens
               </h2>
               <div className="case__screens">
-                {project.uiScreens.map((src, i) => (
-                  <figure key={src} className="case__screen-figure">
-                    <img
-                      className="case__screen case__screen--real"
-                      src={src}
-                      alt={
-                        project.uiScreenCaptions?.[i] ||
-                        `${project.title} UI 화면 ${i + 1}`
-                      }
-                      loading="lazy"
-                    />
-                    {project.uiScreenCaptions?.[i] && (
-                      <figcaption className="case__screen-caption">
-                        {project.uiScreenCaptions[i]}
-                      </figcaption>
-                    )}
-                  </figure>
-                ))}
+                {project.uiScreens.map((src, i) => {
+                  const alt =
+                    project.uiScreenCaptions?.[i] ||
+                    `${project.title} UI 화면 ${i + 1}`;
+                  return (
+                    <figure key={src} className="case__screen-figure">
+                      <img
+                        className="case__screen case__screen--real"
+                        src={src}
+                        alt={alt}
+                        loading="lazy"
+                        role="button"
+                        tabIndex={0}
+                        onClick={() => openLightbox(src, alt)}
+                        onKeyDown={(e) => handleThumbKeyDown(e, src, alt)}
+                      />
+                      {project.uiScreenCaptions?.[i] && (
+                        <figcaption className="case__screen-caption">
+                          {project.uiScreenCaptions[i]}
+                        </figcaption>
+                      )}
+                    </figure>
+                  );
+                })}
               </div>
             </Reveal>
           )}
@@ -281,8 +360,11 @@ section above to distinguish it from). */}
               {project.screensTitle || "Key UI Screens"}
             </h2>
             <div className="case__screens">
-              {project.screens.map((src, i) =>
-                project.images?.screens?.[i] ? (
+              {project.screens.map((src, i) => {
+                const alt =
+                  project.screenCaptions?.[i] ||
+                  `${project.title} 화면 ${i + 1}`;
+                return project.images?.screens?.[i] ? (
                   <figure key={src} className="case__screen-figure">
                     <img
                       className={
@@ -292,11 +374,12 @@ section above to distinguish it from). */}
                           : "")
                       }
                       src={src}
-                      alt={
-                        project.screenCaptions?.[i] ||
-                        `${project.title} 화면 ${i + 1}`
-                      }
+                      alt={alt}
                       loading="lazy"
+                      role="button"
+                      tabIndex={0}
+                      onClick={() => openLightbox(src, alt)}
+                      onKeyDown={(e) => handleThumbKeyDown(e, src, alt)}
                     />
                     {project.screenCaptions?.[i] && (
                       <figcaption className="case__screen-caption">
@@ -314,8 +397,8 @@ section above to distinguish it from). */}
                       Screen 0{i + 1} 교체 영역 ({src})
                     </span>
                   </div>
-                ),
-              )}
+                );
+              })}
             </div>
           </Reveal>
 
@@ -333,24 +416,30 @@ shipped an offline flyer for the same campaign. */}
                 {project.flyerScreensTitle || "Print & Flyer Design"}
               </h2>
               <div className="case__screens case__screens--pair">
-                {project.flyerScreens.map((src, i) => (
-                  <figure key={src} className="case__screen-figure">
-                    <img
-                      className="case__screen case__screen--real case__screen--auto"
-                      src={src}
-                      alt={
-                        project.flyerCaptions?.[i] ||
-                        `${project.title} 전단지 ${i + 1}`
-                      }
-                      loading="lazy"
-                    />
-                    {project.flyerCaptions?.[i] && (
-                      <figcaption className="case__screen-caption">
-                        {project.flyerCaptions[i]}
-                      </figcaption>
-                    )}
-                  </figure>
-                ))}
+                {project.flyerScreens.map((src, i) => {
+                  const alt =
+                    project.flyerCaptions?.[i] ||
+                    `${project.title} 전단지 ${i + 1}`;
+                  return (
+                    <figure key={src} className="case__screen-figure">
+                      <img
+                        className="case__screen case__screen--real case__screen--auto"
+                        src={src}
+                        alt={alt}
+                        loading="lazy"
+                        role="button"
+                        tabIndex={0}
+                        onClick={() => openLightbox(src, alt)}
+                        onKeyDown={(e) => handleThumbKeyDown(e, src, alt)}
+                      />
+                      {project.flyerCaptions?.[i] && (
+                        <figcaption className="case__screen-caption">
+                          {project.flyerCaptions[i]}
+                        </figcaption>
+                      )}
+                    </figure>
+                  );
+                })}
               </div>
             </Reveal>
           )}
@@ -369,14 +458,19 @@ shipped an offline flyer for the same campaign. */}
                 Screens
               </h2>
               <div className="case__responsive">
-                {project.responsive.map((src, i) =>
-                  project.images?.responsive?.[i] ? (
+                {project.responsive.map((src, i) => {
+                  const alt = `${project.title} ${i === 0 ? "태블릿" : "모바일"} 화면`;
+                  return project.images?.responsive?.[i] ? (
                     <img
                       key={src}
                       className="case__responsive-item case__responsive-item--real"
                       src={src}
-                      alt={`${project.title} ${i === 0 ? "태블릿" : "모바일"} 화면`}
+                      alt={alt}
                       loading="lazy"
+                      role="button"
+                      tabIndex={0}
+                      onClick={() => openLightbox(src, alt)}
+                      onKeyDown={(e) => handleThumbKeyDown(e, src, alt)}
                     />
                   ) : (
                     <div
@@ -388,8 +482,8 @@ shipped an offline flyer for the same campaign. */}
                         {i === 0 ? "Tablet" : "Mobile"} 교체 영역 ({src})
                       </span>
                     </div>
-                  ),
-                )}
+                  );
+                })}
               </div>
             </Reveal>
           )}
