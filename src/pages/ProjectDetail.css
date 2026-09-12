@@ -373,7 +373,8 @@ change as the collection grows. Click-to-enlarge (see the lightbox in
 ProjectDetail.jsx) is what makes shrinking these down to thumbnail size
 safe — nothing here is only readable at full width. */
 .case__screens--gallery {
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  /* 180px → 270px (1.5x): bigger tiles per row request. */
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
   gap: 0.9rem;
 }
 
@@ -404,13 +405,17 @@ letterboxed, instead of losing its edges. */
 }
 
 .case__screens--gallery .case__screen-caption {
-  font-size: var(--fs-xs);
+  /* Font-size is unified with the base .case__screen-caption rule below now
+  (was var(--fs-xs), noticeably smaller than captions everywhere else on
+  the page) — just keep a slightly tighter line-height here since gallery
+  captions sit under a narrower tile and wrap more often. */
   line-height: 1.35;
 }
 
 @media (max-width: 600px) {
   .case__screens--gallery {
-    grid-template-columns: repeat(auto-fill, minmax(128px, 1fr));
+    /* 128px → 192px (1.5x), matching the desktop tile size increase. */
+    grid-template-columns: repeat(auto-fill, minmax(192px, 1fr));
     gap: 0.6rem;
   }
 }
@@ -421,8 +426,12 @@ letterboxed, instead of losing its edges. */
   gap: 0.6rem;
 }
 
+/* Was var(--fs-sm) — about 2x that size now, per feedback that captions
+read too small everywhere they're used (this rule covers every
+.case__screen-caption on the site, not just the gallery, so the bump
+applies uniformly instead of creating a new inconsistency). */
 .case__screen-caption {
-  font-size: var(--fs-sm);
+  font-size: var(--fs-lg);
   color: var(--text-on-light-muted);
   letter-spacing: 0.01em;
 }
