@@ -198,13 +198,20 @@ the title never overlaps whatever the photo itself contains. */}
             className="case__section"
             aria-labelledby="overview-title"
           >
-            <h2 id="overview-title" className="case__section-title">
-              <span className="case__section-num">{num()}</span> Overview
-            </h2>
+            {/* Title lives inside the grid's left column now (stacked above
+            the summary) instead of spanning full-width above the grid — that
+            way the facts list on the right, as the grid's other column,
+            starts flush with the title's own top edge instead of with the
+            summary paragraph beneath it. */}
             <div className="case__overview-grid">
-              <p className="case__overview-desc">
-                {project.overview.description}
-              </p>
+              <div>
+                <h2 id="overview-title" className="case__section-title">
+                  <span className="case__section-num">{num()}</span> Overview
+                </h2>
+                <p className="case__overview-desc">
+                  {project.overview.description}
+                </p>
+              </div>
               <dl className="case__overview-facts">
                 <div>
                   <dt>Client</dt>

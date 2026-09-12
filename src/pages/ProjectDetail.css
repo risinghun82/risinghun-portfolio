@@ -288,6 +288,14 @@ lives. */
   padding-top: 0.7rem;
 }
 
+/* CLIENT now sits right at the top of the row, level with the section
+title — a rule directly above it, with nothing above to separate from,
+just reads as a stray line rather than a divider. */
+.case__overview-facts div:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
 /* CLIENT/SCOPE/DURATION were fs-xs (~11.5px) next to a fs-lg (~21px)
 paragraph in the same row — three different sizes in one section (label,
 value, description) read as unpolished rather than deliberate. Sizing the
