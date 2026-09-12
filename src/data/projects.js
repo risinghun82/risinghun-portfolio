@@ -18,6 +18,9 @@ export const projects = [
     contribution: "100% (기획·디자인·퍼블리싱 단독 진행)",
     year: "2022",
     accent: "#B5652E",
+    // Shown in the "Featured Projects" zone of Works.jsx — see that file's
+    // comment for how featured vs. secondary projects are picked.
+    featured: true,
     // This project uses real screenshots instead of color placeholders —
     // see the `images` flag below and Works.jsx / ProjectDetail.jsx, which
     // check it to decide whether to render an <img> or the placeholder div.
@@ -78,6 +81,7 @@ export const projects = [
     contribution: "100% (기획·디자인·퍼블리싱 단독 진행)",
     year: "2022",
     accent: "#2B3742",
+    featured: true,
     // The hero photo's headline + CTA block sits in the lower half of the
     // source image (nav bar takes up the top). A pure vertical "center" crop
     // was slicing into the "DISCOVER L01" button, so bias the crop toward
@@ -148,6 +152,7 @@ export const projects = [
     contribution: "기획 90% · 디자인 100% · 퍼블리싱 100%",
     year: "2023",
     accent: "#159895",
+    featured: true,
     // Real screenshots + real promotional creative — see Works.jsx / ProjectDetail.jsx.
     images: {
       hero: true,
@@ -238,6 +243,7 @@ export const projects = [
     contribution: "기획 50% · 디자인 100% · 퍼블리싱 100%",
     year: "2022",
     accent: "#DC3B2B",
+    featured: true,
     // Real screenshots, same pattern as Projects 01 / 05.
     images: { hero: true, screens: [true, true], responsive: [true, true] },
     // Headline here is centered in the source photo, not left-aligned — the
