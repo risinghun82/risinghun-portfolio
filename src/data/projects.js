@@ -58,6 +58,14 @@ export const projects = [
       colors: ["#171717", "#F5EFE4", "#C1652F", "#5B5A42"],
       typefaces: ["Inter (영문 헤드라인)", "Pretendard (본문/한글)"],
     },
+    // What I actually did, not a repeat of the role tags — one line per
+    // concrete task, derived from `direction`/`contribution` above.
+    responsibilities: [
+      "브랜드 무드에 맞춘 홈페이지 UI 리디자인",
+      "'쓰임에 따라 고른 장비' 카테고리 큐레이션 섹션 기획",
+      "상품 상세페이지 정보 위계 재설계",
+      "HTML/CSS 반응형 퍼블리싱",
+    ],
     screens: [
       "/images/project-01-screen-01.jpg",
       "/images/project-01-screen-02.jpg",
@@ -82,6 +90,10 @@ export const projects = [
     year: "2022",
     accent: "#2B3742",
     featured: true,
+    // No client, no brief — self-directed start to finish. Flags the case
+    // study to label itself honestly and frame its Challenge/Result
+    // sections as exploration goals rather than a client engagement.
+    personal: true,
     // The hero photo's headline + CTA block sits in the lower half of the
     // source image (nav bar takes up the top). A pure vertical "center" crop
     // was slicing into the "DISCOVER L01" button, so bias the crop toward
@@ -129,6 +141,12 @@ export const projects = [
         "Noto Sans KR (본문/한글)",
       ],
     },
+    responsibilities: [
+      "브랜드 컨셉 기획 및 사이트 정보구조 설계 (셀프 디렉팅)",
+      "'ONE OBJECT, THREE SPACES' 탭 인터랙션 UI/UX 설계",
+      "제품 상세 화면 디자인 (컬러 스와치·조작 다이어그램)",
+      "HTML/CSS/JS 반응형 퍼블리싱",
+    ],
     screens: [
       "/images/project-02-screen-01.jpg",
       "/images/project-02-screen-02.jpg",
@@ -195,6 +213,13 @@ export const projects = [
       colors: ["#159895", "#1B2A6B", "#FFFFFF", "#F2F5F5"],
       typefaces: ["Pretendard (헤드라인/본문)", "Inter (숫자·영문)"],
     },
+    responsibilities: [
+      "B2C 전환에 맞춘 정보구조 및 화면 흐름 재설계",
+      "신규 기능 추가에 따른 UI 확장 및 HTML/CSS 퍼블리싱",
+      "온라인 프로모션 및 오프라인 홍보물(백월·리플렛) 디자인",
+      "영업·기획·개발 담당자와 협업해 요구사항을 실제 화면으로 구현",
+      "서비스 운영 중 UI 일관성 관리",
+    ],
     // These three assets are offline print/campaign creative, not in-app UI —
     // so this project uses its own section title + per-image captions instead
     // of the generic "Key UI Screens" heading. Real UI screens (if added
@@ -284,6 +309,12 @@ export const projects = [
       colors: ["#1B1F6B", "#2A3AA0", "#DC3B2B", "#FFD400"],
       typefaces: ["Pretendard (헤드라인/본문)", "Inter (숫자·영문)"],
     },
+    responsibilities: [
+      "정량 효과 중심 정보구조 기획 (부분 참여)",
+      "요금제 비교 UI 및 CTA 배치 디자인",
+      "HTML/CSS 반응형 퍼블리싱",
+      "오프라인 전단지(Print & Flyer) 디자인",
+    ],
     screens: [
       "/images/project-04-screen-01.jpg",
       "/images/project-04-screen-02.jpg",
@@ -372,6 +403,12 @@ export const projects = [
       colors: ["#0B3550", "#1D5D99", "#6C5CE7", "#FFFFFF"],
       typefaces: ["Inter (영문/숫자)", "Pretendard (본문/한글)"],
     },
+    responsibilities: [
+      "고객지원·자료실 화면 UI 개선",
+      "법정교육 카테고리 탭 구조 설계",
+      "학습 플랫폼 UI 리디자인 (부분 참여)",
+      "반응형 퍼블리싱 (부분 참여)",
+    ],
     screens: [
       "/images/project-05-screen-01.jpg",
       "/images/project-05-screen-02.jpg",
