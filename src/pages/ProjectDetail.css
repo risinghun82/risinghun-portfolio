@@ -275,6 +275,7 @@ a UI component someone else designed. The label carries the project's
 accent color instead of a card border, which is where that color now
 lives. */
 .case__overview-facts {
+  margin: 0; /* reset UA default <dl> margin so it aligns flush with the title */
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
