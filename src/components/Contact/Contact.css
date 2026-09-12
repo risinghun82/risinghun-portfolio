@@ -1,6 +1,10 @@
 .contact {
   position: relative;
-  background: linear-gradient(180deg, var(--night-brown) 0%, var(--charcoal) 100%);
+  background: linear-gradient(
+    180deg,
+    var(--night-brown) 0%,
+    var(--charcoal) 100%
+  );
   color: var(--sun-cream);
   padding: var(--space-section-y) 0 4rem;
   overflow: hidden;
@@ -13,7 +17,11 @@
   transform: translateX(-50%);
   width: min(1200px, 130vw);
   height: 40%;
-  background: radial-gradient(closest-side, rgba(255, 90, 31, 0.35), transparent 72%);
+  background: radial-gradient(
+    closest-side,
+    rgba(255, 90, 31, 0.35),
+    transparent 72%
+  );
   filter: blur(10px);
   pointer-events: none;
 }
@@ -22,7 +30,22 @@
   font-family: var(--font-display);
   font-size: var(--fs-section-title);
   letter-spacing: var(--ls-tight);
-  margin: 1.2rem 0 4rem;
+  margin: 1.2rem 0 1.4rem;
+}
+
+.contact__lede {
+  font-size: var(--fs-lg);
+  line-height: var(--lh-heading);
+  color: var(--text-on-dark-muted);
+  max-width: 46ch;
+  margin-bottom: 2.4rem;
+}
+
+.contact__cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 3.5rem;
 }
 
 .contact__grid {
@@ -47,7 +70,9 @@
   font-family: var(--font-display);
   font-size: clamp(1.1rem, 1.6vw, 1.35rem);
   border-bottom: 1px solid transparent;
-  transition: color var(--dur-fast) var(--ease-rise), border-color var(--dur-fast) var(--ease-rise);
+  transition:
+    color var(--dur-fast) var(--ease-rise),
+    border-color var(--dur-fast) var(--ease-rise);
 }
 
 .contact__value:hover {
