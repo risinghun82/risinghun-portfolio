@@ -5,8 +5,8 @@ import "./Nav.css";
 const LINKS = [
   { label: "Work", href: "#works" },
   { label: "About", href: "#about" },
-  { label: "Process", href: "#process" },
-  { label: "Contact", href: "#contact" }
+  { label: "Capabilities", href: "#process" },
+  { label: "Contact", href: "#contact" },
 ];
 
 /**
@@ -100,7 +100,11 @@ export default function Nav() {
             Home
           </Link>
           {LINKS.map((link) => (
-            <Link key={link.href} to={`/${link.href}`} onClick={() => setMenuOpen(false)}>
+            <Link
+              key={link.href}
+              to={`/${link.href}`}
+              onClick={() => setMenuOpen(false)}
+            >
               {link.label}
             </Link>
           ))}
