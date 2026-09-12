@@ -4,20 +4,24 @@ import "./Skills.css";
 const GROUPS = [
   {
     label: "Design",
-    items: ["Photoshop", "Illustrator", "Figma", "Adobe XD"]
+    desc: "Web Visual · UI Design · Promotion / Detail Page",
+    items: ["Photoshop", "Illustrator", "Figma", "Adobe XD"],
   },
   {
     label: "Web",
-    items: ["HTML", "CSS", "Responsive Design", "Semantic Markup"]
+    desc: "Responsive Publishing · UI Implementation",
+    items: ["HTML", "CSS", "Responsive Design", "Semantic Markup"],
   },
   {
     label: "Work",
-    items: ["Web Design", "UI Design", "Banner / Promotion", "Publishing"]
+    desc: "Planning · Commerce Ops · Maintenance",
+    items: ["Web Design", "UI Design", "Banner / Promotion", "Publishing"],
   },
   {
     label: "AI",
-    items: ["ChatGPT / Claude", "Figma AI"]
-  }
+    desc: "Workflow Acceleration",
+    items: ["ChatGPT / Claude", "Figma AI"],
+  },
 ];
 
 /**
@@ -35,8 +39,14 @@ export default function Skills() {
 
         <div className="skills__grid">
           {GROUPS.map((group, i) => (
-            <Reveal as="div" key={group.label} className="skills__group" delay={i + 1}>
+            <Reveal
+              as="div"
+              key={group.label}
+              className="skills__group"
+              delay={i + 1}
+            >
               <h3 className="skills__group-title">{group.label}</h3>
+              <p className="skills__group-desc">{group.desc}</p>
               <ul className="skills__group-list">
                 {group.items.map((item) => (
                   <li key={item}>{item}</li>
