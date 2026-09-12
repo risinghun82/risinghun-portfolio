@@ -360,6 +360,38 @@ portrait image doesn't run the full width of the page at full height. */
   }
 }
 
+/* Dense gallery layout — for a section meant to hold a growing pile of
+banner/print creative rather than a handful of full-width screenshots.
+Tiles size themselves via auto-fill/minmax, so dropping more images into
+the data array just adds more tiles to the grid; nothing here needs to
+change as the collection grows. Click-to-enlarge (see the lightbox in
+ProjectDetail.jsx) is what makes shrinking these down to thumbnail size
+safe — nothing here is only readable at full width. */
+.case__screens--gallery {
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 0.9rem;
+}
+
+.case__screens--gallery .case__screen-figure {
+  gap: 0.4rem;
+}
+
+.case__screens--gallery .case__screen {
+  aspect-ratio: 4 / 3;
+}
+
+.case__screens--gallery .case__screen-caption {
+  font-size: var(--fs-xs);
+  line-height: 1.35;
+}
+
+@media (max-width: 600px) {
+  .case__screens--gallery {
+    grid-template-columns: repeat(auto-fill, minmax(128px, 1fr));
+    gap: 0.6rem;
+  }
+}
+
 .case__screen-figure {
   display: flex;
   flex-direction: column;

@@ -359,7 +359,14 @@ section above to distinguish it from). */}
               <span className="case__section-num">{num()}</span>{" "}
               {project.screensTitle || "Key UI Screens"}
             </h2>
-            <div className="case__screens">
+            <div
+              className={
+                "case__screens" +
+                (project.screensLayout === "gallery"
+                  ? " case__screens--gallery"
+                  : "")
+              }
+            >
               {project.screens.map((src, i) => {
                 const alt =
                   project.screenCaptions?.[i] ||
