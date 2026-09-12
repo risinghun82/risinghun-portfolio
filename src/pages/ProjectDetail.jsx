@@ -7,10 +7,12 @@ import "./ProjectDetail.css";
 
 /**
  * Project Detail / Case Study
- * Follows a fixed narrative order (overview → background → problems →
- * direction → visual system → screens → responsive → role/tools → result)
- * so a reviewer can answer: why this decision, what problem it solved, what
- * the designer actually owned, and what changed as a result.
+ * Follows a fixed narrative order (overview → challenge → my role →
+ * approach/solution → design → publishing → result) so a hiring reviewer
+ * can answer, in order: what was this, what was the problem, what did the
+ * designer actually own, how did they solve it, what did they design and
+ * build, and what changed as a result. This is deliberately a problem →
+ * role → solution → result narrative, not an image gallery.
  */
 export default function ProjectDetail() {
   const { slug } = useParams();
@@ -21,10 +23,19 @@ export default function ProjectDetail() {
   const idx = projects.findIndex((p) => p.slug === slug);
   const next = projects[(idx + 1) % projects.length];
 
+  // Role-scope chips reuse the same real `role` field Works.jsx reads —
+  // never a separately maintained (and driftable) list.
+  const roleTags = project.role.split("/").map((t) => t.trim());
+
+  // "Publishing" tools are whichever of toolsUsed actually mention
+  // HTML/CSS/responsive work — derived from real data, never invented.
+  const publishingTools = project.toolsUsed.filter((t) =>
+    /html|css|반응형/i.test(t),
+  );
+
   // Sections are numbered by how many of them actually render for this
-  // project (not a hardcoded 01–09), so a project with an extra section —
-  // e.g. Gimesee's print materials + separate real UI screens — doesn't
-  // throw off the numbering of everything after it.
+  // project (not a hardcoded 01–07), so a project missing a piece (e.g. no
+  // responsive version) doesn't throw off the numbering of what follows.
   let sectionCount = 0;
   const num = () => String(++sectionCount).padStart(2, "0");
 
@@ -65,7 +76,7 @@ export default function ProjectDetail() {
       )}
 
       <main className="case" style={{ "--project-accent": project.accent }}>
-        {/* 1. Hero — image and title live in separate panels on purpose, so
+        {/* Hero — image and title live in separate panels on purpose, so
 the title never overlaps whatever the photo itself contains. */}
         <section
           className={
@@ -122,79 +133,119 @@ the title never overlaps whatever the photo itself contains. */}
         </section>
 
         <div className="container case__body" data-nav-theme="light">
-          {/* 2. Overview */}
+          {/* 01. Overview — the description plus a scannable facts table
+          (Client / Year·Period / Role / Tools / Contribution) so a
+          recruiter gets the who/what/how-much before reading a word of
+          prose. */}
           <Reveal
             as="section"
             className="case__section"
             aria-labelledby="overview-title"
           >
-            <h2 id="overview-title" className="case__section-title">
-              <span className="case__section-num">{num()}</span> Overview
-            </h2>
             <div className="case__overview-grid">
-              <p className="case__overview-desc">
-                {project.overview.description}
-              </p>
+              <div>
+                <h2 id="overview-title" className="case__section-title">
+                  <span className="case__section-num">{num()}</span> Overview
+                </h2>
+                <p className="case__overview-desc">
+                  {project.overview.description}
+                </p>
+              </div>
               <dl className="case__overview-facts">
                 <div>
                   <dt>Client</dt>
                   <dd>{project.overview.client}</dd>
                 </div>
                 <div>
-                  <dt>Scope</dt>
-                  <dd>{project.overview.scope}</dd>
-                </div>
-                <div>
-                  <dt>Duration</dt>
+                  <dt>Year / Period</dt>
                   <dd>{project.overview.duration}</dd>
                 </div>
+                <div>
+                  <dt>Role</dt>
+                  <dd>{project.role}</dd>
+                </div>
+                <div>
+                  <dt>Tools</dt>
+                  <dd>{project.toolsUsed.join(" · ")}</dd>
+                </div>
+                {project.contribution && (
+                  <div>
+                    <dt>Contribution</dt>
+                    <dd>{project.contribution}</dd>
+                  </div>
+                )}
               </dl>
             </div>
           </Reveal>
 
-          {/* 3. Background & goals */}
+          {/* 02. Challenge — background + concrete problems, grouped under
+          one umbrella so the reviewer reads "why this project existed"
+          as a single beat, not two disconnected sections. */}
           <Reveal
             as="section"
             className="case__section"
-            aria-labelledby="bg-title"
+            aria-labelledby="challenge-title"
           >
-            <h2 id="bg-title" className="case__section-title">
-              <span className="case__section-num">{num()}</span> Background
-              &amp; Goals
+            <h2 id="challenge-title" className="case__section-title">
+              <span className="case__section-num">{num()}</span> Challenge
             </h2>
-            <ul className="case__statement-list">
-              {project.background.map((line) => (
-                <li key={line}>{line}</li>
-              ))}
-            </ul>
+            <div className="case__challenge">
+              <div className="case__challenge-group">
+                <h3 className="case__challenge-subtitle">
+                  Background &amp; Goals
+                </h3>
+                <ul className="case__statement-list">
+                  {project.background.map((line) => (
+                    <li key={line}>{line}</li>
+                  ))}
+                </ul>
+              </div>
+              <div className="case__challenge-group">
+                <h3 className="case__challenge-subtitle">Existing Problems</h3>
+                <ul className="case__statement-list case__statement-list--flagged">
+                  {project.problems.map((line) => (
+                    <li key={line}>{line}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
           </Reveal>
 
-          {/* 4. Problems */}
+          {/* 03. My Role — answers "what did you actually do here?" before
+          any visuals, using the real scope/role/contribution fields
+          already in project data (never invented percentages). */}
           <Reveal
             as="section"
             className="case__section"
-            aria-labelledby="problem-title"
+            aria-labelledby="role-title"
           >
-            <h2 id="problem-title" className="case__section-title">
-              <span className="case__section-num">{num()}</span> Existing
-              Problems
+            <h2 id="role-title" className="case__section-title">
+              <span className="case__section-num">{num()}</span> My Role
             </h2>
-            <ul className="case__statement-list case__statement-list--flagged">
-              {project.problems.map((line) => (
-                <li key={line}>{line}</li>
-              ))}
-            </ul>
+            <div className="case__role-block">
+              <p className="case__role-scope">{project.overview.scope}</p>
+              <ul className="case__tools" aria-label="담당 역할">
+                {roleTags.map((tag) => (
+                  <li key={tag}>{tag}</li>
+                ))}
+              </ul>
+              {project.contribution && (
+                <p className="case__contribution">
+                  기여도 {project.contribution}
+                </p>
+              )}
+            </div>
           </Reveal>
 
-          {/* 5. Design direction */}
+          {/* 04. Approach & Solution */}
           <Reveal
             as="section"
             className="case__section"
-            aria-labelledby="direction-title"
+            aria-labelledby="approach-title"
           >
-            <h2 id="direction-title" className="case__section-title">
-              <span className="case__section-num">{num()}</span> Design
-              Direction
+            <h2 id="approach-title" className="case__section-title">
+              <span className="case__section-num">{num()}</span> Approach &amp;
+              Solution
             </h2>
             <ul className="case__statement-list">
               {project.direction.map((line) => (
@@ -203,171 +254,160 @@ the title never overlaps whatever the photo itself contains. */}
             </ul>
           </Reveal>
 
-          {/* 6. Color & typography */}
+          {/* 05. Design — the actual visual/component output: color &
+          typography system, then every screen (in-app UI, campaign/print
+          materials, flyer) as evidence, grouped under one section instead
+          of three separate top-level ones. */}
           <Reveal
             as="section"
             className="case__section"
-            aria-labelledby="palette-title"
+            aria-labelledby="design-title"
           >
-            <h2 id="palette-title" className="case__section-title">
-              <span className="case__section-num">{num()}</span> Color &amp;
-              Typography
+            <h2 id="design-title" className="case__section-title">
+              <span className="case__section-num">{num()}</span> Design
             </h2>
-            <div className="case__palette">
-              {project.colorTypography.colors.map((c) => (
-                <span
-                  key={c}
-                  className="case__swatch"
-                  style={{ background: c }}
-                >
-                  {c}
-                </span>
-              ))}
-            </div>
-            <ul className="case__typefaces">
-              {project.colorTypography.typefaces.map((t) => (
-                <li key={t}>{t}</li>
-              ))}
-            </ul>
-          </Reveal>
 
-          {/* 7. Key UI Screens — only for projects (like Gimesee) that have
-real in-app screenshots, shown ahead of the print/campaign
-materials below since these are the actual product UI. */}
-          {project.uiScreens && (
-            <Reveal
-              as="section"
-              className="case__section"
-              aria-labelledby="ui-screens-title"
-            >
-              <h2 id="ui-screens-title" className="case__section-title">
-                <span className="case__section-num">{num()}</span> Key UI
-                Screens
-              </h2>
-              <div className="case__screens">
-                {project.uiScreens.map((src, i) => (
-                  <figure key={src} className="case__screen-figure">
-                    <img
-                      className="case__screen case__screen--real"
-                      src={src}
-                      alt={
-                        project.uiScreenCaptions?.[i] ||
-                        `${project.title} UI 화면 ${i + 1}`
-                      }
-                      loading="lazy"
-                    />
-                    {project.uiScreenCaptions?.[i] && (
-                      <figcaption className="case__screen-caption">
-                        {project.uiScreenCaptions[i]}
-                      </figcaption>
-                    )}
-                  </figure>
-                ))}
-              </div>
-            </Reveal>
-          )}
-
-          {/* 7b. Print/campaign screens (or, for projects built entirely from
-in-app screenshots, whatever screensTitle that project supplies
-instead — defaults to "Key UI Screens" if there's no uiScreens
-section above to distinguish it from). */}
-          <Reveal
-            as="section"
-            className="case__section"
-            aria-labelledby="screens-title"
-          >
-            <h2 id="screens-title" className="case__section-title">
-              <span className="case__section-num">{num()}</span>{" "}
-              {project.screensTitle || "Key UI Screens"}
-            </h2>
-            <div className="case__screens">
-              {project.screens.map((src, i) =>
-                project.images?.screens?.[i] ? (
-                  <figure key={src} className="case__screen-figure">
-                    <img
-                      className={
-                        "case__screen case__screen--real" +
-                        (project.screensAspect === "auto"
-                          ? " case__screen--auto"
-                          : "")
-                      }
-                      src={src}
-                      alt={
-                        project.screenCaptions?.[i] ||
-                        `${project.title} 화면 ${i + 1}`
-                      }
-                      loading="lazy"
-                    />
-                    {project.screenCaptions?.[i] && (
-                      <figcaption className="case__screen-caption">
-                        {project.screenCaptions[i]}
-                      </figcaption>
-                    )}
-                  </figure>
-                ) : (
-                  <div
-                    key={src}
-                    className="img-placeholder case__screen"
-                    style={{ "--ph-a": project.accent, "--ph-b": "#24100B" }}
+            <div className="case__design-block">
+              <h3 className="case__design-subtitle">Color &amp; Typography</h3>
+              <div className="case__palette">
+                {project.colorTypography.colors.map((c) => (
+                  <span
+                    key={c}
+                    className="case__swatch"
+                    style={{ background: c }}
                   >
-                    <span>
-                      Screen 0{i + 1} 교체 영역 ({src})
-                    </span>
-                  </div>
-                ),
-              )}
-            </div>
-          </Reveal>
-
-          {/* 7c. Print/flyer design — separate from the on-screen UI shots
-above, only rendered for projects (like Ppasak Guys) that also
-shipped an offline flyer for the same campaign. */}
-          {project.flyerScreens && (
-            <Reveal
-              as="section"
-              className="case__section"
-              aria-labelledby="flyer-title"
-            >
-              <h2 id="flyer-title" className="case__section-title">
-                <span className="case__section-num">{num()}</span>{" "}
-                {project.flyerScreensTitle || "Print & Flyer Design"}
-              </h2>
-              <div className="case__screens case__screens--pair">
-                {project.flyerScreens.map((src, i) => (
-                  <figure key={src} className="case__screen-figure">
-                    <img
-                      className="case__screen case__screen--real case__screen--auto"
-                      src={src}
-                      alt={
-                        project.flyerCaptions?.[i] ||
-                        `${project.title} 전단지 ${i + 1}`
-                      }
-                      loading="lazy"
-                    />
-                    {project.flyerCaptions?.[i] && (
-                      <figcaption className="case__screen-caption">
-                        {project.flyerCaptions[i]}
-                      </figcaption>
-                    )}
-                  </figure>
+                    {c}
+                  </span>
                 ))}
               </div>
-            </Reveal>
-          )}
+              <ul className="case__typefaces">
+                {project.colorTypography.typefaces.map((t) => (
+                  <li key={t}>{t}</li>
+                ))}
+              </ul>
+            </div>
 
-          {/* 8. Responsive screens — skipped for projects (like Gimesee) that
-        were never built with a mobile/responsive version, via
-        project.noResponsive. See src/data/projects.js. */}
-          {!project.noResponsive && (
-            <Reveal
-              as="section"
-              className="case__section"
-              aria-labelledby="responsive-title"
-            >
-              <h2 id="responsive-title" className="case__section-title">
-                <span className="case__section-num">{num()}</span> Responsive
-                Screens
-              </h2>
+            {project.uiScreens && (
+              <div className="case__design-block">
+                <h3 className="case__design-subtitle">Key UI Screens</h3>
+                <div className="case__screens">
+                  {project.uiScreens.map((src, i) => (
+                    <figure key={src} className="case__screen-figure">
+                      <img
+                        className="case__screen case__screen--real"
+                        src={src}
+                        alt={
+                          project.uiScreenCaptions?.[i] ||
+                          `${project.title} UI 화면 ${i + 1}`
+                        }
+                        loading="lazy"
+                      />
+                      {project.uiScreenCaptions?.[i] && (
+                        <figcaption className="case__screen-caption">
+                          {project.uiScreenCaptions[i]}
+                        </figcaption>
+                      )}
+                    </figure>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div className="case__design-block">
+              <h3 className="case__design-subtitle">
+                {project.screensTitle || "Key UI Screens"}
+              </h3>
+              <div className="case__screens">
+                {project.screens.map((src, i) =>
+                  project.images?.screens?.[i] ? (
+                    <figure key={src} className="case__screen-figure">
+                      <img
+                        className={
+                          "case__screen case__screen--real" +
+                          (project.screensAspect === "auto"
+                            ? " case__screen--auto"
+                            : "")
+                        }
+                        src={src}
+                        alt={
+                          project.screenCaptions?.[i] ||
+                          `${project.title} 화면 ${i + 1}`
+                        }
+                        loading="lazy"
+                      />
+                      {project.screenCaptions?.[i] && (
+                        <figcaption className="case__screen-caption">
+                          {project.screenCaptions[i]}
+                        </figcaption>
+                      )}
+                    </figure>
+                  ) : (
+                    <div
+                      key={src}
+                      className="img-placeholder case__screen"
+                      style={{ "--ph-a": project.accent, "--ph-b": "#24100B" }}
+                    >
+                      <span>
+                        Screen 0{i + 1} 교체 영역 ({src})
+                      </span>
+                    </div>
+                  ),
+                )}
+              </div>
+            </div>
+
+            {project.flyerScreens && (
+              <div className="case__design-block">
+                <h3 className="case__design-subtitle">
+                  {project.flyerScreensTitle || "Print & Flyer Design"}
+                </h3>
+                <div className="case__screens case__screens--pair">
+                  {project.flyerScreens.map((src, i) => (
+                    <figure key={src} className="case__screen-figure">
+                      <img
+                        className="case__screen case__screen--real case__screen--auto"
+                        src={src}
+                        alt={
+                          project.flyerCaptions?.[i] ||
+                          `${project.title} 전단지 ${i + 1}`
+                        }
+                        loading="lazy"
+                      />
+                      {project.flyerCaptions?.[i] && (
+                        <figcaption className="case__screen-caption">
+                          {project.flyerCaptions[i]}
+                        </figcaption>
+                      )}
+                    </figure>
+                  ))}
+                </div>
+              </div>
+            )}
+          </Reveal>
+
+          {/* 06. Publishing — explicit callout for the HTML/CSS/responsive
+          work, since this is exactly the "not just a designer" proof
+          point. Responsive screens (when this project has any) live here
+          as the evidence. Projects without a responsive version (e.g.
+          Gimesee, an internal B2B tool) get an honest one-line note
+          instead of an empty/misleading section. */}
+          <Reveal
+            as="section"
+            className="case__section"
+            aria-labelledby="publishing-title"
+          >
+            <h2 id="publishing-title" className="case__section-title">
+              <span className="case__section-num">{num()}</span> Publishing
+            </h2>
+            {publishingTools.length > 0 && (
+              <p className="case__publishing-desc">
+                {publishingTools.join(", ")}
+                {project.noResponsive
+                  ? "로 화면을 직접 퍼블리싱했습니다. 데스크톱 사용 환경을 기준으로 한 내부 서비스라 별도의 반응형 버전은 제작하지 않았습니다."
+                  : "로 화면을 직접 퍼블리싱하고, 아래와 같이 반응형까지 대응했습니다."}
+              </p>
+            )}
+            {!project.noResponsive && (
               <div className="case__responsive">
                 {project.responsive.map((src, i) =>
                   project.images?.responsive?.[i] ? (
@@ -391,41 +431,17 @@ shipped an offline flyer for the same campaign. */}
                   ),
                 )}
               </div>
-            </Reveal>
-          )}
-
-          {/* 9. Role & tools */}
-          <Reveal
-            as="section"
-            className="case__section"
-            aria-labelledby="role-title"
-          >
-            <h2 id="role-title" className="case__section-title">
-              <span className="case__section-num">{num()}</span> Role &amp;
-              Tools
-            </h2>
-            <p className="case__role">{project.role}</p>
-            {project.contribution && (
-              <p className="case__contribution">
-                기여도 {project.contribution}
-              </p>
             )}
-            <ul className="case__tools">
-              {project.toolsUsed.map((tool) => (
-                <li key={tool}>{tool}</li>
-              ))}
-            </ul>
           </Reveal>
 
-          {/* 10. Result / learnings */}
+          {/* 07. Result */}
           <Reveal
             as="section"
             className="case__section case__result"
             aria-labelledby="result-title"
           >
             <h2 id="result-title" className="case__section-title">
-              <span className="case__section-num">{num()}</span> Result &amp;
-              Learnings
+              <span className="case__section-num">{num()}</span> Result
             </h2>
             <p className="case__result-text">{project.result}</p>
           </Reveal>

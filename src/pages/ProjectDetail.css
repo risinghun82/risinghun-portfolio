@@ -254,6 +254,7 @@ fonts. */
   display: grid;
   grid-template-columns: 1.3fr 1fr;
   gap: 3rem;
+  align-items: start;
 }
 
 .case__overview-desc {
@@ -262,6 +263,7 @@ fonts. */
 }
 
 .case__overview-facts {
+  margin: 0; /* reset UA default <dl> margin so it aligns flush with the title */
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
@@ -310,6 +312,65 @@ fonts. */
   width: 6px;
   height: 1px;
   background: var(--project-accent, var(--accent));
+}
+
+/* 02. Challenge — Background & Goals / Existing Problems shown as two
+labeled groups within one section instead of two separate top-level
+sections. */
+.case__challenge {
+  display: flex;
+  flex-direction: column;
+  gap: 2.4rem;
+}
+
+.case__challenge-subtitle {
+  font-family: var(--font-display);
+  font-size: var(--fs-sm);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  color: var(--text-on-light-muted);
+  margin-bottom: 1rem;
+}
+
+/* 03. My Role */
+.case__role-block {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  align-items: flex-start;
+}
+
+.case__role-scope {
+  font-size: var(--fs-lg);
+  line-height: var(--lh-heading);
+  max-width: 68ch;
+}
+
+/* 05. Design — Color & Typography / screens grouped as sub-blocks of one
+numbered section instead of three separate top-level ones. */
+.case__design-block {
+  margin-top: 2.6rem;
+}
+
+.case__design-block:first-child {
+  margin-top: 0;
+}
+
+.case__design-subtitle {
+  font-family: var(--font-display);
+  font-size: var(--fs-sm);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  color: var(--text-on-light-muted);
+  margin-bottom: 1.4rem;
+}
+
+/* 06. Publishing */
+.case__publishing-desc {
+  font-size: var(--fs-lg);
+  line-height: var(--lh-heading);
+  max-width: 68ch;
+  margin-bottom: 2rem;
 }
 
 .case__palette {
@@ -401,16 +462,9 @@ instead, showing the whole screenshot uncropped. */
   aspect-ratio: 3 / 4;
 }
 
-.case__role {
-  font-size: var(--fs-lg);
-  margin-bottom: 1.2rem;
-}
-
 .case__contribution {
   font-size: var(--fs-sm);
   color: var(--text-on-light-muted);
-  margin-top: -0.6rem;
-  margin-bottom: 1.2rem;
 }
 
 .case__tools {
