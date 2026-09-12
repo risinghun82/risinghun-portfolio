@@ -195,6 +195,14 @@ export const projects = [
     // of the generic "Key UI Screens" heading. Real UI screens (if added
     // later) should go in a separate array so the two don't get conflated.
     screensTitle: "Campaign & Print Materials",
+    // This section is meant to hold a growing pile of banner/print creative
+    // (many more will be added over time), not a handful of full-width
+    // screenshots — "gallery" renders it as a dense multi-column grid of
+    // small tiles instead of one large image per row. See
+    // ProjectDetail.jsx / ProjectDetail.css. Adding more banners later is
+    // just adding more entries to screens/screenCaptions/images.screens
+    // below — the grid itself needs no further changes.
+    screensLayout: "gallery",
     screenCaptions: [
       "조선일보 지면광고 배너",
       "3단 리플렛 — 앞면",
