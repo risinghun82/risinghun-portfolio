@@ -401,10 +401,15 @@ the title never overlaps whatever the photo itself contains. */}
             </h2>
             {publishingTools.length > 0 && (
               <p className="case__publishing-desc">
-                {publishingTools.join(", ")}
-                {project.noResponsive
-                  ? "로 화면을 직접 퍼블리싱했습니다. 데스크톱 사용 환경을 기준으로 한 내부 서비스라 별도의 반응형 버전은 제작하지 않았습니다."
-                  : "로 화면을 직접 퍼블리싱하고, 아래와 같이 반응형까지 대응했습니다."}
+                {/* Particle ("등을") attaches to the fixed word "등", not to
+                the variable tool list, so this stays grammatically correct
+                no matter what toolsUsed contains. */}
+                {publishingTools.join(", ")} 등을 활용해 화면을 직접 퍼블리싱
+                {project.noResponsive ? "했습니다." : "하고,"}
+                {!project.noResponsive &&
+                  " 아래와 같이 반응형까지 대응했습니다."}
+                {project.noResponsive &&
+                  " 데스크톱 사용 환경을 기준으로 한 내부 서비스라 별도의 반응형 버전은 제작하지 않았습니다."}
               </p>
             )}
             {!project.noResponsive && (
