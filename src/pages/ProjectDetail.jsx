@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { useParams, Link, Navigate } from "react-router-dom";
 import { createPortal } from "react-dom";
 import Reveal from "../components/Reveal.jsx";
@@ -28,35 +27,6 @@ export default function ProjectDetail() {
   // throw off the numbering of everything after it.
   let sectionCount = 0;
   const num = () => String(++sectionCount).padStart(2, "0");
-
-  // Scoped to the dense banner gallery (screensLayout === "gallery") only —
-  // those tiles are shrunk small enough that they need a way to read them
-  // at full size. Regular full-width screenshots elsewhere don't need this.
-  const [lightbox, setLightbox] = useState(null); // { src, alt } | null
-  const openLightbox = (src, alt) => setLightbox({ src, alt });
-  const closeLightbox = () => setLightbox(null);
-  const handleThumbKeyDown = (e, src, alt) => {
-    if (e.key === "Enter" || e.key === " ") {
-      e.preventDefault();
-      openLightbox(src, alt);
-    }
-  };
-
-  useEffect(() => {
-    if (!lightbox) return;
-    const onKeyDown = (e) => {
-      if (e.key === "Escape") closeLightbox();
-    };
-    document.addEventListener("keydown", onKeyDown);
-    // Lock background scroll while the lightbox is open, same as any
-    // standard image-viewer modal.
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.removeEventListener("keydown", onKeyDown);
-      document.body.style.overflow = prevOverflow;
-    };
-  }, [lightbox]);
 
   return (
     <>
@@ -93,46 +63,6 @@ export default function ProjectDetail() {
         </Link>,
         document.body,
       )}
-
-      {/* Image lightbox — also portaled to <body> for the same reason as
-      the floating back button above (it needs to sit above everything,
-      truly fixed to the viewport, not confined by the page-transition
-      wrapper's transform). Every real screenshot/print asset on the page
-      opens here at full size when clicked. */}
-      {lightbox &&
-        createPortal(
-          <div
-            className="case__lightbox"
-            role="dialog"
-            aria-modal="true"
-            aria-label={lightbox.alt}
-            onClick={closeLightbox}
-          >
-            <button
-              type="button"
-              className="case__lightbox-close"
-              onClick={closeLightbox}
-              aria-label="이미지 닫기"
-            >
-              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path
-                  d="M6 6l12 12M18 6L6 18"
-                  stroke="currentColor"
-                  strokeWidth="1.75"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </button>
-            <img
-              className="case__lightbox-image"
-              src={lightbox.src}
-              alt={lightbox.alt}
-              onClick={(e) => e.stopPropagation()}
-            />
-          </div>,
-          document.body,
-        )}
 
       <main className="case" style={{ "--project-accent": project.accent }}>
         {/* 1. Hero — image and title live in separate panels on purpose, so
@@ -198,20 +128,13 @@ the title never overlaps whatever the photo itself contains. */}
             className="case__section"
             aria-labelledby="overview-title"
           >
-            {/* Title lives inside the grid's left column now (stacked above
-            the summary) instead of spanning full-width above the grid — that
-            way the facts list on the right, as the grid's other column,
-            starts flush with the title's own top edge instead of with the
-            summary paragraph beneath it. */}
+            <h2 id="overview-title" className="case__section-title">
+              <span className="case__section-num">{num()}</span> Overview
+            </h2>
             <div className="case__overview-grid">
-              <div>
-                <h2 id="overview-title" className="case__section-title">
-                  <span className="case__section-num">{num()}</span> Overview
-                </h2>
-                <p className="case__overview-desc">
-                  {project.overview.description}
-                </p>
-              </div>
+              <p className="case__overview-desc">
+                {project.overview.description}
+              </p>
               <dl className="case__overview-facts">
                 <div>
                   <dt>Client</dt>
@@ -322,26 +245,24 @@ materials below since these are the actual product UI. */}
                 Screens
               </h2>
               <div className="case__screens">
-                {project.uiScreens.map((src, i) => {
-                  const alt =
-                    project.uiScreenCaptions?.[i] ||
-                    `${project.title} UI 화면 ${i + 1}`;
-                  return (
-                    <figure key={src} className="case__screen-figure">
-                      <img
-                        className="case__screen case__screen--real"
-                        src={src}
-                        alt={alt}
-                        loading="lazy"
-                      />
-                      {project.uiScreenCaptions?.[i] && (
-                        <figcaption className="case__screen-caption">
-                          {project.uiScreenCaptions[i]}
-                        </figcaption>
-                      )}
-                    </figure>
-                  );
-                })}
+                {project.uiScreens.map((src, i) => (
+                  <figure key={src} className="case__screen-figure">
+                    <img
+                      className="case__screen case__screen--real"
+                      src={src}
+                      alt={
+                        project.uiScreenCaptions?.[i] ||
+                        `${project.title} UI 화면 ${i + 1}`
+                      }
+                      loading="lazy"
+                    />
+                    {project.uiScreenCaptions?.[i] && (
+                      <figcaption className="case__screen-caption">
+                        {project.uiScreenCaptions[i]}
+                      </figcaption>
+                    )}
+                  </figure>
+                ))}
               </div>
             </Reveal>
           )}
@@ -359,20 +280,9 @@ section above to distinguish it from). */}
               <span className="case__section-num">{num()}</span>{" "}
               {project.screensTitle || "Key UI Screens"}
             </h2>
-            <div
-              className={
-                "case__screens" +
-                (project.screensLayout === "gallery"
-                  ? " case__screens--gallery"
-                  : "")
-              }
-            >
-              {project.screens.map((src, i) => {
-                const alt =
-                  project.screenCaptions?.[i] ||
-                  `${project.title} 화면 ${i + 1}`;
-                const isGallery = project.screensLayout === "gallery";
-                return project.images?.screens?.[i] ? (
+            <div className="case__screens">
+              {project.screens.map((src, i) =>
+                project.images?.screens?.[i] ? (
                   <figure key={src} className="case__screen-figure">
                     <img
                       className={
@@ -382,20 +292,11 @@ section above to distinguish it from). */}
                           : "")
                       }
                       src={src}
-                      alt={alt}
+                      alt={
+                        project.screenCaptions?.[i] ||
+                        `${project.title} 화면 ${i + 1}`
+                      }
                       loading="lazy"
-                      // Click-to-enlarge only applies to the dense banner
-                      // gallery, where images are shrunk small enough that
-                      // they need it to be readable — the regular
-                      // full-width screenshots elsewhere don't.
-                      {...(isGallery
-                        ? {
-                            role: "button",
-                            tabIndex: 0,
-                            onClick: () => openLightbox(src, alt),
-                            onKeyDown: (e) => handleThumbKeyDown(e, src, alt),
-                          }
-                        : {})}
                     />
                     {project.screenCaptions?.[i] && (
                       <figcaption className="case__screen-caption">
@@ -413,8 +314,8 @@ section above to distinguish it from). */}
                       Screen 0{i + 1} 교체 영역 ({src})
                     </span>
                   </div>
-                );
-              })}
+                ),
+              )}
             </div>
           </Reveal>
 
@@ -432,26 +333,24 @@ shipped an offline flyer for the same campaign. */}
                 {project.flyerScreensTitle || "Print & Flyer Design"}
               </h2>
               <div className="case__screens case__screens--pair">
-                {project.flyerScreens.map((src, i) => {
-                  const alt =
-                    project.flyerCaptions?.[i] ||
-                    `${project.title} 전단지 ${i + 1}`;
-                  return (
-                    <figure key={src} className="case__screen-figure">
-                      <img
-                        className="case__screen case__screen--real case__screen--auto"
-                        src={src}
-                        alt={alt}
-                        loading="lazy"
-                      />
-                      {project.flyerCaptions?.[i] && (
-                        <figcaption className="case__screen-caption">
-                          {project.flyerCaptions[i]}
-                        </figcaption>
-                      )}
-                    </figure>
-                  );
-                })}
+                {project.flyerScreens.map((src, i) => (
+                  <figure key={src} className="case__screen-figure">
+                    <img
+                      className="case__screen case__screen--real case__screen--auto"
+                      src={src}
+                      alt={
+                        project.flyerCaptions?.[i] ||
+                        `${project.title} 전단지 ${i + 1}`
+                      }
+                      loading="lazy"
+                    />
+                    {project.flyerCaptions?.[i] && (
+                      <figcaption className="case__screen-caption">
+                        {project.flyerCaptions[i]}
+                      </figcaption>
+                    )}
+                  </figure>
+                ))}
               </div>
             </Reveal>
           )}
@@ -470,14 +369,13 @@ shipped an offline flyer for the same campaign. */}
                 Screens
               </h2>
               <div className="case__responsive">
-                {project.responsive.map((src, i) => {
-                  const alt = `${project.title} ${i === 0 ? "태블릿" : "모바일"} 화면`;
-                  return project.images?.responsive?.[i] ? (
+                {project.responsive.map((src, i) =>
+                  project.images?.responsive?.[i] ? (
                     <img
                       key={src}
                       className="case__responsive-item case__responsive-item--real"
                       src={src}
-                      alt={alt}
+                      alt={`${project.title} ${i === 0 ? "태블릿" : "모바일"} 화면`}
                       loading="lazy"
                     />
                   ) : (
@@ -490,8 +388,8 @@ shipped an offline flyer for the same campaign. */}
                         {i === 0 ? "Tablet" : "Mobile"} 교체 영역 ({src})
                       </span>
                     </div>
-                  );
-                })}
+                  ),
+                )}
               </div>
             </Reveal>
           )}
