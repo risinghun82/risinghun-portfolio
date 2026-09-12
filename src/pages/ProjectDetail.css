@@ -254,6 +254,14 @@ fonts. */
   display: grid;
   grid-template-columns: 1.3fr 1fr;
   gap: 3rem;
+  /* Project summaries range from one short sentence to a full paragraph, but
+  the facts list's own height barely changes project to project. Stretching
+  both columns to match the row (the old default) meant a short summary
+  just left a dead gap under itself, sized however tall the facts list
+  happened to be that day — a mismatch, not a design. Centering the two
+  columns against each other keeps them reading as one balanced row no
+  matter how long the summary is. */
+  align-items: center;
 }
 
 .case__overview-desc {
@@ -261,10 +269,20 @@ fonts. */
   line-height: var(--lh-heading);
 }
 
+/* Was plain floating text with a divider above each item — fine when it
+happened to line up with the paragraph next to it, but with nothing of its
+own to anchor it, any height mismatch just read as broken. Framed as a
+card, it's a self-contained fact sheet that sits comfortably next to prose
+of any length instead of needing to match it. */
 .case__overview-facts {
   display: flex;
   flex-direction: column;
   gap: 1.4rem;
+  padding: 1.75rem 2rem;
+  background: #fff;
+  border-radius: 8px;
+  border-left: 3px solid var(--project-accent, var(--sun-orange));
+  box-shadow: 0 18px 48px rgba(23, 23, 23, 0.08);
 }
 
 .case__overview-facts div {
@@ -273,6 +291,14 @@ fonts. */
   gap: 0.4rem;
   border-top: 1px solid rgba(23, 23, 23, 0.14);
   padding-top: 0.7rem;
+}
+
+/* The card's own top edge already separates it from whatever's above, so
+the first item doesn't need its own divider on top of that — one less
+redundant line right under the card's border. */
+.case__overview-facts div:first-child {
+  border-top: none;
+  padding-top: 0;
 }
 
 /* CLIENT/SCOPE/DURATION were fs-xs (~11.5px) next to a fs-lg (~21px)
