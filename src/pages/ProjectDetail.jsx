@@ -33,6 +33,20 @@ export default function ProjectDetail() {
     /html|css|반응형/i.test(t),
   );
 
+  // A handful of section labels shift for a self-directed personal project
+  // (no client, no brief) so it reads as what it actually was rather than
+  // being forced into the same "client engagement" framing as the rest —
+  // same sections, same underlying data, just an honest label. See
+  // src/data/projects.js `personal` flag.
+  const challengeTitle = project.personal ? "Goal & Exploration" : "Challenge";
+  const backgroundLabel = project.personal
+    ? "What I Wanted to Explore"
+    : "Background & Goals";
+  const problemsLabel = project.personal
+    ? "Constraints & Questions"
+    : "Existing Problems";
+  const resultTitle = project.personal ? "What I Explored" : "Result";
+
   // Sections are numbered by how many of them actually render for this
   // project (not a hardcoded 01–07), so a project missing a piece (e.g. no
   // responsive version) doesn't throw off the numbering of what follows.
@@ -121,12 +135,29 @@ the title never overlaps whatever the photo itself contains. */}
             </Link>
 
             <div className="case__hero-info">
-              <span className="case__number">PROJECT {project.number}</span>
+              <span className="case__number">
+                PROJECT {project.number}
+                {project.personal && (
+                  <span className="case__personal-badge">Personal Project</span>
+                )}
+              </span>
               <h1 className="case__title">{project.title}</h1>
               <p className="case__category">{project.category}</p>
+              {/* One-line summary + role/tools right here, so "what this
+              project was and what I did" is answerable without scrolling
+              past the hero. */}
+              <p className="case__hero-summary">{project.summary}</p>
+              <ul
+                className="case__tools case__tools--on-dark"
+                aria-label="담당 역할"
+              >
+                {roleTags.map((tag) => (
+                  <li key={tag}>{tag}</li>
+                ))}
+              </ul>
               <div className="case__hero-meta">
-                <span>{project.role}</span>
-                <span>{project.year}</span>
+                <span>{project.overview.duration}</span>
+                <span>{project.toolsUsed.join(" · ")}</span>
               </div>
             </div>
           </div>
@@ -187,13 +218,12 @@ the title never overlaps whatever the photo itself contains. */}
             aria-labelledby="challenge-title"
           >
             <h2 id="challenge-title" className="case__section-title">
-              <span className="case__section-num">{num()}</span> Challenge
+              <span className="case__section-num">{num()}</span>{" "}
+              {challengeTitle}
             </h2>
             <div className="case__challenge">
               <div className="case__challenge-group">
-                <h3 className="case__challenge-subtitle">
-                  Background &amp; Goals
-                </h3>
+                <h3 className="case__challenge-subtitle">{backgroundLabel}</h3>
                 <ul className="case__statement-list">
                   {project.background.map((line) => (
                     <li key={line}>{line}</li>
@@ -201,7 +231,7 @@ the title never overlaps whatever the photo itself contains. */}
                 </ul>
               </div>
               <div className="case__challenge-group">
-                <h3 className="case__challenge-subtitle">Existing Problems</h3>
+                <h3 className="case__challenge-subtitle">{problemsLabel}</h3>
                 <ul className="case__statement-list case__statement-list--flagged">
                   {project.problems.map((line) => (
                     <li key={line}>{line}</li>
@@ -224,9 +254,13 @@ the title never overlaps whatever the photo itself contains. */}
             </h2>
             <div className="case__role-block">
               <p className="case__role-scope">{project.overview.scope}</p>
-              <ul className="case__tools" aria-label="담당 역할">
-                {roleTags.map((tag) => (
-                  <li key={tag}>{tag}</li>
+              {/* Concrete tasks actually performed, not a repeat of the role
+              chips already shown in the hero — this is the section a
+              recruiter reads to answer "so what did they actually do
+              here?" See responsibilities in src/data/projects.js. */}
+              <ul className="case__statement-list case__responsibilities">
+                {project.responsibilities.map((line) => (
+                  <li key={line}>{line}</li>
                 ))}
               </ul>
               {project.contribution && (
@@ -446,7 +480,7 @@ the title never overlaps whatever the photo itself contains. */}
             aria-labelledby="result-title"
           >
             <h2 id="result-title" className="case__section-title">
-              <span className="case__section-num">{num()}</span> Result
+              <span className="case__section-num">{num()}</span> {resultTitle}
             </h2>
             <p className="case__result-text">{project.result}</p>
           </Reveal>

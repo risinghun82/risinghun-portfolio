@@ -184,6 +184,21 @@ fonts. */
   animation-delay: 0.05s;
 }
 
+/* Self-directed (no client) projects get an honest small label right next
+to the project number, instead of being framed the same as a client
+engagement. */
+.case__personal-badge {
+  margin-left: 0.7rem;
+  padding: 0.15rem 0.6rem;
+  border: 1px solid rgba(255, 246, 235, 0.35);
+  border-radius: 999px;
+  font-size: 0.7em;
+  letter-spacing: var(--ls-wide);
+  color: var(--text-on-dark-muted);
+  text-transform: none;
+  vertical-align: middle;
+}
+
 .case__title {
   font-family: var(--font-display);
   font-size: clamp(2rem, 3.4vw, 3.4rem);
@@ -201,15 +216,41 @@ fonts. */
   animation-delay: 0.15s;
 }
 
+/* One-line "what this was" — answers the first thing a reviewer needs
+before anything else, right in the hero, no scrolling required. */
+.case__hero-summary {
+  max-width: 46ch;
+  margin-top: 0.9rem;
+  font-size: var(--fs-md);
+  line-height: var(--lh-heading);
+  color: var(--sun-cream);
+  animation: caseHeroTextIn 0.6s var(--ease-rise) both;
+  animation-delay: 0.18s;
+}
+
+/* Same pill component as .case__tools (Design section / My Role), but on
+the hero's dark panel background — light border/text instead of dark. */
+.case__tools--on-dark {
+  margin-top: 1.1rem;
+  animation: caseHeroTextIn 0.6s var(--ease-rise) both;
+  animation-delay: 0.22s;
+}
+
+.case__tools--on-dark li {
+  border-color: rgba(255, 246, 235, 0.32);
+  color: var(--sun-cream);
+}
+
 .case__hero-meta {
   display: flex;
+  flex-wrap: wrap;
   gap: 1.4rem;
   margin-top: 1.2rem;
   font-size: var(--fs-sm);
   letter-spacing: 0.02em;
   color: var(--text-on-dark-muted);
   animation: caseHeroTextIn 0.6s var(--ease-rise) both;
-  animation-delay: 0.2s;
+  animation-delay: 0.26s;
 }
 
 @media (max-width: 900px) {
