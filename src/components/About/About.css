@@ -10,7 +10,11 @@
   line-height: var(--lh-heading);
   letter-spacing: var(--ls-tight);
   margin-top: 1.4rem;
-  max-width: 16ch;
+  /* Line breaks are set manually via <br/> in the markup; Korean glyphs run
+     much wider per character than Latin ones, so a ch-based max-width
+     (sized for the old English copy) forced an extra mid-word wrap. Just
+     bound it to the container instead of a fixed character count. */
+  max-width: 100%;
 }
 
 .about__grid {

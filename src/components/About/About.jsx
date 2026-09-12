@@ -4,13 +4,16 @@ import "./About.css";
 const STATS = [
   { value: "14 Years", label: "Web Design Experience" },
   { value: "End-to-End", label: "Planning → Design → Publishing" },
-  { value: "Multi-disciplinary", label: "Web · UI/UX · Commerce · Content" },
+  { value: "Hands-On", label: "Designing & Building for the Web" },
 ];
 
+// Concrete, day-to-day capabilities rather than design-philosophy adjectives
+// — the point is to show what actually gets done, not how it's described.
 const KEYWORDS = [
-  "Structure over decoration",
-  "Clarity of hierarchy",
-  "Warm, confident tone",
+  "요구사항 분석",
+  "정보구조 설계",
+  "실무 퍼블리싱",
+  "운영 대응",
 ];
 
 const TOOLS = ["Figma", "Photoshop", "Illustrator", "Adobe XD", "HTML/CSS"];
@@ -31,13 +34,14 @@ export default function About() {
     >
       <div className="container about__inner">
         <Reveal as="p" className="eyebrow">
-          About the Rise
+          About
         </Reveal>
 
         <Reveal as="h2" className="about__title title-mask">
           <span>
-            DESIGN WITH
-            <br />A CLEAR DIRECTION
+            기획부터 퍼블리싱까지
+            <br />
+            직접 해왔습니다.
           </span>
         </Reveal>
 
