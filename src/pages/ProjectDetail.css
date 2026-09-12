@@ -373,6 +373,13 @@ safe — nothing here is only readable at full width. */
 }
 
 .case__screens--gallery .case__screen-figure {
+  /* <figure> carries a browser-default 1em 40px margin. At full-width
+  layout that margin barely registered, but stretched across a narrow
+  180-196px grid column it ate ~80px of every tile — the reason the tiles
+  rendered small and adrift with big gaps instead of sitting flush in a
+  dense grid. Reset it, scoped to the gallery so nothing else on the page
+  is affected. */
+  margin: 0;
   gap: 0.4rem;
 }
 
