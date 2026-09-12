@@ -2,12 +2,16 @@ import Reveal from "../Reveal.jsx";
 import "./About.css";
 
 const STATS = [
-  { value: "13+", label: "Years in web planning & UI/UX" },
-  { value: "20+", label: "Brand & product projects" },
-  { value: "100%", label: "Responsive, HTML/CSS-ready" }
+  { value: "14 Years", label: "Web Design Experience" },
+  { value: "End-to-End", label: "Planning → Design → Publishing" },
+  { value: "Multi-disciplinary", label: "Web · UI/UX · Commerce · Content" },
 ];
 
-const KEYWORDS = ["Structure over decoration", "Clarity of hierarchy", "Warm, confident tone"];
+const KEYWORDS = [
+  "Structure over decoration",
+  "Clarity of hierarchy",
+  "Warm, confident tone",
+];
 
 const TOOLS = ["Figma", "Photoshop", "Illustrator", "Adobe XD", "HTML/CSS"];
 
@@ -19,7 +23,12 @@ const TOOLS = ["Figma", "Photoshop", "Illustrator", "Adobe XD", "HTML/CSS"];
  */
 export default function About() {
   return (
-    <section id="about" className="about" data-nav-theme="light" aria-label="소개">
+    <section
+      id="about"
+      className="about"
+      data-nav-theme="light"
+      aria-label="소개"
+    >
       <div className="container about__inner">
         <Reveal as="p" className="eyebrow">
           About the Rise
@@ -35,11 +44,11 @@ export default function About() {
         <div className="about__grid">
           <Reveal className="about__intro" delay={1}>
             <p>
-              13년간 아이디어를 명확한 구조로 정리하고,
+              14년간 요구사항을 파악해 화면을 기획하고,
               <br />
-              브랜드의 방향을 실제 웹 경험으로 구현해 온
+              디자인부터 퍼블리싱까지 직접 구현해 온
               <br />
-              웹기획자 겸 UI/UX 디자이너 <strong>신동훈</strong>입니다.
+              웹디자이너 <strong>신동훈</strong>입니다.
             </p>
             <ul className="about__keywords">
               {KEYWORDS.map((k) => (
@@ -65,7 +74,9 @@ export default function About() {
           </div>
           <div className="about__foot-col">
             <span className="about__foot-title">Publishing</span>
-            <p>시맨틱 HTML, 반응형 CSS 퍼블리싱, 유지보수 가능한 컴포넌트 구조</p>
+            <p>
+              시맨틱 HTML, 반응형 CSS 퍼블리싱, 유지보수 가능한 컴포넌트 구조
+            </p>
           </div>
         </Reveal>
       </div>

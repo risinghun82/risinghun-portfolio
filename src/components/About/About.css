@@ -62,9 +62,11 @@
 
 .about__stat-value {
   font-family: var(--font-display);
-  font-size: clamp(2rem, 3vw, 2.6rem);
+  font-size: clamp(1.3rem, 1.7vw, 1.6rem);
+  font-weight: 600;
   color: var(--accent);
   letter-spacing: var(--ls-tight);
+  text-transform: uppercase;
 }
 
 .about__stat-label {
