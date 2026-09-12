@@ -17,12 +17,13 @@ const GROUPS = [
     desc: "Planning · Commerce Ops · Maintenance",
     items: ["Web Design", "UI Design", "Banner / Promotion", "Publishing"],
   },
-  {
-    label: "AI",
-    desc: "Workflow Acceleration",
-    items: ["ChatGPT / Claude", "Figma AI"],
-  },
 ];
+
+// Note: ChatGPT/Claude and Figma AI are used day to day to speed up
+// research and production, but are deliberately not listed as their own
+// skill group — Planning/Design/Publishing are the actual core competency,
+// and a standalone "AI" category next to them would overstate what AI
+// tools contribute versus hands-on skill.
 
 /**
  * Skills
