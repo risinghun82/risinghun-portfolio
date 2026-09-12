@@ -292,17 +292,13 @@ fonts. */
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  /* font-size lives here (not just on the <li>s) because max-width is in
-  ch units, which resolve against the font-size of the element that
-  declares them. This used to be set only on the <li>, one size down from
-  the Overview paragraph right above it — so the 68ch cap resolved against
-  the smaller size and came out ~630px, stranding these bullets in a
-  narrow column with a huge dead gap next to them. Matching Overview's
-  size here (same as .case__result-text below, which never had this
-  problem) makes the line length resolve the same way: ~930px, filling
-  the row the way the rest of the page does. */
+  /* font-size lives here (not just on the <li>s) — see below — and there's
+  deliberately no max-width. Each of these sections ends in a full-width
+  divider line (.case__section's border-bottom), so a capped-width text
+  block reads as if it stops short of that line instead of filling the row
+  it sits on. Letting it run the full column width lines the text up with
+  the divider beneath it. */
   font-size: var(--fs-lg);
-  max-width: 68ch;
 }
 
 .case__statement-list li {
