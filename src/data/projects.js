@@ -160,6 +160,10 @@ export const projects = [
     result:
       "클라이언트 없이도 기획 → 디자인 → 퍼블리싱을 혼자 끝까지 완성해본 프로젝트입니다. 캠핑 장비(Project 01)와는 전혀 다른 제품군에서, 공간 전환 인터랙션과 라이프스타일 사진만으로도 제품의 다용도성을 설득할 수 있다는 것을 확인했습니다.",
   },
+  /* Project 03 (Gimesee) temporarily disabled — commented out rather than
+  deleted so it can be restored later with `git`/re-paste. Removing it here
+  also removes it from Works.jsx (Featured/More lists) and makes
+  /work/gimesee redirect home via getProjectBySlug returning undefined.
   {
     id: 3,
     slug: "gimesee",
@@ -258,10 +262,11 @@ export const projects = [
     result:
       "B2B 실무자용에 머물러 있던 화면을 일반 사용자도 헤매지 않고 쓸 수 있는 구조로 단계적으로 전환했고, 온라인 화면과 오프라인 홍보물까지 하나의 톤으로 관리하면서 서비스 전체의 브랜드 인상을 일관되게 유지하고 있습니다.",
   },
+  */
   {
     id: 4,
     slug: "ppasak-guys",
-    number: "04",
+    number: "03",
     title: "Ppasak Guys",
     category: "B2B Service Landing Page",
     role: "Web Design / UI·UX / Publishing",
