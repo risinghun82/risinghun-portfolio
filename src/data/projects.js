@@ -347,7 +347,7 @@ export const projects = [
   {
     id: 5,
     slug: "hrd-asset",
-    number: "05",
+    number: "04",
     title: "HRD Asset",
     category: "Corporate E-Learning Platform",
     role: "Web Design / UI·UX / Publishing",
