@@ -51,10 +51,26 @@
   --ls-wide: 0.14em;
   --ls-wider: 0.28em;
 
-  /* Spacing */
-  --space-section-y: clamp(5rem, 12vw, 10rem);
-  --space-container-x: clamp(1.5rem, 6vw, 6rem);
-  --max-width: 1440px;
+  /* Spacing — one shared system every stacked section reads from (via
+     .container / var(--space-section-y)), so content width and rhythm
+     stay consistent site-wide instead of drifting per component. Desktop
+     values below; the two media queries further down retune them for
+     tablet/mobile without any component needing its own override. */
+  --space-section-y: clamp(6rem, 8vw, 7.5rem); /* 96–120px */
+  --space-container-x: clamp(
+    3rem,
+    4vw,
+    4rem
+  ); /* 48–64px, never under the 48px floor */
+  --max-width: 1200px; /* editorial reading measure for text-led sections */
+  /* Wider measure for the one section that's primarily visual (Featured
+     Projects) — same side margins, just a more generous frame so project
+     imagery gets real screen space instead of being capped to text width.
+     Deliberately wider than the old shared 1440px max-width (not just
+     matching it), since the brief asks the images to actually get bigger
+     on large screens, not just keep their old size under a new system. */
+  --max-width-wide: 1600px;
+  --grid-gutter: 24px;
 
   /* Motion */
   --ease-rise: cubic-bezier(0.16, 0.8, 0.24, 1);
@@ -65,4 +81,23 @@
   /* Layering */
   --z-nav: 100;
   --z-overlay: 200;
+}
+
+/* Tablet: narrower side margin, slightly tighter section rhythm. Redefined
+   here at :root so every section inherits it automatically through the
+   same var(--space-container-x) / var(--space-section-y) it already uses —
+   no per-component breakpoint needed. */
+@media (max-width: 1024px) {
+  :root {
+    --space-container-x: 2rem; /* 32px */
+    --space-section-y: clamp(4.5rem, 9vw, 5.5rem); /* 72–88px */
+  }
+}
+
+/* Mobile: single-column margin + the tightest section rhythm. */
+@media (max-width: 640px) {
+  :root {
+    --space-container-x: 1.25rem; /* 20px */
+    --space-section-y: clamp(4rem, 10vw, 5rem); /* 64–80px */
+  }
 }
