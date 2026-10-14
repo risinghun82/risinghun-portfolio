@@ -83,7 +83,9 @@
   font-size: clamp(0.75rem, 0.13vw + 0.72rem, 0.875rem);
   letter-spacing: var(--ls-wider);
   text-transform: uppercase;
-  color: var(--text-on-dark-muted);
+  /* Small English caption text needs more contrast than the larger
+     paragraph copy gets away with — see --text-caption-on-dark. */
+  color: var(--text-caption-on-dark);
 }
 
 .hero__experience {
@@ -96,23 +98,21 @@
      message. With that gone, a lighter gap here keeps the headline from
      sitting low on the first screen. */
   margin-top: clamp(1.6rem, 4vw, 2.8rem);
-  /* Content group width: the brief asks for ~600-700px rather than
-     letting the headline/description/CTA stretch to the full container.
-     A dedicated max-width here (not just on individual children) keeps
-     every piece — including the headline, which has no character-count
-     limit of its own — aligned to the same column edge. */
-  max-width: 700px;
+  /* Text block width, per spec — 680px, so headline/description/CTA all
+     wrap to the same column edge instead of stretching to the full
+     1200px container. */
+  max-width: 680px;
 }
 
 .hero__headline {
   font-family: var(--font-display);
   font-weight: 700;
-  /* Bumped up again — against the dark background the previous ~53-59px
-     still read as too quiet for a first-screen headline. Now lands at
-     ≈61px/1440 and ≈72px/1920 while keeping mobile at a confident ~38px. */
-  font-size: clamp(2.375rem, 2.2vw + 1.86rem, 4.5rem);
-  line-height: var(--lh-tight);
-  letter-spacing: -0.02em;
+  /* Literal spec: clamp(44px, 4.2vw, 64px) — ≈60.5px/1440, 64px cap at
+     1920+. This is the single strongest visual element on the first
+     screen, deliberately larger than the subtitle/body beneath it. */
+  font-size: clamp(44px, 4.2vw, 64px);
+  line-height: 1.18;
+  letter-spacing: -0.04em;
 }
 
 .hero__headline span {
@@ -126,8 +126,8 @@
 .hero__subtitle {
   font-family: var(--font-display);
   font-weight: 500;
-  /* ~18px on mobile up to ~26px on large desktop. */
-  font-size: clamp(1.125rem, 0.52vw + 1rem, 1.625rem);
+  /* Spec: 22–24px desktop. */
+  font-size: clamp(22px, 1vw, 24px);
   line-height: var(--lh-heading);
   letter-spacing: var(--ls-tight);
   color: var(--sun-cream);
@@ -138,13 +138,13 @@
   /* Body font, not display — this is read as proof/reasoning copy, not a
      headline, so it should sit quietly and stay easy to scan. */
   font-family: var(--font-body);
-  /* Raised the floor from ~15px to the 16-17px range requested — it was
-     reading a touch small against the body line-height. */
-  font-size: clamp(1rem, 0.065vw + 0.985rem, 1.0625rem);
+  /* Spec: 16–17px desktop body, capped at a 560px measure so it never
+     runs long enough to turn into a wall of text next to the headline. */
+  font-size: clamp(16px, 0.3vw + 15.5px, 17px);
   /* --lh-body is 1.7, already above the 1.6 minimum. */
   line-height: var(--lh-body);
   color: var(--text-on-dark-muted);
-  max-width: 46ch;
+  max-width: 560px;
   margin-top: 1.3rem;
 }
 
@@ -179,7 +179,10 @@
    editing .btn itself (that class is used across every section). */
 .hero .btn {
   font-size: 0.95rem;
-  padding: 1rem 1.8rem;
+  /* Spec: 44–48px tall click area. Fixed height (not padding-driven) so
+     it hits that range exactly regardless of the inherited line-height. */
+  height: 48px;
+  padding: 0 1.8rem;
   transition:
     background var(--dur-fast) var(--ease-rise),
     color var(--dur-fast) var(--ease-rise),
@@ -255,10 +258,17 @@
     margin-top: 1.4rem;
   }
 
+  .hero__headline {
+    /* Spec: clamp(32px, 8vw, 40px) on mobile. */
+    font-size: clamp(32px, 8vw, 40px);
+  }
+
   .hero__description {
     /* Let it wrap naturally across the full column instead of staying
        capped at a desktop reading width. */
     max-width: none;
+    /* Spec: 15–16px on mobile. */
+    font-size: clamp(15px, 1vw, 16px);
   }
 
   .hero__cta {
@@ -268,6 +278,9 @@
 
   .hero__cta .btn {
     justify-content: center;
+    /* Spec: minimum 44px tap target on mobile. */
+    min-height: 44px;
+    height: auto;
   }
 
   .hero__scroll {
