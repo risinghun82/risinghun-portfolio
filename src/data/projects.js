@@ -76,15 +76,30 @@ export const projects = [
       "영업·기획·개발 담당자와 협업해 요구사항을 실제 화면으로 구현",
       "서비스 운영 중 UI 일관성 관리",
     ],
-    // These three assets are offline print/campaign creative, not in-app UI —
-    // so this project uses its own section title + per-image captions instead
-    // of the generic "Key UI Screens" heading. Real UI screens (if added
-    // later) should go in a separate array so the two don't get conflated.
-    screensTitle: "Campaign & Print Materials",
+    // My Role 섹션을 PLANNING / DESIGN / PUBLISHING으로 구분해 보여주기 위한
+    // 분류 — 위 responsibilities와 동일한 실제 업무 내용을 그대로 재사용하고,
+    // 두 역할이 섞인 항목(2번)만 원래 의미를 바꾸지 않는 선에서 나눠 배치함.
+    // 새로운 업무나 수치를 추가하지 않음.
+    roleBreakdown: {
+      planning: [
+        "B2C 전환에 맞춘 정보구조 및 화면 흐름 재설계",
+        "영업·기획·개발 담당자와 협업해 요구사항을 실제 화면으로 구현",
+      ],
+      design: [
+        "신규 기능 추가에 따른 UI 확장",
+        "온라인 프로모션 및 오프라인 홍보물(백월·리플렛) 디자인",
+        "서비스 운영 중 UI 일관성 관리",
+      ],
+      publishing: ["HTML/CSS 퍼블리싱"],
+    },
+    // 실제 화면(A. WEB SERVICE UI)을 먼저, 오프라인 홍보물(B. MARKETING
+    // DESIGN)을 그다음에 배치 — uiScreens가 먼저 렌더링되고 이 screens 블록이
+    // 그 뒤에 오는 현재 순서를 그대로 유지.
+    screensTitle: "Marketing Design",
     screenCaptions: [
-      "조선일보 지면광고 배너",
-      "3단 리플렛 — 앞면",
-      "3단 리플렛 — 뒷면",
+      "조선일보 지면광고 배너 — 서비스 인지도 확보를 위한 오프라인 광고 소재를 디자인했습니다.",
+      "3단 리플렛 — 앞면. 전시회 배포용 리플렛의 레이아웃과 비주얼을 직접 디자인했습니다.",
+      "3단 리플렛 — 뒷면. 서비스 주요 기능과 이용 방법을 한눈에 보여주는 정보 구성을 맡았습니다.",
     ],
     screens: [
       "/images/project-03-screen-01.jpg",
@@ -94,8 +109,12 @@ export const projects = [
     // Real in-app UI screenshots, separate from the print materials above.
     // Personal phone numbers visible in the source screenshots (sender +
     // recipient) were redacted before saving these — see public/images.
+    uiScreensTitle: "Web Service UI",
     uiScreens: ["/images/project-03-ui-01.jpg", "/images/project-03-ui-02.jpg"],
-    uiScreenCaptions: ["새 메시지 작성", "주소록"],
+    uiScreenCaptions: [
+      "새 메시지 작성 화면 — 다채널(문자·카카오톡·RCS) 발송 절차를 단계별로 안내하도록 UI/UX를 설계했습니다.",
+      "주소록 화면 — 실무자 중심이던 기존 화면을 일반 사용자도 헤매지 않도록 정보 구조를 재설계했습니다.",
+    ],
     // This project does not have a mobile/responsive version — skip the
     // "Responsive Screens" section entirely on the case study page rather
     // than showing placeholder or misleading images. See ProjectDetail.jsx.
@@ -178,6 +197,19 @@ export const projects = [
       "제품 상세 화면 디자인 (컬러 스와치·조작 다이어그램)",
       "HTML/CSS/JS 반응형 퍼블리싱",
     ],
+    roleBreakdown: {
+      planning: ["브랜드 컨셉 기획 및 사이트 정보구조 설계 (셀프 디렉팅)"],
+      design: [
+        "'ONE OBJECT, THREE SPACES' 탭 인터랙션 UI/UX 설계",
+        "제품 상세 화면 디자인 (컬러 스와치·조작 다이어그램)",
+      ],
+      publishing: ["HTML/CSS/JS 반응형 퍼블리싱"],
+    },
+    screenCaptions: [
+      "'ONE OBJECT, THREE SPACES' 탭 인터랙션 — 하나의 제품이 공간별로 쓰이는 모습을 보여주는 섹션입니다.",
+      "제품 상세 화면 — 컬러 스와치와 조작 다이어그램으로 실제 사용성을 시각화했습니다.",
+      "THE COLLECTION 그리드 — 4개 제품을 한눈에 비교할 수 있도록 스펙 비교표와 함께 구성했습니다.",
+    ],
     screens: [
       "/images/project-02-screen-01.jpg",
       "/images/project-02-screen-02.jpg",
@@ -187,6 +219,10 @@ export const projects = [
       "/images/project-02-responsive-01.jpg",
       "/images/project-02-responsive-02.jpg",
     ],
+    // Publishing 섹션의 INTERACTION 항목 — 실제로 JS로 구현한 인터랙션만 기재
+    // (direction/responsibilities에 이미 있는 내용 그대로, 새로운 사실 추가 없음).
+    interactionNote:
+      "'ONE OBJECT, THREE SPACES' 탭을 누르면 같은 제품이 HOME · WORK · OUTDOOR 공간에서 쓰이는 모습으로 전환되는 인터랙션을 JS로 직접 구현했습니다.",
     toolsUsed: ["Figma", "Photoshop", "HTML/CSS/JS", "반응형 퍼블리싱"],
     result:
       "클라이언트 없이도 기획 → 디자인 → 퍼블리싱을 혼자 끝까지 완성해본 프로젝트입니다. 캠핑 장비(Project 01)와는 전혀 다른 제품군에서, 공간 전환 인터랙션과 라이프스타일 사진만으로도 제품의 다용도성을 설득할 수 있다는 것을 확인했습니다.",
@@ -248,6 +284,19 @@ export const projects = [
       "'쓰임에 따라 고른 장비' 카테고리 큐레이션 섹션 기획",
       "상품 상세페이지 정보 위계 재설계",
       "HTML/CSS 반응형 퍼블리싱",
+    ],
+    roleBreakdown: {
+      planning: ["'쓰임에 따라 고른 장비' 카테고리 큐레이션 섹션 기획"],
+      design: [
+        "브랜드 무드에 맞춘 홈페이지 UI 리디자인",
+        "상품 상세페이지 정보 위계 재설계",
+      ],
+      publishing: ["HTML/CSS 반응형 퍼블리싱"],
+    },
+    screenCaptions: [
+      "웜톤 라이프스타일 사진을 전면에 배치한 홈 히어로",
+      "'쓰임에 따라 고른 장비' 카테고리 큐레이션 섹션",
+      "이미지 → 정보 → 구매 순으로 위계를 정리한 상품 상세 화면",
     ],
     screens: [
       "/images/project-01-screen-01.jpg",
@@ -318,6 +367,20 @@ export const projects = [
       "요금제 비교 UI 및 CTA 배치 디자인",
       "HTML/CSS 반응형 퍼블리싱",
       "오프라인 전단지(Print & Flyer) 디자인",
+    ],
+    roleBreakdown: {
+      planning: ["정량 효과 중심 정보구조 기획 (부분 참여)"],
+      design: [
+        "요금제 비교 UI 및 CTA 배치 디자인",
+        "오프라인 전단지(Print & Flyer) 디자인",
+      ],
+      publishing: ["HTML/CSS 반응형 퍼블리싱"],
+    },
+    // Key UI Screens(B2B 랜딩페이지 본문)이 핵심 사례로 먼저 읽히도록 캡션 추가
+    // — 아래 direction 배열에 이미 있는 실제 작업 내용을 그대로 가져와 연결.
+    screenCaptions: [
+      "정량 효과(관리 업무 시간 90% 감소 등)를 전면에 배치한 랜딩페이지 상단",
+      "4종 요금제 비교 UI — 추천 플랜에 BEST 배지와 강조 테두리를 적용했습니다.",
     ],
     screens: [
       "/images/project-04-screen-01.jpg",
@@ -416,6 +479,25 @@ export const projects = [
       "법정교육 카테고리 탭 구조 설계",
       "학습 플랫폼 UI 리디자인 (부분 참여)",
       "반응형 퍼블리싱 (부분 참여)",
+    ],
+    // 공동 작업 프로젝트 — 기여도(기획 50%·디자인 70%·퍼블리싱 60%)가 이미
+    // 보여주듯 전 항목이 협업 범위이며, "(부분 참여)" 표기가 있는 항목은 그대로
+    // 유지해 개인 담당 범위와 협업 범위를 구분되게 보여줌.
+    roleBreakdown: {
+      planning: ["법정교육 카테고리 탭 구조 설계"],
+      design: [
+        "고객지원·자료실 화면 UI 개선",
+        "학습 플랫폼 UI 리디자인 (부분 참여)",
+      ],
+      publishing: ["반응형 퍼블리싱 (부분 참여)"],
+    },
+    // PC 화면이 먼저 보이도록 섹션 제목을 명확히 함 — Publishing 섹션에서
+    // 태블릿·모바일(반응형) 화면을 별도로 강조하는 구조는 그대로 유지.
+    screensTitle: "Desktop Screens (PC)",
+    screenCaptions: [
+      "FAQ·고객지원 채널을 상단 블록으로 통합한 홈 화면",
+      "법정교육 카테고리를 탭 구조로 정리해 비교 가능하게 만든 강좌 목록 화면",
+      "브랜드 블루 톤과 인증 정보를 강조한 상세 안내 화면",
     ],
     screens: [
       "/images/project-05-screen-01.jpg",
