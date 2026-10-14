@@ -48,15 +48,16 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  /* Was space-between, pinning the old foot message to the bottom edge.
-     That block is gone now, so flex-start + a deliberate padding-bottom
-     keeps the real content from drifting low while still leaving the
-     glow/scroll-cue area underneath it breathing room. */
-  justify-content: flex-start;
-  /* Was 7.5rem — on a short page like this it read as too much dead air
-     before anything meaningful appeared. */
-  padding-top: clamp(5.5rem, 11vw, 6.5rem);
-  padding-bottom: clamp(4rem, 9vw, 6rem);
+  /* Was flex-start, which packed everything right under the nav and left
+     a dead block of empty space between the CTA row and the glow at the
+     bottom. Centering the content group — with a bit more padding below
+     it than above — balances the first screen without placing it at a
+     literal mathematical center (that would crowd the glow/scroll cue). */
+  justify-content: center;
+  /* Floor clears the fixed 88px nav with real breathing room; the ceiling
+     caps how far down a very tall viewport would otherwise centre it. */
+  padding-top: clamp(7rem, 9vw, 8rem);
+  padding-bottom: clamp(7.5rem, 11vw, 10rem);
 }
 
 /* Top row: brand mark kept, but demoted to a small identity line — the
@@ -72,10 +73,11 @@
 .hero__brand,
 .hero__experience {
   font-family: var(--font-display);
-  /* Eyebrow row: kept small and quiet on purpose — scoped clamp() so it
-     stays ~11px on narrow phones and settles at ~13px on desktop, never
-     touching the shared --fs-sm token used elsewhere. */
-  font-size: clamp(0.6875rem, 0.13vw + 0.66rem, 0.8125rem);
+  /* Eyebrow row: still the quietest line on the screen, but nudged up
+     from ~11-13px to ~12-14px — the English phrase in particular was
+     reading too small at this tracking. Scoped clamp(), never touching
+     the shared --fs-sm token used elsewhere. */
+  font-size: clamp(0.75rem, 0.13vw + 0.72rem, 0.875rem);
   letter-spacing: var(--ls-wider);
   text-transform: uppercase;
   color: var(--text-on-dark-muted);
@@ -96,10 +98,10 @@
 .hero__headline {
   font-family: var(--font-display);
   font-weight: 700;
-  /* Was clamp(2.1rem, 5.6vw, 4.6rem) (~34px–74px) — brought the ceiling
-     down to spec (~32px–60px) so the line doesn't overpower the new
-     subtitle/description stack underneath it. */
-  font-size: clamp(2rem, 1.7vw + 1.6rem, 3.75rem);
+  /* Tuned so the two common PC widths land inside the 52-60px target
+     (≈53px at 1440, ≈59px at 1920) instead of the ~50-58px it was
+     hitting before; the floor still gives phones a confident size. */
+  font-size: clamp(2.2rem, 1.25vw + 2.19rem, 3.75rem);
   line-height: var(--lh-tight);
   letter-spacing: -0.02em;
 }
@@ -127,8 +129,10 @@
   /* Body font, not display — this is read as proof/reasoning copy, not a
      headline, so it should sit quietly and stay easy to scan. */
   font-family: var(--font-body);
-  /* ~15px on mobile up to ~17px on large desktop. */
-  font-size: clamp(0.9375rem, 0.13vw + 0.91rem, 1.0625rem);
+  /* Raised the floor from ~15px to the 16-17px range requested — it was
+     reading a touch small against the body line-height. */
+  font-size: clamp(1rem, 0.065vw + 0.985rem, 1.0625rem);
+  /* --lh-body is 1.7, already above the 1.6 minimum. */
   line-height: var(--lh-body);
   color: var(--text-on-dark-muted);
   max-width: 46ch;
@@ -144,11 +148,13 @@
 
 .hero__expertise li {
   font-family: var(--font-display);
-  font-size: var(--fs-sm);
-  letter-spacing: 0.02em;
+  /* Was --fs-sm (13.1px) — bumped slightly since these are read as real
+     capability labels, not fine print. Scoped to this list only. */
+  font-size: 0.9rem;
+  letter-spacing: 0.03em;
   border: 1px solid rgba(255, 243, 228, 0.32);
   color: var(--sun-cream);
-  padding: 0.55rem 1.1rem;
+  padding: 0.6rem 1.2rem;
   border-radius: 999px;
 }
 
@@ -159,10 +165,12 @@
   margin-top: 2.6rem;
 }
 
-/* Scoped hover polish for the two CTA buttons — adds lift + a soft glow
-   on top of the shared .btn color transition, without editing .btn
-   itself (that class is used across every section on the site). */
+/* Scoped CTA sizing + hover polish — bigger text and click area than the
+   shared .btn default, plus a lift and soft glow on hover, all without
+   editing .btn itself (that class is used across every section). */
 .hero .btn {
+  font-size: 0.95rem;
+  padding: 1rem 1.8rem;
   transition:
     background var(--dur-fast) var(--ease-rise),
     color var(--dur-fast) var(--ease-rise),
