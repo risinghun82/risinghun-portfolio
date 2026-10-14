@@ -28,7 +28,10 @@ const GROUPS = [
 /**
  * Skills
  * Grouped by domain rather than shown as arbitrary percentage bars — only
- * tools/skills the designer can actually deliver with are listed.
+ * tools/skills the designer can actually deliver with are listed. Carries
+ * an eyebrow + H2 title pair like every other section (it was previously
+ * the one section without a title, which both broke the site's alignment
+ * rhythm and made the section read as thin/empty on its own).
  */
 export default function Skills() {
   return (
@@ -36,6 +39,9 @@ export default function Skills() {
       <div className="container">
         <Reveal as="p" className="eyebrow">
           Skills
+        </Reveal>
+        <Reveal as="h2" className="skills__title title-mask">
+          <span>HANDS-ON TOOLKIT</span>
         </Reveal>
 
         <div className="skills__grid">
