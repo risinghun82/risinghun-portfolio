@@ -9,7 +9,9 @@
   font-size: var(--fs-section-title);
   line-height: var(--lh-heading);
   letter-spacing: var(--ls-tight);
-  margin-top: 1.4rem;
+  /* 1.2rem — same eyebrow-to-title gap as Process/Contact, so the three
+     sections share one rhythm instead of each using its own value. */
+  margin-top: 1.2rem;
   /* Line breaks are set manually via <br/> in the markup; Korean glyphs run
      much wider per character than Latin ones, so a ch-based max-width
      (sized for the old English copy) forced an extra mid-word wrap. Just
@@ -21,7 +23,8 @@
   display: grid;
   grid-template-columns: 1.3fr 1fr;
   gap: 4rem;
-  margin-top: 4.5rem;
+  /* Was 4.5rem, tuned down a touch to match the tighter section rhythm. */
+  margin-top: 3.5rem;
 }
 
 .about__intro p {
@@ -53,7 +56,11 @@
 .about__stats {
   display: flex;
   flex-direction: column;
-  gap: 1.8rem;
+  /* Was 1.8rem — with the old "Tools/Publishing" footer gone (it
+     duplicated the Skills section below almost word for word), this
+     column carries a bit more of the section's visual weight now, so
+     each stat gets more room to breathe. */
+  gap: 2.4rem;
   border-left: 1px solid rgba(23, 23, 23, 0.14);
   padding-left: 2.4rem;
 }
@@ -61,12 +68,14 @@
 .about__stat {
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
+  gap: 0.35rem;
 }
 
 .about__stat-value {
   font-family: var(--font-display);
-  font-size: clamp(1.3rem, 1.7vw, 1.6rem);
+  /* Was clamp(1.3rem, 1.7vw, 1.6rem) — nudged up to match this column's
+     slightly larger role in the section now. */
+  font-size: clamp(1.4rem, 1.9vw, 1.8rem);
   font-weight: 600;
   color: var(--accent);
   letter-spacing: var(--ls-tight);
@@ -76,29 +85,6 @@
 .about__stat-label {
   font-size: var(--fs-sm);
   color: var(--text-on-light-muted);
-}
-
-.about__foot {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 2rem;
-  margin-top: 4.5rem;
-  padding-top: 2.4rem;
-  border-top: 1px solid rgba(23, 23, 23, 0.14);
-}
-
-.about__foot-title {
-  display: block;
-  font-family: var(--font-display);
-  font-size: var(--fs-xs);
-  letter-spacing: var(--ls-wider);
-  text-transform: uppercase;
-  color: var(--text-on-light-muted);
-  margin-bottom: 0.6rem;
-}
-
-.about__foot-col p {
-  font-size: var(--fs-md);
 }
 
 @media (max-width: 1024px) {
@@ -115,11 +101,5 @@
     gap: 2.4rem;
     border-top: 1px solid rgba(23, 23, 23, 0.14);
     padding-top: 2rem;
-  }
-}
-
-@media (max-width: 768px) {
-  .about__foot {
-    grid-template-columns: 1fr;
   }
 }

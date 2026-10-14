@@ -16,8 +16,6 @@ const KEYWORDS = [
   "운영 대응",
 ];
 
-const TOOLS = ["Figma", "Photoshop", "Illustrator", "Adobe XD", "HTML/CSS"];
-
 /**
  * About / Introduction
  * Transitions from the dark Hero into the site's warm neutral "daytime"
@@ -70,19 +68,6 @@ export default function About() {
             ))}
           </Reveal>
         </div>
-
-        <Reveal className="about__foot" delay={3}>
-          <div className="about__foot-col">
-            <span className="about__foot-title">Tools</span>
-            <p>{TOOLS.join(" · ")}</p>
-          </div>
-          <div className="about__foot-col">
-            <span className="about__foot-title">Publishing</span>
-            <p>
-              시맨틱 HTML, 반응형 CSS 퍼블리싱, 유지보수 가능한 컴포넌트 구조
-            </p>
-          </div>
-        </Reveal>
       </div>
     </section>
   );
