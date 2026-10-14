@@ -436,6 +436,71 @@ with empty space beside it. */
   }
 }
 
+/* Gimesee-only (project.approachBreakdown, see src/data/projects.js +
+ProjectDetail.jsx): Approach & Solution shown as Problem/Solution/Outcome
+cards instead of the flat two-column list above, to make explicit the
+link between the documented process and the actual screens shown in
+Design below. Other projects have no approachBreakdown and keep
+.case__statement-list--cols exactly as-is. */
+.case__approach-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.case__approach-card {
+  padding-top: 1.6rem;
+  border-top: 1px solid rgba(23, 23, 23, 0.14);
+}
+
+.case__approach-card:first-child {
+  padding-top: 0;
+  border-top: none;
+}
+
+.case__approach-screens {
+  font-family: var(--font-display);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  color: var(--project-accent, var(--accent));
+  margin-bottom: 0.9rem;
+}
+
+.case__approach-row {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 1.2rem;
+  margin-bottom: 0.9rem;
+  align-items: baseline;
+}
+
+.case__approach-row:last-child {
+  margin-bottom: 0;
+}
+
+.case__approach-label {
+  font-family: var(--font-display);
+  font-size: var(--fs-sm);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  color: var(--text-on-light-muted);
+}
+
+.case__approach-row p {
+  /* Spec: body 15-16px, line-height >= 1.65. */
+  font-size: clamp(15px, 1vw, 16px);
+  line-height: 1.7;
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  .case__approach-row {
+    grid-template-columns: 1fr;
+    gap: 0.3rem;
+  }
+}
+
 /* 02. Challenge — Background & Goals / Existing Problems shown as two
 labeled groups side by side (same row-filling idea as .case__overview-grid)
 instead of stacked, which on a wide centered page left one narrow list
@@ -596,6 +661,25 @@ portrait image doesn't run the full width of the page at full height. */
   }
 }
 
+/* Gimesee-only (project.screensLayout === "gallery"): Marketing Design's
+3 vertically-stacked large images become a PC 2-column gallery per this
+round's spec, gap 24-32px (tighter than the default 36-48px so this
+section reads with slightly less visual weight than Web Service UI above
+it, while every image stays fully visible/clickable). Collapses to 1
+column on mobile, same breakpoint as .case__screens--pair. No other
+project sets screensLayout, so .case__screens alone (1 column, 36-48px
+gap) is unaffected. */
+.case__screens--marketing {
+  grid-template-columns: repeat(2, 1fr);
+  gap: clamp(24px, 2vw, 32px);
+}
+
+@media (max-width: 900px) {
+  .case__screens--marketing {
+    grid-template-columns: 1fr;
+  }
+}
+
 .case__screen-figure {
   display: flex;
   flex-direction: column;
@@ -603,8 +687,13 @@ portrait image doesn't run the full width of the page at full height. */
 }
 
 .case__screen-caption {
-  font-size: var(--fs-sm);
-  color: var(--text-on-light-muted);
+  /* Spec: captions 13-14px with improved contrast over the previous
+  var(--text-on-light-muted) (~11.5px fs-sm, 0.6 alpha) — same higher-
+  contrast caption color already used for Overview facts/About/Works
+  (--text-caption-on-light). Shared class: this is a sitewide
+  legibility bump for every project's image captions, not Gimesee-only. */
+  font-size: clamp(13px, 1vw, 14px);
+  color: var(--text-caption-on-light, var(--text-on-light-muted));
   letter-spacing: 0.01em;
 }
 

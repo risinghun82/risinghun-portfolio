@@ -424,11 +424,44 @@ the title never overlaps whatever the photo itself contains. */}
               <span className="case__section-num">{num()}</span> Approach &amp;
               Solution
             </h2>
-            <ul className="case__statement-list case__statement-list--cols">
-              {project.direction.map((line) => (
-                <li key={line}>{line}</li>
-              ))}
-            </ul>
+            {/* When approachBreakdown exists (Gimesee only, as of this round),
+            show each item as a Problem / Solution / Outcome card instead of a
+            flat bullet list — every line of text here is reused verbatim (or
+            split at an existing clause boundary) from problems/background/
+            direction/result in src/data/projects.js, never invented. Other
+            projects have no approachBreakdown and keep the original flat
+            list exactly as before. */}
+            {project.approachBreakdown ? (
+              <div className="case__approach-grid">
+                {project.approachBreakdown.map((item, i) => (
+                  <div key={i} className="case__approach-card">
+                    {item.screens && (
+                      <p className="case__approach-screens">
+                        {item.screens.join(" · ")}
+                      </p>
+                    )}
+                    <div className="case__approach-row">
+                      <span className="case__approach-label">Problem</span>
+                      <p>{item.problem}</p>
+                    </div>
+                    <div className="case__approach-row">
+                      <span className="case__approach-label">Solution</span>
+                      <p>{item.solution}</p>
+                    </div>
+                    <div className="case__approach-row">
+                      <span className="case__approach-label">Outcome</span>
+                      <p>{item.outcome}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <ul className="case__statement-list case__statement-list--cols">
+                {project.direction.map((line) => (
+                  <li key={line}>{line}</li>
+                ))}
+              </ul>
+            )}
           </Reveal>
 
           {/* 05. Design — the actual visual/component output: color &
@@ -481,7 +514,12 @@ the title never overlaps whatever the photo itself contains. */}
                           label={alt}
                         >
                           <img
-                            className="case__screen case__screen--real"
+                            className={
+                              "case__screen case__screen--real" +
+                              (project.uiScreensAspect === "auto"
+                                ? " case__screen--auto"
+                                : "")
+                            }
                             src={src}
                             alt={alt}
                             loading="lazy"
@@ -503,7 +541,14 @@ the title never overlaps whatever the photo itself contains. */}
               <h3 className="case__design-subtitle">
                 {project.screensTitle || "Key UI Screens"}
               </h3>
-              <div className="case__screens">
+              <div
+                className={
+                  "case__screens" +
+                  (project.screensLayout === "gallery"
+                    ? " case__screens--marketing"
+                    : "")
+                }
+              >
                 {project.screens.map((src, i) => {
                   if (!project.images?.screens?.[i]) {
                     return (
