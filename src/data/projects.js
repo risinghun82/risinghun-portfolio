@@ -5,165 +5,21 @@
 //
 // image / images fields are placeholder paths under /public/images/.
 // Replace the actual files in that folder — see README.md "이미지 교체 방법".
+//
+// Display order (and the "number" field below) follows the sequence
+// requested for the Featured Projects rework: Gimesee, NODEN, Ppasak
+// Camping, Ppasak Guys, HRD Asset. All five are now `featured: true` —
+// HRD Asset used to be the lone "More Projects" item with a smaller card;
+// it now renders through the same WorkItem card as everything else (see
+// Works.jsx, which simply filters on this flag), so there's no longer a
+// visually inconsistent card type in the list.
 // ---------------------------------------------------------------------------
 
 export const projects = [
   {
-    id: 1,
-    slug: "ppasak-camping",
-    number: "01",
-    title: "Ppasak Camping",
-    category: "E-commerce Website Redesign",
-    role: "Web Design / UI·UX / Publishing",
-    contribution: "100% (기획·디자인·퍼블리싱 단독 진행)",
-    year: "2022",
-    accent: "#B5652E",
-    // Shown in the "Featured Projects" zone of Works.jsx — see that file's
-    // comment for how featured vs. secondary projects are picked.
-    featured: true,
-    // This project uses real screenshots instead of color placeholders —
-    // see the `images` flag below and Works.jsx / ProjectDetail.jsx, which
-    // check it to decide whether to render an <img> or the placeholder div.
-    images: {
-      hero: true,
-      screens: [true, true, true],
-      responsive: [true, true],
-    },
-    summary:
-      "아웃도어 브랜드 빠삭한 캠핑의 온라인 스토어를, 감도 높은 라이프스타일 사진과 명확한 카테고리 구조로 다시 설계했습니다.",
-    heroImage: "/images/project-01-hero.jpg",
-    overview: {
-      client: "Ppasak Camping (빠삭한 캠핑)",
-      scope: "이커머스 웹사이트 UI 리디자인, 상품 상세 시스템, 반응형 퍼블리싱",
-      duration: "2022.10 – 2022.11",
-      description:
-        "텐트·가구·조명 등 아웃도어 장비를 판매하는 캠핑 브랜드의 온라인 스토어를 리디자인한 프로젝트입니다. 제품은 좋지만 사이트는 평범한 쇼핑몰로만 보여, 브랜드가 지향하는 '감도 높은 아웃도어 라이프'가 전달되지 않는 문제가 있었습니다.",
-    },
-    background: [
-      "타겟 고객층이 가격보다 톤앤매너와 사진의 질을 먼저 보고 브랜드를 판단하는 프리미엄 캠핑 시장이었습니다.",
-      "상품 수가 많아지면서 카테고리 구조 없이 목록만 계속 늘어나는 상태였습니다.",
-      "홈 화면에서 브랜드의 정체성보다 할인·이벤트 배너가 먼저 보이는 구조였습니다.",
-    ],
-    problems: [
-      "홈 히어로가 브랜드 무드를 전달하지 못하고 일반 쇼핑몰 배너처럼 보임",
-      "카테고리별 상품이 단순 나열되어 있어 '무엇부터 봐야 할지' 안내가 없음",
-      "상품 상세페이지에서 이미지·옵션·구매 버튼의 위계가 불명확함",
-    ],
-    direction: [
-      "노을·모닥불 같은 웜톤 라이프스타일 사진을 히어로 전면에 배치해 브랜드 무드부터 전달",
-      "'쓰임에 따라 고른 장비' 카테고리 큐레이션 섹션을 홈에 추가해 탐색 동선을 짧게 만듦",
-      "상품 상세는 큰 이미지 → 정보 → 구매 순으로 위계를 명확히 하고, 구매 버튼은 오렌지 포인트 컬러로 통일",
-    ],
-    colorTypography: {
-      colors: ["#171717", "#F5EFE4", "#C1652F", "#5B5A42"],
-      typefaces: ["Inter (영문 헤드라인)", "Pretendard (본문/한글)"],
-    },
-    // What I actually did, not a repeat of the role tags — one line per
-    // concrete task, derived from `direction`/`contribution` above.
-    responsibilities: [
-      "브랜드 무드에 맞춘 홈페이지 UI 리디자인",
-      "'쓰임에 따라 고른 장비' 카테고리 큐레이션 섹션 기획",
-      "상품 상세페이지 정보 위계 재설계",
-      "HTML/CSS 반응형 퍼블리싱",
-    ],
-    screens: [
-      "/images/project-01-screen-01.jpg",
-      "/images/project-01-screen-02.jpg",
-      "/images/project-01-screen-03.jpg",
-    ],
-    responsive: [
-      "/images/project-01-responsive-01.jpg",
-      "/images/project-01-responsive-02.jpg",
-    ],
-    toolsUsed: ["Figma", "Photoshop", "HTML/CSS", "반응형 퍼블리싱"],
-    result:
-      "카테고리 큐레이션 섹션을 도입한 이후 홈에서 상품 목록으로 이어지는 탐색 동선이 짧아졌고, 사진 톤을 웜톤으로 통일하면서 사이트 전체의 브랜드 인상이 한층 또렷해졌습니다.",
-  },
-  {
-    id: 2,
-    slug: "noden",
-    number: "02",
-    title: "NODEN",
-    category: "D2C Product Brand Website (개인 프로젝트)",
-    role: "Web Design / UI Design / Publishing",
-    contribution: "100% (기획·디자인·퍼블리싱 단독 진행)",
-    year: "2022",
-    accent: "#2B3742",
-    featured: true,
-    // No client, no brief — self-directed start to finish. Flags the case
-    // study to label itself honestly and frame its Challenge/Result
-    // sections as exploration goals rather than a client engagement.
-    personal: true,
-    // The hero photo's headline + CTA block sits in the lower half of the
-    // source image (nav bar takes up the top). A pure vertical "center" crop
-    // was slicing into the "DISCOVER L01" button, so bias the crop toward
-    // the bottom of the source image to keep the whole text group intact.
-    imagePosition: "left 75%",
-    // Real screenshots of a self-built, self-directed site — see Works.jsx / ProjectDetail.jsx.
-    images: {
-      hero: true,
-      screens: [true, true, true],
-      responsive: [true, true],
-    },
-    summary:
-      "집과 업무 공간, 야외를 오가며 쓰는 휴대형 라이프스타일 오브젝트 브랜드 'NODEN'의 웹사이트를, 기획부터 디자인·퍼블리싱까지 직접 진행한 개인 프로젝트입니다.",
-    heroImage: "/images/project-02-hero.jpg",
-    overview: {
-      client: "개인 프로젝트 · 가상 브랜드 (실제 클라이언트 없음)",
-      scope:
-        "D2C 브랜드 웹사이트 기획 및 UI 디자인, 인터랙션 설계, 반응형 퍼블리싱 (셀프 디렉팅)",
-      duration: "2022.06",
-      description:
-        "휴대형 조명·서큘레이터·스피커·시계 등 '공간을 옮겨 다니며 쓰는' 라이프스타일 오브젝트를 파는 가상 브랜드 'NODEN'의 웹사이트를 직접 기획하고 디자인·퍼블리싱까지 완성한 개인 프로젝트입니다. 클라이언트 없이도 제품 스토리텔링부터 구매 전환까지 이어지는 D2C 사이트를 처음부터 끝까지 완성할 수 있는지 검증하기 위해 시작했습니다.",
-    },
-    background: [
-      "실무에서 자주 맡지 않는 '기획자 없이 혼자 컨셉부터 완성까지' 진행하는 경험을 쌓고 싶었습니다.",
-      "캠핑 브랜드 작업(Ppasak Camping)이 아웃도어 장비였던 것과 달리, 미니멀한 실내외 겸용 라이프스타일 제품에서는 톤과 인터랙션을 어떻게 다르게 설계해야 하는지 실험해보고 싶었습니다.",
-      "제품이 4종뿐인 상황에서, 단순 나열이 아니라 공간(집·업무·야외)을 축으로 제품을 소개하는 구조를 만들 수 있는지가 관건이었습니다.",
-    ],
-    problems: [
-      "레퍼런스로 삼은 미니멀 라이프스타일 브랜드 다수가 제품 나열 위주라, '왜 하나의 제품이 여러 공간에서 쓰이는지'를 설득하지 못함",
-      "컬러 옵션·스펙·가격 등 정보량이 많은 제품 상세를 감성적인 톤 그대로 유지하면서 보여줘야 했음",
-      "재구매·비교가 잦은 카테고리 특성상, 4개 제품을 스펙으로 비교할 수 있는 장치가 필요했음",
-    ],
-    direction: [
-      "히어로에서 어두운 톤의 무드 사진으로 제품을 먼저 각인시키고, 이후 섹션에서 톤을 밝게 전환해 정보 전달에 집중",
-      "'ONE OBJECT, THREE SPACES' 탭 섹션을 두어 같은 제품이 HOME·WORK·OUTDOOR에서 각각 다르게 쓰이는 모습을 하나의 인터랙션으로 보여줌",
-      "제품 상세는 컬러 스와치·다이얼 조작 등 실제 사용성을 다이어그램처럼 시각화해 정보량이 많아도 정돈되어 보이게 구성",
-      "THE COLLECTION 그리드와 스펙 비교표를 함께 제공해, 첫 방문자가 4개 제품 중 무엇을 볼지 스스로 판단할 수 있도록 설계",
-      "'FROM ROOM TO OPEN AIR' 라이프스타일 갤러리로 마무리해, 스펙이 아니라 실제 생활 속 장면으로 브랜드를 다시 각인",
-    ],
-    colorTypography: {
-      colors: ["#1F2A33", "#F3F5F6", "#2B3742", "#8B8272"],
-      typefaces: [
-        "Space Grotesk (영문 헤드라인)",
-        "IBM Plex Mono (스펙/숫자)",
-        "Noto Sans KR (본문/한글)",
-      ],
-    },
-    responsibilities: [
-      "브랜드 컨셉 기획 및 사이트 정보구조 설계 (셀프 디렉팅)",
-      "'ONE OBJECT, THREE SPACES' 탭 인터랙션 UI/UX 설계",
-      "제품 상세 화면 디자인 (컬러 스와치·조작 다이어그램)",
-      "HTML/CSS/JS 반응형 퍼블리싱",
-    ],
-    screens: [
-      "/images/project-02-screen-01.jpg",
-      "/images/project-02-screen-02.jpg",
-      "/images/project-02-screen-03.jpg",
-    ],
-    responsive: [
-      "/images/project-02-responsive-01.jpg",
-      "/images/project-02-responsive-02.jpg",
-    ],
-    toolsUsed: ["Figma", "Photoshop", "HTML/CSS/JS", "반응형 퍼블리싱"],
-    result:
-      "클라이언트 없이도 기획 → 디자인 → 퍼블리싱을 혼자 끝까지 완성해본 프로젝트입니다. 캠핑 장비(Project 01)와는 전혀 다른 제품군에서, 공간 전환 인터랙션과 라이프스타일 사진만으로도 제품의 다용도성을 설득할 수 있다는 것을 확인했습니다.",
-  },
-  {
     id: 3,
     slug: "gimesee",
-    number: "03",
+    number: "01",
     title: "Gimesee",
     category: "In-house Messaging Service · Web/UI Design",
     role: "Web Design / UI·UX / Publishing / Brand Content",
@@ -253,6 +109,158 @@ export const projects = [
     ],
     result:
       "B2B 실무자용에 머물러 있던 화면을 일반 사용자도 헤매지 않고 쓸 수 있는 구조로 단계적으로 전환했고, 온라인 화면과 오프라인 홍보물까지 하나의 톤으로 관리하면서 서비스 전체의 브랜드 인상을 일관되게 유지하고 있습니다.",
+  },
+  {
+    id: 2,
+    slug: "noden",
+    number: "02",
+    title: "NODEN",
+    category: "D2C Product Brand Website (개인 프로젝트)",
+    role: "Web Design / UI Design / Publishing",
+    contribution: "100% (기획·디자인·퍼블리싱 단독 진행)",
+    year: "2022",
+    accent: "#2B3742",
+    featured: true,
+    // No client, no brief — self-directed start to finish. Flags the case
+    // study to label itself honestly and frame its Challenge/Result
+    // sections as exploration goals rather than a client engagement.
+    personal: true,
+    // The hero photo's headline + CTA block sits in the lower half of the
+    // source image (nav bar takes up the top). A pure vertical "center" crop
+    // was slicing into the "DISCOVER L01" button, so bias the crop toward
+    // the bottom of the source image to keep the whole text group intact.
+    imagePosition: "left 75%",
+    // Real screenshots of a self-built, self-directed site — see Works.jsx / ProjectDetail.jsx.
+    images: {
+      hero: true,
+      screens: [true, true, true],
+      responsive: [true, true],
+    },
+    summary:
+      "집과 업무 공간, 야외를 오가며 쓰는 휴대형 라이프스타일 오브젝트 브랜드 'NODEN'의 웹사이트를, 기획부터 디자인·퍼블리싱까지 직접 진행한 개인 프로젝트입니다.",
+    heroImage: "/images/project-02-hero.jpg",
+    overview: {
+      client: "개인 프로젝트 · 가상 브랜드 (실제 클라이언트 없음)",
+      scope:
+        "D2C 브랜드 웹사이트 기획 및 UI 디자인, 인터랙션 설계, 반응형 퍼블리싱 (셀프 디렉팅)",
+      duration: "2022.06",
+      description:
+        "휴대형 조명·서큘레이터·스피커·시계 등 '공간을 옮겨 다니며 쓰는' 라이프스타일 오브젝트를 파는 가상 브랜드 'NODEN'의 웹사이트를 직접 기획하고 디자인·퍼블리싱까지 완성한 개인 프로젝트입니다. 클라이언트 없이도 제품 스토리텔링부터 구매 전환까지 이어지는 D2C 사이트를 처음부터 끝까지 완성할 수 있는지 검증하기 위해 시작했습니다.",
+    },
+    background: [
+      "실무에서 자주 맡지 않는 '기획자 없이 혼자 컨셉부터 완성까지' 진행하는 경험을 쌓고 싶었습니다.",
+      "캠핑 브랜드 작업(Ppasak Camping)이 아웃도어 장비였던 것과 달리, 미니멀한 실내외 겸용 라이프스타일 제품에서는 톤과 인터랙션을 어떻게 다르게 설계해야 하는지 실험해보고 싶었습니다.",
+      "제품이 4종뿐인 상황에서, 단순 나열이 아니라 공간(집·업무·야외)을 축으로 제품을 소개하는 구조를 만들 수 있는지가 관건이었습니다.",
+    ],
+    problems: [
+      "레퍼런스로 삼은 미니멀 라이프스타일 브랜드 다수가 제품 나열 위주라, '왜 하나의 제품이 여러 공간에서 쓰이는지'를 설득하지 못함",
+      "컬러 옵션·스펙·가격 등 정보량이 많은 제품 상세를 감성적인 톤 그대로 유지하면서 보여줘야 했음",
+      "재구매·비교가 잦은 카테고리 특성상, 4개 제품을 스펙으로 비교할 수 있는 장치가 필요했음",
+    ],
+    direction: [
+      "히어로에서 어두운 톤의 무드 사진으로 제품을 먼저 각인시키고, 이후 섹션에서 톤을 밝게 전환해 정보 전달에 집중",
+      "'ONE OBJECT, THREE SPACES' 탭 섹션을 두어 같은 제품이 HOME·WORK·OUTDOOR에서 각각 다르게 쓰이는 모습을 하나의 인터랙션으로 보여줌",
+      "제품 상세는 컬러 스와치·다이얼 조작 등 실제 사용성을 다이어그램처럼 시각화해 정보량이 많아도 정돈되어 보이게 구성",
+      "THE COLLECTION 그리드와 스펙 비교표를 함께 제공해, 첫 방문자가 4개 제품 중 무엇을 볼지 스스로 판단할 수 있도록 설계",
+      "'FROM ROOM TO OPEN AIR' 라이프스타일 갤러리로 마무리해, 스펙이 아니라 실제 생활 속 장면으로 브랜드를 다시 각인",
+    ],
+    colorTypography: {
+      colors: ["#1F2A33", "#F3F5F6", "#2B3742", "#8B8272"],
+      typefaces: [
+        "Space Grotesk (영문 헤드라인)",
+        "IBM Plex Mono (스펙/숫자)",
+        "Noto Sans KR (본문/한글)",
+      ],
+    },
+    responsibilities: [
+      "브랜드 컨셉 기획 및 사이트 정보구조 설계 (셀프 디렉팅)",
+      "'ONE OBJECT, THREE SPACES' 탭 인터랙션 UI/UX 설계",
+      "제품 상세 화면 디자인 (컬러 스와치·조작 다이어그램)",
+      "HTML/CSS/JS 반응형 퍼블리싱",
+    ],
+    screens: [
+      "/images/project-02-screen-01.jpg",
+      "/images/project-02-screen-02.jpg",
+      "/images/project-02-screen-03.jpg",
+    ],
+    responsive: [
+      "/images/project-02-responsive-01.jpg",
+      "/images/project-02-responsive-02.jpg",
+    ],
+    toolsUsed: ["Figma", "Photoshop", "HTML/CSS/JS", "반응형 퍼블리싱"],
+    result:
+      "클라이언트 없이도 기획 → 디자인 → 퍼블리싱을 혼자 끝까지 완성해본 프로젝트입니다. 캠핑 장비(Project 01)와는 전혀 다른 제품군에서, 공간 전환 인터랙션과 라이프스타일 사진만으로도 제품의 다용도성을 설득할 수 있다는 것을 확인했습니다.",
+  },
+  {
+    id: 1,
+    slug: "ppasak-camping",
+    number: "03",
+    title: "Ppasak Camping",
+    category: "E-commerce Website Redesign",
+    role: "Web Design / UI·UX / Publishing",
+    contribution: "100% (기획·디자인·퍼블리싱 단독 진행)",
+    year: "2022",
+    accent: "#B5652E",
+    // Shown in the "Featured Projects" zone of Works.jsx — see that file's
+    // comment for how featured vs. secondary projects are picked.
+    featured: true,
+    // This project uses real screenshots instead of color placeholders —
+    // see the `images` flag below and Works.jsx / ProjectDetail.jsx, which
+    // check it to decide whether to render an <img> or the placeholder div.
+    images: {
+      hero: true,
+      screens: [true, true, true],
+      responsive: [true, true],
+    },
+    summary:
+      "아웃도어 브랜드 빠삭한 캠핑의 온라인 스토어를, 감도 높은 라이프스타일 사진과 명확한 카테고리 구조로 다시 설계했습니다.",
+    heroImage: "/images/project-01-hero.jpg",
+    overview: {
+      client: "Ppasak Camping (빠삭한 캠핑)",
+      scope: "이커머스 웹사이트 UI 리디자인, 상품 상세 시스템, 반응형 퍼블리싱",
+      duration: "2022.10 – 2022.11",
+      description:
+        "텐트·가구·조명 등 아웃도어 장비를 판매하는 캠핑 브랜드의 온라인 스토어를 리디자인한 프로젝트입니다. 제품은 좋지만 사이트는 평범한 쇼핑몰로만 보여, 브랜드가 지향하는 '감도 높은 아웃도어 라이프'가 전달되지 않는 문제가 있었습니다.",
+    },
+    background: [
+      "타겟 고객층이 가격보다 톤앤매너와 사진의 질을 먼저 보고 브랜드를 판단하는 프리미엄 캠핑 시장이었습니다.",
+      "상품 수가 많아지면서 카테고리 구조 없이 목록만 계속 늘어나는 상태였습니다.",
+      "홈 화면에서 브랜드의 정체성보다 할인·이벤트 배너가 먼저 보이는 구조였습니다.",
+    ],
+    problems: [
+      "홈 히어로가 브랜드 무드를 전달하지 못하고 일반 쇼핑몰 배너처럼 보임",
+      "카테고리별 상품이 단순 나열되어 있어 '무엇부터 봐야 할지' 안내가 없음",
+      "상품 상세페이지에서 이미지·옵션·구매 버튼의 위계가 불명확함",
+    ],
+    direction: [
+      "노을·모닥불 같은 웜톤 라이프스타일 사진을 히어로 전면에 배치해 브랜드 무드부터 전달",
+      "'쓰임에 따라 고른 장비' 카테고리 큐레이션 섹션을 홈에 추가해 탐색 동선을 짧게 만듦",
+      "상품 상세는 큰 이미지 → 정보 → 구매 순으로 위계를 명확히 하고, 구매 버튼은 오렌지 포인트 컬러로 통일",
+    ],
+    colorTypography: {
+      colors: ["#171717", "#F5EFE4", "#C1652F", "#5B5A42"],
+      typefaces: ["Inter (영문 헤드라인)", "Pretendard (본문/한글)"],
+    },
+    // What I actually did, not a repeat of the role tags — one line per
+    // concrete task, derived from `direction`/`contribution` above.
+    responsibilities: [
+      "브랜드 무드에 맞춘 홈페이지 UI 리디자인",
+      "'쓰임에 따라 고른 장비' 카테고리 큐레이션 섹션 기획",
+      "상품 상세페이지 정보 위계 재설계",
+      "HTML/CSS 반응형 퍼블리싱",
+    ],
+    screens: [
+      "/images/project-01-screen-01.jpg",
+      "/images/project-01-screen-02.jpg",
+      "/images/project-01-screen-03.jpg",
+    ],
+    responsive: [
+      "/images/project-01-responsive-01.jpg",
+      "/images/project-01-responsive-02.jpg",
+    ],
+    toolsUsed: ["Figma", "Photoshop", "HTML/CSS", "반응형 퍼블리싱"],
+    result:
+      "카테고리 큐레이션 섹션을 도입한 이후 홈에서 상품 목록으로 이어지는 탐색 동선이 짧아졌고, 사진 톤을 웜톤으로 통일하면서 사이트 전체의 브랜드 인상이 한층 또렷해졌습니다.",
   },
   {
     id: 4,
@@ -345,6 +353,10 @@ export const projects = [
     contribution: "기획 50% · 디자인 70% · 퍼블리싱 60%",
     year: "2023",
     accent: "#1D5D99",
+    // Promoted into the Featured Projects list (was the lone "More
+    // Projects" card) so every project now shares the same card
+    // structure — see Works.jsx, which reads this flag.
+    featured: true,
     // Real screenshots, same pattern as Project 01 — see Works.jsx / ProjectDetail.jsx.
     images: {
       hero: true,
