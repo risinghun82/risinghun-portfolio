@@ -48,7 +48,10 @@
 }
 
 .process__step-desc {
-  font-size: var(--fs-base);
+  /* Was var(--fs-base) (15.2px) — bumped to a flat 16px so the body copy
+     reads comfortably at its own column width, not just "not tiny". */
+  font-size: 1rem;
+  line-height: 1.6;
   color: var(--text-on-light-muted);
 }
 
