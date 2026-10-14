@@ -139,6 +139,11 @@ function WorkItem({ project, reverse }) {
           <div className="work-item__meta">
             <span>{project.year}</span>
             {project.contribution && <span>{project.contribution}</span>}
+            {project.toolsUsed?.length > 0 && (
+              <span className="work-item__tools">
+                {project.toolsUsed.slice(0, 3).join(" · ")}
+              </span>
+            )}
           </div>
           <span className="work-item__link">
             VIEW PROJECT <span aria-hidden="true">→</span>
