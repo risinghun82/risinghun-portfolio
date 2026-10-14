@@ -35,8 +35,11 @@
 }
 
 .skills__group-desc {
-  font-size: var(--fs-sm);
-  color: var(--text-on-light-muted);
+  /* Was var(--fs-sm) (~13.1px) at the dimmer muted tone — same small English
+     caption line treatment as Works meta / About stat labels, for
+     consistency across sections. */
+  font-size: 14px;
+  color: var(--text-caption-on-light);
   margin-bottom: 1.2rem;
 }
 
