@@ -83,8 +83,12 @@
 }
 
 .about__stat-label {
-  font-size: var(--fs-sm);
-  color: var(--text-on-light-muted);
+  /* Was var(--fs-sm) (~13.1px) at the dimmer muted tone — this is the same
+     kind of small English caption as the Works project meta/category text,
+     so it gets the same flat 14px + caption-contrast treatment for
+     typographic consistency across sections. */
+  font-size: 14px;
+  color: var(--text-caption-on-light);
 }
 
 @media (max-width: 1024px) {
