@@ -49,9 +49,13 @@ export const projects = [
       description:
         "문자·카카오톡·RCS 등 다채널 메시지 발송 서비스 '지메시'의 웹 UI/UX와 화면 디자인을 전담하고 있습니다. 기존 B2B 중심의 발송 도구를 일반 사용자도 쉽게 이용할 수 있는 서비스로 전환하는 화면 설계부터, 신규 기능 추가에 따른 UI 고도화, 서비스 소개 페이지와 온·오프라인 홍보 콘텐츠 제작까지 서비스 전반의 디자인을 담당하고 있습니다.",
     },
+    // "기능과 이용 절차가 실무자 기준으로 설계돼 있어 일반 사용자에게 진입장벽이
+    // 높았다"는 원래 이 배열에 별도 항목으로 있었으나, 바로 아래 problems의
+    // 첫 항목과 의미가 거의 그대로 겹쳐 Challenge 섹션에서 같은 내용을 두 번
+    // 읽게 됐습니다. 사실 자체를 지어내거나 바꾸지 않고, problems 쪽이 더
+    // 구체적이므로 background에서만 정리(제거)했습니다.
     background: [
       "기존 B2B 메시지 발송 도구를 일반 사용자 중심의 B2C 서비스로 전환해야 하는 과제가 있었습니다.",
-      "기능과 이용 절차가 실무자 기준으로 설계돼 있어, 새로 유입되는 일반 사용자에게는 진입장벽이 높았습니다.",
       "온라인 화면뿐 아니라 전시회 백월·리플렛 등 오프라인 홍보물까지 함께 관리해야 하는 구조였습니다.",
     ],
     problems: [
@@ -165,6 +169,23 @@ export const projects = [
     uiScreenCaptions: [
       "새 메시지 작성 화면 — 다채널(문자·카카오톡·RCS) 발송 절차를 단계별로 안내하도록 UI/UX를 설계했습니다.",
       "주소록 화면 — 실무자 중심이던 기존 화면을 일반 사용자도 헤매지 않도록 정보 구조를 재설계했습니다.",
+    ],
+    // sectionOrder — Gimesee 전용. 채용담당자가 Overview 바로 다음에 My Role을
+    // 이어서 보고, 실제 작업물(Web Service UI 화면)을 Challenge/Approach 같은
+    // 서술형 내용보다 먼저 확인할 수 있도록 섹션 순서만 재배치합니다. 각
+    // 섹션의 제목·내용·레이아웃은 전혀 바꾸지 않았고(ProjectDetail.jsx의
+    // 동일한 렌더링 함수를 그대로 재사용), 순서만 다릅니다. 다른 프로젝트는
+    // 이 필드가 없으므로 기존 순서(Overview → Challenge → My Role →
+    // Approach & Solution → Design → Publishing → Result)를 그대로 유지합니다.
+    sectionOrder: [
+      "overview",
+      "role",
+      "uiScreens",
+      "challenge",
+      "approach",
+      "design",
+      "publishing",
+      "result",
     ],
     // This project does not have a mobile/responsive version — skip the
     // "Responsive Screens" section entirely on the case study page rather
