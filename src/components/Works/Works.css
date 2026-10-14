@@ -3,6 +3,15 @@
   padding: var(--space-section-y) 0;
 }
 
+/* This section reads from the wider measure site-wide (see .works__list
+   below) — override just the max-width on any shared .container used
+   inside it (the head/more-projects wrappers) so the eyebrow/title block
+   lines up with the same left/right edge as the project list beneath it,
+   rather than the narrower editorial width other sections use. */
+.works .container {
+  max-width: var(--max-width-wide);
+}
+
 .works__head {
   margin-bottom: 4rem;
 }
@@ -35,8 +44,14 @@
 .works__list {
   display: flex;
   flex-direction: column;
-  gap: clamp(3.5rem, 7vw, 6rem);
-  max-width: var(--max-width);
+  /* Project-to-project spacing — one value, so every gap in the list is
+     identical regardless of which project comes before/after it. */
+  gap: clamp(4rem, 7vw, 6.5rem);
+  /* This is the one section that's primarily visual, so it reads from the
+     wider measure (var(--max-width-wide)) instead of the editorial
+     var(--max-width) the text sections use — same side margins, more
+     room for the project imagery itself. */
+  max-width: var(--max-width-wide);
   margin: 0 auto;
   padding: 0 var(--space-container-x);
 }
@@ -47,9 +62,14 @@
 
 .work-item {
   display: grid;
+  /* 1.35 : 0.9 already simplifies to 60 : 40 — kept as-is, just widened
+     the gap and the section's own container above so the image itself
+     gets meaningfully more pixels, not just a bigger ratio of a narrow box. */
   grid-template-columns: 1.35fr 0.9fr;
   align-items: stretch;
-  gap: clamp(1.5rem, 4vw, 3.5rem);
+  /* Was clamp(1.5rem, 4vw, 3.5rem) (24-56px) — raised to the requested
+     48-64px so image and text read as two clearly separate blocks. */
+  gap: clamp(3rem, 4vw, 4rem);
 }
 
 .work-item--reverse {
