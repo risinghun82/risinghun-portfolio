@@ -65,6 +65,45 @@ export const projects = [
       "서비스 소개 페이지·온라인 프로모션 이미지부터 전시회 백월·리플렛 같은 오프라인 콘텐츠까지 함께 제작해 온·오프라인 톤을 일치시킴",
       "영업·기획·개발 담당자와 협업해 요구사항을 실제 운영 가능한 화면으로 구현하고, 서비스 전반의 디자인 일관성과 가독성을 지속적으로 관리",
     ],
+    // approachBreakdown — Gimesee 전용. Approach & Solution을 문제/해결/결과
+    // 구조로 재정리하되, 아래 problem/solution/outcome 문구는 전부 위
+    // problems / background / direction / result 배열에 이미 있는 문장을
+    // 그대로 쓰거나(검증 가능) 기존 문장 안의 쉼표 경계에서만 나눈 것으로,
+    // 새로운 사실이나 연결 관계를 지어내지 않았음. 앞 두 항목은 실제로
+    // 아래 uiScreens(새 메시지 작성/주소록)로 보여주는 화면과 1:1로 연결됨.
+    approachBreakdown: [
+      {
+        problem:
+          "실무자용으로 만들어진 화면을 그대로 쓰고 있어 일반 사용자가 보기엔 기능과 용어가 낯설었고, 복잡한 발송 절차도 단계 구분 없이 그대로 노출되어 있었습니다.",
+        solution:
+          "B2C 전환에 맞춰 정보 구조와 화면 흐름을 다시 설계하고, 복잡한 발송 절차를 단계별로 안내되도록 UI/UX를 개선했습니다.",
+        outcome:
+          "새 메시지 작성·주소록 화면에 그대로 반영되어, 실무자 중심이던 화면을 일반 사용자도 헤매지 않고 쓸 수 있게 되었습니다.",
+        screens: ["새 메시지 작성", "주소록"],
+      },
+      {
+        problem:
+          "신규 기능이 추가될 때마다 화면이 그때그때 덧붙는 식으로 늘어나 서비스 전체의 디자인 톤이 흔들리기 쉬웠습니다.",
+        solution:
+          "신규 기능이 추가될 때마다 기존 화면과 같은 톤으로 UI를 확장했습니다.",
+        outcome: "HTML/CSS로 직접 퍼블리싱해 실제 운영 화면에 반영했습니다.",
+      },
+      {
+        problem:
+          "온라인 화면뿐 아니라 전시회 백월·리플렛 등 오프라인 홍보물까지 함께 관리해야 하는 구조였습니다.",
+        solution:
+          "서비스 소개 페이지·온라인 프로모션 이미지부터 전시회 백월·리플렛 같은 오프라인 콘텐츠까지 함께 제작했습니다.",
+        outcome: "온·오프라인 톤을 일치시켰습니다.",
+      },
+      {
+        problem:
+          "기존 B2B 메시지 발송 도구를 일반 사용자 중심의 B2C 서비스로 전환해야 하는 과제가 있었습니다.",
+        solution:
+          "영업·기획·개발 담당자와 협업해 요구사항을 실제 운영 가능한 화면으로 구현했습니다.",
+        outcome:
+          "서비스 전반의 디자인 일관성과 가독성을 지속적으로 관리하고 있습니다.",
+      },
+    ],
     colorTypography: {
       colors: ["#159895", "#1B2A6B", "#FFFFFF", "#F2F5F5"],
       typefaces: ["Pretendard (헤드라인/본문)", "Inter (숫자·영문)"],
@@ -95,6 +134,11 @@ export const projects = [
     // 실제 화면(A. WEB SERVICE UI)을 먼저, 오프라인 홍보물(B. MARKETING
     // DESIGN)을 그다음에 배치 — uiScreens가 먼저 렌더링되고 이 screens 블록이
     // 그 뒤에 오는 현재 순서를 그대로 유지.
+    // screensLayout: "gallery" — Gimesee 전용 플래그. 세로로 나열되던 3개
+    // 홍보 이미지를 PC 2열 갤러리(모바일 1열)로 전환 — 다른 프로젝트의 일반
+    // screens 블록(HRD Asset의 Desktop Screens 등)은 이 플래그가 없으므로
+    // 기존 1열 레이아웃 그대로 유지됨. 원본 비율은 변경하지 않음.
+    screensLayout: "gallery",
     screensTitle: "Marketing Design",
     screenCaptions: [
       "조선일보 지면광고 배너 — 서비스 인지도 확보를 위한 오프라인 광고 소재를 디자인했습니다.",
@@ -110,6 +154,13 @@ export const projects = [
     // Personal phone numbers visible in the source screenshots (sender +
     // recipient) were redacted before saving these — see public/images.
     uiScreensTitle: "Web Service UI",
+    // uiScreensAspect: "auto" — these are the core deliverable screenshots
+    // this round asks to show larger; both source files are ample resolution
+    // (1909×942 / 1619×899), so showing them at their own natural ratio
+    // (instead of force-cropping to 16:9) both enlarges them and keeps the
+    // original ratio/quality intact. Gimesee-only — no other project's
+    // uiScreens block is affected by this flag.
+    uiScreensAspect: "auto",
     uiScreens: ["/images/project-03-ui-01.jpg", "/images/project-03-ui-02.jpg"],
     uiScreenCaptions: [
       "새 메시지 작성 화면 — 다채널(문자·카카오톡·RCS) 발송 절차를 단계별로 안내하도록 UI/UX를 설계했습니다.",
