@@ -6,7 +6,10 @@
     var(--charcoal) 100%
   );
   color: var(--sun-cream);
-  padding: var(--space-section-y) 0 4rem;
+  /* Bottom padding was a flat 4rem regardless of viewport — tied it to
+     the same section-y scale (at a fraction of it) so the page's last
+     screen doesn't end in more dead space than any other section. */
+  padding: var(--space-section-y) 0 clamp(2.5rem, 4vw, 3.5rem);
   overflow: hidden;
 }
 
@@ -46,6 +49,15 @@
   flex-wrap: wrap;
   gap: 1rem;
   margin-bottom: 3.5rem;
+}
+
+/* Scoped sizing bump for the two primary CTAs — same pattern as the Hero
+   buttons — so "Email Me" / "View Resume" read as the clear next action
+   on the page's last screen, without touching the shared .btn used
+   everywhere else. */
+.contact__cta-row .btn {
+  font-size: 0.95rem;
+  padding: 1rem 1.8rem;
 }
 
 .contact__grid {
@@ -99,7 +111,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 5rem;
+  /* Was 5rem — combined with the old fixed 4rem section padding below it,
+     the page's last screen ended in more empty space than any other
+     section did. */
+  margin-top: 3.5rem;
   padding-top: 1.6rem;
   border-top: 1px solid rgba(255, 243, 228, 0.18);
   font-size: var(--fs-sm);
