@@ -270,14 +270,16 @@ background — effectively invisible. */
 }
 
 .case__body {
-  /* Matches the site-wide .container convention (max-width + auto margins)
-  used by Works/About/etc. — without it, on wide viewports this column just
-  fills the full-bleed .case background, so left-aligned text (Challenge,
-  My Role, ...) ends up hugging the left edge with a large empty gap on the
-  right instead of sitting in a centered, readable column. */
+  /* Matches the site-wide .container convention exactly (width calc +
+  max-width + auto margins, see global.css) — without it, on wide
+  viewports this column just fills the full-bleed .case background, so
+  left-aligned text (Challenge, My Role, ...) ends up hugging the left
+  edge with a large empty gap on the right instead of sitting in the same
+  centered column every other section uses. */
+  width: calc(100% - (var(--space-container-x) * 2));
   max-width: var(--max-width);
-  margin: 0 auto;
-  padding: var(--space-section-y) var(--space-container-x);
+  margin-inline: auto;
+  padding-block: var(--space-section-y);
 }
 
 .case__section {
