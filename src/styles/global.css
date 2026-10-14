@@ -55,11 +55,20 @@ p {
   margin: 0;
 }
 
+/* The one container every major section (Hero, Nav, Featured Projects,
+   About, Skills, Contact) shares. Deliberately width+max-width, not
+   padding — with box-sizing:border-box, a padding-based container never
+   actually reaches `--max-width` as content width (padding eats into the
+   cap), so on a 1920px screen Hero's 1200px column and Works' content
+   column would land on two different edges even with equal padding.
+   width:calc() + max-width + auto margins means the box is exactly
+   `--max-width` wide once the viewport is big enough, with the gutter
+   only acting as a floor below that — every section lands on the same
+   line at every width. */
 .container {
+  width: calc(100% - (var(--space-container-x) * 2));
   max-width: var(--max-width);
-  margin: 0 auto;
-  padding-left: var(--space-container-x);
-  padding-right: var(--space-container-x);
+  margin-inline: auto;
 }
 
 section {
@@ -106,7 +115,9 @@ section {
 .reveal {
   opacity: 0;
   transform: translateY(28px);
-  transition: opacity var(--dur-base) var(--ease-rise), transform var(--dur-base) var(--ease-rise);
+  transition:
+    opacity var(--dur-base) var(--ease-rise),
+    transform var(--dur-base) var(--ease-rise);
 }
 
 .reveal.is-visible {
@@ -114,10 +125,18 @@ section {
   transform: translateY(0);
 }
 
-.reveal-delay-1 { transition-delay: 0.08s; }
-.reveal-delay-2 { transition-delay: 0.16s; }
-.reveal-delay-3 { transition-delay: 0.24s; }
-.reveal-delay-4 { transition-delay: 0.32s; }
+.reveal-delay-1 {
+  transition-delay: 0.08s;
+}
+.reveal-delay-2 {
+  transition-delay: 0.16s;
+}
+.reveal-delay-3 {
+  transition-delay: 0.24s;
+}
+.reveal-delay-4 {
+  transition-delay: 0.32s;
+}
 
 /* Buttons ----------------------------------------------------------------- */
 .btn {
@@ -131,7 +150,9 @@ section {
   padding: 0.9rem 1.6rem;
   border: 1px solid currentColor;
   border-radius: 2px;
-  transition: background var(--dur-fast) var(--ease-rise), color var(--dur-fast) var(--ease-rise),
+  transition:
+    background var(--dur-fast) var(--ease-rise),
+    color var(--dur-fast) var(--ease-rise),
     border-color var(--dur-fast) var(--ease-rise);
 }
 
@@ -182,7 +203,11 @@ button:focus-visible {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(150deg, var(--ph-a, #3a3a3a), var(--ph-b, #1c1c1c));
+  background: linear-gradient(
+    150deg,
+    var(--ph-a, #3a3a3a),
+    var(--ph-b, #1c1c1c)
+  );
   color: rgba(255, 255, 255, 0.55);
   font-family: var(--font-display);
   font-size: var(--fs-xs);
