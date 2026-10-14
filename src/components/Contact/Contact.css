@@ -74,7 +74,8 @@
   font-size: var(--fs-xs);
   letter-spacing: var(--ls-wider);
   text-transform: uppercase;
-  color: var(--text-on-dark-muted);
+  /* Small caption-scale label — boosted contrast, see --text-caption-on-dark. */
+  color: var(--text-caption-on-dark);
   margin-bottom: 0.7rem;
 }
 
