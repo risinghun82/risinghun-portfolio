@@ -236,7 +236,13 @@ the hero's dark panel background — light border/text instead of dark. */
   animation-delay: 0.22s;
 }
 
-.case__tools--on-dark li {
+/* Both classes are on the same <ul> (className="case__tools
+case__tools--on-dark"), so this needs the combined selector: a plain
+`.case__tools--on-dark li` has the same specificity as the base `.case__tools
+li` below and loses to it on source order alone, which was silently
+rendering these pills with the base's dark border color on the hero's dark
+background — effectively invisible. */
+.case__tools.case__tools--on-dark li {
   border-color: rgba(255, 246, 235, 0.32);
   color: var(--sun-cream);
 }
