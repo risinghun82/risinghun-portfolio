@@ -201,9 +201,11 @@ engagement. */
 
 .case__title {
   font-family: var(--font-display);
-  font-size: clamp(2rem, 3.4vw, 3.4rem);
+  /* Spec: PC 기준 36-44px — was clamp(2rem,3.4vw,3.4rem) (32-54.4px), which
+     ran noticeably larger than the rest of the detail-page type scale. */
+  font-size: clamp(2.25rem, 2.6vw, 2.75rem);
   letter-spacing: var(--ls-tight);
-  line-height: 1.05;
+  line-height: 1.1;
   margin: 0.6rem 0 0.5rem;
   animation: caseHeroTextIn 0.6s var(--ease-rise) both;
   animation-delay: 0.1s;
@@ -221,8 +223,10 @@ before anything else, right in the hero, no scrolling required. */
 .case__hero-summary {
   max-width: 46ch;
   margin-top: 0.9rem;
-  font-size: var(--fs-md);
-  line-height: var(--lh-heading);
+  /* Spec: 15-16px body, line-height 1.6+ — was var(--fs-md) (16.8px) at
+     --lh-heading (1.15), which read tight for a paragraph this long. */
+  font-size: clamp(15px, 1vw, 16px);
+  line-height: 1.6;
   color: var(--sun-cream);
   animation: caseHeroTextIn 0.6s var(--ease-rise) both;
   animation-delay: 0.18s;
@@ -231,7 +235,9 @@ before anything else, right in the hero, no scrolling required. */
 /* Same pill component as .case__tools (Design section / My Role), but on
 the hero's dark panel background — light border/text instead of dark. */
 .case__tools--on-dark {
-  margin-top: 1.1rem;
+  /* Was 1.1rem — a touch more separation from the description above now
+     that both sit at a calmer, more legible size. */
+  margin-top: 1.4rem;
   animation: caseHeroTextIn 0.6s var(--ease-rise) both;
   animation-delay: 0.22s;
 }
@@ -270,16 +276,37 @@ background — effectively invisible. */
 }
 
 .case__body {
-  /* Matches the site-wide .container convention exactly (width calc +
-  max-width + auto margins, see global.css) — without it, on wide
-  viewports this column just fills the full-bleed .case background, so
-  left-aligned text (Challenge, My Role, ...) ends up hugging the left
-  edge with a large empty gap on the right instead of sitting in the same
-  centered column every other section uses. */
+  /* Reuses the same width-calc + max-width + auto-margin mechanism as the
+  site-wide .container (see global.css) — same gutters (48/32/20px via
+  --space-container-x), but a narrower 1040px cap of its own. A case study
+  is prose-and-evidence, not a marketing layout: 1040px keeps every line of
+  body copy at a comfortable reading measure instead of stretching to the
+  main site's 1200px, which read too wide for paragraph text. */
   width: calc(100% - (var(--space-container-x) * 2));
-  max-width: var(--max-width);
   margin-inline: auto;
-  padding-block: var(--space-section-y);
+  /* Spec: 88-104px between major sections on desktop (was the sitewide
+  112px --space-section-y, which ran a bit heavier than this text-dense
+  page needed). Tablet/mobile keep inheriting --space-section-y (80px /
+  64px), both already inside the spec's own tablet/mobile ranges. */
+  padding-block: clamp(88px, 7vw, 104px);
+}
+
+/* `.case__body` shares its element with the sitewide `.container` class
+(className="container case__body" in ProjectDetail.jsx), and both are
+single-class selectors — equal specificity means whichever rule happens to
+land later in the bundled stylesheet silently wins, which was letting
+.container's 1200px max-width override this page's narrower 1040px cap
+regardless of the order these two rules appear in this file. The extra
+`.case` ancestor here raises specificity above `.container` so this always
+wins, without reaching for `!important`. */
+.case .case__body {
+  max-width: 1040px;
+}
+
+@media (max-width: 1024px) {
+  .case__body {
+    padding-block: var(--space-section-y);
+  }
 }
 
 .case__section {
@@ -296,7 +323,8 @@ background — effectively invisible. */
   align-items: baseline;
   gap: 0.9rem;
   font-family: var(--font-display);
-  font-size: clamp(1.5rem, 2.4vw, 2rem);
+  /* Spec: 22-26px section titles — was clamp(1.5rem,2.4vw,2rem) (24-32px). */
+  font-size: clamp(1.375rem, 1.6vw, 1.625rem);
   letter-spacing: var(--ls-tight);
   margin-bottom: 1.8rem;
 }
@@ -314,8 +342,12 @@ background — effectively invisible. */
 }
 
 .case__overview-desc {
-  font-size: var(--fs-lg);
-  line-height: var(--lh-heading);
+  /* Spec: 15-17px body copy, line-height 1.65 — applied consistently to
+  every body-copy class on this page (see the matching comment on
+  .case__statement-list li below), replacing the mix of --fs-lg/--fs-md
+  sizes each section used to pick independently. */
+  font-size: clamp(15px, 1vw, 17px);
+  line-height: 1.65;
 }
 
 .case__overview-facts {
@@ -335,15 +367,17 @@ background — effectively invisible. */
 
 .case__overview-facts dt {
   font-family: var(--font-display);
-  font-size: var(--fs-xs);
+  /* Was var(--fs-xs) (~11.5px) — small meta labels get the same caption
+  contrast/size treatment used sitewide (Works meta, About stat labels). */
+  font-size: 13px;
   letter-spacing: var(--ls-wide);
   text-transform: uppercase;
-  color: var(--text-on-light-muted);
+  color: var(--text-caption-on-light, var(--text-on-light-muted));
 }
 
 .case__overview-facts dd {
   margin: 0;
-  font-size: var(--fs-md);
+  font-size: 16px;
 }
 
 .case__statement-list {
@@ -359,8 +393,11 @@ background — effectively invisible. */
 }
 
 .case__statement-list li {
-  font-size: var(--fs-md);
-  line-height: var(--lh-body);
+  /* Spec: 15-17px body, line-height 1.65 (was var(--fs-md)/--lh-body =
+  16.8px/1.7 — close, but now explicit and consistent with every other
+  body-copy class on this page rather than each picking its own token). */
+  font-size: clamp(15px, 1vw, 17px);
+  line-height: 1.65;
   padding-left: 1.4rem;
   position: relative;
 }
@@ -451,8 +488,23 @@ of stacked in one narrow column next to empty space. */
 }
 
 .case__role-scope {
-  font-size: var(--fs-lg);
-  line-height: var(--lh-heading);
+  font-size: clamp(15px, 1vw, 17px);
+  line-height: 1.65;
+}
+
+/* My Role split into PLANNING / DESIGN / PUBLISHING groups (see
+src/data/projects.js roleBreakdown + ProjectDetail.jsx) — stacked, each with
+its own small uppercase label (reusing .case__challenge-subtitle), so the
+three disciplines this portfolio needs to prove are each scannable on their
+own instead of folded into one flat list. */
+.case__role-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 1.8rem;
+}
+
+.case__role-group .case__statement-list {
+  margin-top: 0;
 }
 
 /* 05. Design — Color & Typography / screens grouped as sub-blocks of one
@@ -474,11 +526,25 @@ numbered section instead of three separate top-level ones. */
   margin-bottom: 1.4rem;
 }
 
-/* 06. Publishing */
+/* 06. Publishing — now split into IMPLEMENTATION / RESPONSIVE / INTERACTION
+sub-blocks (see ProjectDetail.jsx), each stacked with the same spacing as
+the Design section's own sub-blocks. */
+.case__publishing-block {
+  margin-top: 2.2rem;
+}
+
+.case__publishing-block:first-child {
+  margin-top: 0;
+}
+
 .case__publishing-desc {
-  font-size: var(--fs-lg);
-  line-height: var(--lh-heading);
-  margin-bottom: 2rem;
+  font-size: clamp(15px, 1vw, 17px);
+  line-height: 1.65;
+  margin-bottom: 0;
+}
+
+.case__publishing-block .case__responsive {
+  margin-top: 1rem;
 }
 
 .case__palette {
@@ -513,7 +579,8 @@ numbered section instead of three separate top-level ones. */
 .case__screens {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1.6rem;
+  /* Spec: 36-48px between gallery images (was 1.6rem / 25.6px). */
+  gap: clamp(36px, 3vw, 48px);
 }
 
 /* Front/back flyer pages (or any other naturally-paired pair of images) —
@@ -563,7 +630,7 @@ instead, showing the whole screenshot uncropped. */
 .case__responsive {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 1.6rem;
+  gap: clamp(36px, 3vw, 48px);
 }
 
 .case__responsive-item {
@@ -578,13 +645,15 @@ instead, showing the whole screenshot uncropped. */
 .case__tools {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.7rem;
+  /* Was 0.7rem — a little more room between role/tech tags so they read as
+     distinct pills rather than a crowded run-on row. */
+  gap: 0.85rem;
 }
 
 .case__tools li {
   font-size: var(--fs-sm);
   border: 1px solid rgba(23, 23, 23, 0.2);
-  padding: 0.5rem 0.9rem;
+  padding: 0.55rem 1rem;
   border-radius: 999px;
 }
 
@@ -592,27 +661,86 @@ instead, showing the whole screenshot uncropped. */
   border-bottom: none;
 }
 
-.case__result-text {
-  font-size: var(--fs-lg);
-  line-height: var(--lh-heading);
+/* 07. Result — RESULT / MY CONTRIBUTION side by side (same row-filling
+pattern as Overview/Challenge/My Role above) instead of one block of text,
+so the outcome and the reviewer's "what did THIS person finish" question
+each get their own clearly labeled space. */
+.case__result-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: start;
 }
 
+@media (max-width: 900px) {
+  .case__result-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
+
+.case__result-text {
+  font-size: clamp(15px, 1vw, 17px);
+  line-height: 1.65;
+}
+
+.case__contribution--result {
+  margin-top: 0.6rem;
+}
+
+/* Project-to-project navigation — Back to Portfolio on the left, Previous/
+Next grouped together on the right, all three built from one shared pill
+style so they read as one consistent control instead of three differently
+styled links. */
 .case__nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 1.2rem;
   padding: 2.5rem 0 1rem;
+}
+
+.case__nav-pair {
+  display: flex;
+  gap: 0.9rem;
+  flex-wrap: wrap;
+}
+
+.case__nav-link {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.2rem;
   font-family: var(--font-display);
   font-size: var(--fs-sm);
   letter-spacing: var(--ls-wide);
+  padding: 0.8rem 1.3rem;
+  border: 1px solid rgba(23, 23, 23, 0.16);
+  border-radius: 10px;
+  transition:
+    border-color var(--dur-fast) var(--ease-rise),
+    background-color var(--dur-fast) var(--ease-rise),
+    color var(--dur-fast) var(--ease-rise);
 }
 
-.case__back {
+.case__nav-link:hover,
+.case__nav-link:focus-visible {
+  border-color: var(--project-accent, var(--accent));
+  color: var(--project-accent, var(--accent));
+}
+
+.case__nav-link-label {
+  font-size: var(--fs-xs);
+  letter-spacing: var(--ls-wider);
+  text-transform: uppercase;
   color: var(--text-on-light-muted);
 }
 
-.case__next {
-  color: var(--project-accent, var(--accent));
+.case__nav-link--back {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--text-on-light-muted);
 }
 
 @media (max-width: 900px) {
@@ -628,9 +756,82 @@ instead, showing the whole screenshot uncropped. */
 @media (max-width: 600px) {
   .case__nav {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
     gap: 1rem;
   }
+
+  .case__nav-pair {
+    flex-direction: column;
+  }
+
+  .case__nav-link {
+    width: 100%;
+  }
+}
+
+/* Click-to-zoom gallery images (Design/Publishing screens) — a plain,
+focusable, keyboard-operable wrapper (see Zoomable in ProjectDetail.jsx),
+not a bare div with onClick. */
+.case__zoomable {
+  display: block;
+  cursor: zoom-in;
+  border-radius: 8px;
+}
+
+.case__zoomable:focus-visible {
+  outline: 2px solid var(--project-accent, var(--accent));
+  outline-offset: 3px;
+}
+
+/* Lightweight lightbox overlay — no new dependency, just a fixed, full-
+viewport portal (see Lightbox in ProjectDetail.jsx). */
+.case__lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1rem, 4vw, 3rem);
+  background: rgba(23, 23, 23, 0.88);
+  cursor: zoom-out;
+  animation: caseLightboxIn 0.2s var(--ease-rise) both;
+}
+
+@keyframes caseLightboxIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.case__lightbox-image {
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 6px;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.4);
+  cursor: default;
+}
+
+.case__lightbox-close {
+  position: absolute;
+  top: clamp(1rem, 3vw, 2rem);
+  right: clamp(1rem, 3vw, 2rem);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--sun-cream);
+  font-size: 1.6rem;
+  line-height: 1;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+}
+
+.case__lightbox-close:hover,
+.case__lightbox-close:focus-visible {
+  background: rgba(255, 255, 255, 0.2);
 }
 
 /* 2026 portfolio image polish: consistent media ratio, border and depth */

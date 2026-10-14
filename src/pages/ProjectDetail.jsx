@@ -1,9 +1,78 @@
+import { useEffect, useState } from "react";
 import { useParams, Link, Navigate } from "react-router-dom";
 import { createPortal } from "react-dom";
 import Reveal from "../components/Reveal.jsx";
 import Contact from "../components/Contact/Contact.jsx";
 import { projects, getProjectBySlug } from "../data/projects.js";
 import "./ProjectDetail.css";
+
+/**
+ * Lightweight click-to-zoom lightbox — no new dependency, just a portal +
+ * a fixed overlay, matching the rest of this file's existing pattern (see
+ * the floating back button below). Click the backdrop, press Escape, or
+ * click the close control to dismiss.
+ */
+function Lightbox({ src, alt, onClose }) {
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
+  return createPortal(
+    <div
+      className="case__lightbox"
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-label={alt}
+    >
+      <button
+        type="button"
+        className="case__lightbox-close"
+        onClick={onClose}
+        aria-label="이미지 확대 보기 닫기"
+      >
+        ×
+      </button>
+      <img
+        className="case__lightbox-image"
+        src={src}
+        alt={alt}
+        onClick={(e) => e.stopPropagation()}
+      />
+    </div>,
+    document.body,
+  );
+}
+
+/**
+ * Makes an existing gallery <img> clickable-to-zoom without touching its
+ * src/alt/loading props — wraps it in a button-like span so it stays a
+ * real, focusable, keyboard-operable control (Enter/Space opens it) rather
+ * than a bare onClick div.
+ */
+function Zoomable({ children, onOpen, label }) {
+  return (
+    <span
+      className="case__zoomable"
+      role="button"
+      tabIndex={0}
+      aria-label={`${label} 확대 보기`}
+      onClick={onOpen}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          onOpen();
+        }
+      }}
+    >
+      {children}
+    </span>
+  );
+}
 
 /**
  * Project Detail / Case Study
@@ -18,10 +87,13 @@ export default function ProjectDetail() {
   const { slug } = useParams();
   const project = getProjectBySlug(slug);
 
+  const [lightbox, setLightbox] = useState(null); // { src, alt } | null
+
   if (!project) return <Navigate to="/" replace />;
 
   const idx = projects.findIndex((p) => p.slug === slug);
   const next = projects[(idx + 1) % projects.length];
+  const prev = projects[(idx - 1 + projects.length) % projects.length];
 
   // Role-scope chips reuse the same real `role` field Works.jsx reads —
   // never a separately maintained (and driftable) list.
@@ -37,15 +109,23 @@ export default function ProjectDetail() {
   // (no client, no brief) so it reads as what it actually was rather than
   // being forced into the same "client engagement" framing as the rest —
   // same sections, same underlying data, just an honest label. See
-  // src/data/projects.js `personal` flag.
+  // src/data/projects.js `personal` flag. Non-personal projects use the
+  // PROBLEM / REQUIREMENT framing requested for this round: `problems` is
+  // shown first (it's already written as direct pain points), `background`
+  // second (re-labeled "Requirement" — several of its own lines are
+  // literally phrased as "the task that needed solving"). No copy changes,
+  // only clearer, non-overlapping labels for the same two real lists.
   const challengeTitle = project.personal ? "Goal & Exploration" : "Challenge";
   const backgroundLabel = project.personal
     ? "What I Wanted to Explore"
-    : "Background & Goals";
+    : "Requirement";
   const problemsLabel = project.personal
     ? "Constraints & Questions"
-    : "Existing Problems";
+    : "Problem";
   const resultTitle = project.personal ? "What I Explored" : "Result";
+
+  const openLightbox = (src, alt) => setLightbox({ src, alt });
+  const closeLightbox = () => setLightbox(null);
 
   // Sections are numbered by how many of them actually render for this
   // project (not a hardcoded 01–07), so a project missing a piece (e.g. no
@@ -69,7 +149,7 @@ export default function ProjectDetail() {
         <Link
           to="/#works"
           className="case__float-back"
-          aria-label="이전 화면(Selected Works)으로 돌아가기"
+          aria-label="포트폴리오로 돌아가기"
         >
           <svg
             className="case__float-back-icon"
@@ -131,7 +211,7 @@ the title never overlaps whatever the photo itself contains. */}
 
           <div className="case__hero-panel">
             <Link to="/#works" className="case__hero-crumb">
-              Back to Selected Works
+              Back to Portfolio
             </Link>
 
             <div className="case__hero-info">
@@ -222,22 +302,56 @@ the title never overlaps whatever the photo itself contains. */}
               {challengeTitle}
             </h2>
             <div className="case__challenge">
-              <div className="case__challenge-group">
-                <h3 className="case__challenge-subtitle">{backgroundLabel}</h3>
-                <ul className="case__statement-list">
-                  {project.background.map((line) => (
-                    <li key={line}>{line}</li>
-                  ))}
-                </ul>
-              </div>
-              <div className="case__challenge-group">
-                <h3 className="case__challenge-subtitle">{problemsLabel}</h3>
-                <ul className="case__statement-list case__statement-list--flagged">
-                  {project.problems.map((line) => (
-                    <li key={line}>{line}</li>
-                  ))}
-                </ul>
-              </div>
+              {/* Non-personal projects read PROBLEM first (the concrete pain
+              points), then REQUIREMENT (what the project had to achieve) —
+              personal projects keep their original explore-first framing. */}
+              {project.personal ? (
+                <>
+                  <div className="case__challenge-group">
+                    <h3 className="case__challenge-subtitle">
+                      {backgroundLabel}
+                    </h3>
+                    <ul className="case__statement-list">
+                      {project.background.map((line) => (
+                        <li key={line}>{line}</li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div className="case__challenge-group">
+                    <h3 className="case__challenge-subtitle">
+                      {problemsLabel}
+                    </h3>
+                    <ul className="case__statement-list case__statement-list--flagged">
+                      {project.problems.map((line) => (
+                        <li key={line}>{line}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="case__challenge-group">
+                    <h3 className="case__challenge-subtitle">
+                      {problemsLabel}
+                    </h3>
+                    <ul className="case__statement-list case__statement-list--flagged">
+                      {project.problems.map((line) => (
+                        <li key={line}>{line}</li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div className="case__challenge-group">
+                    <h3 className="case__challenge-subtitle">
+                      {backgroundLabel}
+                    </h3>
+                    <ul className="case__statement-list">
+                      {project.background.map((line) => (
+                        <li key={line}>{line}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </>
+              )}
             </div>
           </Reveal>
 
@@ -264,15 +378,39 @@ the title never overlaps whatever the photo itself contains. */}
               {/* Concrete tasks actually performed, not a repeat of the role
               chips already shown in the hero — this is the section a
               recruiter reads to answer "so what did they actually do
-              here?" See responsibilities in src/data/projects.js. Placed in
-              its own column (not stacked under the scope paragraph) so the
-              section fills the row the same way Overview does, instead of
-              one narrow stack next to empty space. */}
-              <ul className="case__statement-list case__responsibilities">
-                {project.responsibilities.map((line) => (
-                  <li key={line}>{line}</li>
-                ))}
-              </ul>
+              here?" When roleBreakdown exists (all 5 projects as of this
+              round), split into PLANNING / DESIGN / PUBLISHING so the three
+              disciplines this portfolio is meant to prove are each visible
+              at a glance, instead of one undifferentiated list. A project
+              with nothing in a given bucket simply omits that group — see
+              src/data/projects.js roleBreakdown. */}
+              {project.roleBreakdown ? (
+                <div className="case__role-groups">
+                  {[
+                    ["PLANNING", project.roleBreakdown.planning],
+                    ["DESIGN", project.roleBreakdown.design],
+                    ["PUBLISHING", project.roleBreakdown.publishing],
+                  ].map(
+                    ([label, items]) =>
+                      items?.length > 0 && (
+                        <div key={label} className="case__role-group">
+                          <h3 className="case__challenge-subtitle">{label}</h3>
+                          <ul className="case__statement-list">
+                            {items.map((line) => (
+                              <li key={line}>{line}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      ),
+                  )}
+                </div>
+              ) : (
+                <ul className="case__statement-list case__responsibilities">
+                  {project.responsibilities.map((line) => (
+                    <li key={line}>{line}</li>
+                  ))}
+                </ul>
+              )}
             </div>
           </Reveal>
 
@@ -328,26 +466,35 @@ the title never overlaps whatever the photo itself contains. */}
 
             {project.uiScreens && (
               <div className="case__design-block">
-                <h3 className="case__design-subtitle">Key UI Screens</h3>
+                <h3 className="case__design-subtitle">
+                  {project.uiScreensTitle || "Web Service UI"}
+                </h3>
                 <div className="case__screens">
-                  {project.uiScreens.map((src, i) => (
-                    <figure key={src} className="case__screen-figure">
-                      <img
-                        className="case__screen case__screen--real"
-                        src={src}
-                        alt={
-                          project.uiScreenCaptions?.[i] ||
-                          `${project.title} UI 화면 ${i + 1}`
-                        }
-                        loading="lazy"
-                      />
-                      {project.uiScreenCaptions?.[i] && (
-                        <figcaption className="case__screen-caption">
-                          {project.uiScreenCaptions[i]}
-                        </figcaption>
-                      )}
-                    </figure>
-                  ))}
+                  {project.uiScreens.map((src, i) => {
+                    const alt =
+                      project.uiScreenCaptions?.[i] ||
+                      `${project.title} UI 화면 ${i + 1}`;
+                    return (
+                      <figure key={src} className="case__screen-figure">
+                        <Zoomable
+                          onOpen={() => openLightbox(src, alt)}
+                          label={alt}
+                        >
+                          <img
+                            className="case__screen case__screen--real"
+                            src={src}
+                            alt={alt}
+                            loading="lazy"
+                          />
+                        </Zoomable>
+                        {project.uiScreenCaptions?.[i] && (
+                          <figcaption className="case__screen-caption">
+                            {project.uiScreenCaptions[i]}
+                          </figcaption>
+                        )}
+                      </figure>
+                    );
+                  })}
                 </div>
               </div>
             )}
@@ -357,41 +504,52 @@ the title never overlaps whatever the photo itself contains. */}
                 {project.screensTitle || "Key UI Screens"}
               </h3>
               <div className="case__screens">
-                {project.screens.map((src, i) =>
-                  project.images?.screens?.[i] ? (
+                {project.screens.map((src, i) => {
+                  if (!project.images?.screens?.[i]) {
+                    return (
+                      <div
+                        key={src}
+                        className="img-placeholder case__screen"
+                        style={{
+                          "--ph-a": project.accent,
+                          "--ph-b": "#24100B",
+                        }}
+                      >
+                        <span>
+                          Screen 0{i + 1} 교체 영역 ({src})
+                        </span>
+                      </div>
+                    );
+                  }
+                  const alt =
+                    project.screenCaptions?.[i] ||
+                    `${project.title} 화면 ${i + 1}`;
+                  return (
                     <figure key={src} className="case__screen-figure">
-                      <img
-                        className={
-                          "case__screen case__screen--real" +
-                          (project.screensAspect === "auto"
-                            ? " case__screen--auto"
-                            : "")
-                        }
-                        src={src}
-                        alt={
-                          project.screenCaptions?.[i] ||
-                          `${project.title} 화면 ${i + 1}`
-                        }
-                        loading="lazy"
-                      />
+                      <Zoomable
+                        onOpen={() => openLightbox(src, alt)}
+                        label={alt}
+                      >
+                        <img
+                          className={
+                            "case__screen case__screen--real" +
+                            (project.screensAspect === "auto"
+                              ? " case__screen--auto"
+                              : "")
+                          }
+                          src={src}
+                          alt={alt}
+                          loading="lazy"
+                        />
+                      </Zoomable>
                       {project.screenCaptions?.[i] && (
                         <figcaption className="case__screen-caption">
                           {project.screenCaptions[i]}
                         </figcaption>
                       )}
                     </figure>
-                  ) : (
-                    <div
-                      key={src}
-                      className="img-placeholder case__screen"
-                      style={{ "--ph-a": project.accent, "--ph-b": "#24100B" }}
-                    >
-                      <span>
-                        Screen 0{i + 1} 교체 영역 ({src})
-                      </span>
-                    </div>
-                  ),
-                )}
+                  );
+                })}
               </div>
             </div>
 
@@ -401,24 +559,31 @@ the title never overlaps whatever the photo itself contains. */}
                   {project.flyerScreensTitle || "Print & Flyer Design"}
                 </h3>
                 <div className="case__screens case__screens--pair">
-                  {project.flyerScreens.map((src, i) => (
-                    <figure key={src} className="case__screen-figure">
-                      <img
-                        className="case__screen case__screen--real case__screen--auto"
-                        src={src}
-                        alt={
-                          project.flyerCaptions?.[i] ||
-                          `${project.title} 전단지 ${i + 1}`
-                        }
-                        loading="lazy"
-                      />
-                      {project.flyerCaptions?.[i] && (
-                        <figcaption className="case__screen-caption">
-                          {project.flyerCaptions[i]}
-                        </figcaption>
-                      )}
-                    </figure>
-                  ))}
+                  {project.flyerScreens.map((src, i) => {
+                    const alt =
+                      project.flyerCaptions?.[i] ||
+                      `${project.title} 전단지 ${i + 1}`;
+                    return (
+                      <figure key={src} className="case__screen-figure">
+                        <Zoomable
+                          onOpen={() => openLightbox(src, alt)}
+                          label={alt}
+                        >
+                          <img
+                            className="case__screen case__screen--real case__screen--auto"
+                            src={src}
+                            alt={alt}
+                            loading="lazy"
+                          />
+                        </Zoomable>
+                        {project.flyerCaptions?.[i] && (
+                          <figcaption className="case__screen-caption">
+                            {project.flyerCaptions[i]}
+                          </figcaption>
+                        )}
+                      </figure>
+                    );
+                  })}
                 </div>
               </div>
             )}
@@ -438,42 +603,79 @@ the title never overlaps whatever the photo itself contains. */}
             <h2 id="publishing-title" className="case__section-title">
               <span className="case__section-num">{num()}</span> Publishing
             </h2>
+
+            {/* IMPLEMENTATION — only the tools actually used for this
+            project (publishingTools, derived from real toolsUsed data). */}
             {publishingTools.length > 0 && (
-              <p className="case__publishing-desc">
-                {/* Particle ("등을") attaches to the fixed word "등", not to
-                the variable tool list, so this stays grammatically correct
-                no matter what toolsUsed contains. */}
-                {publishingTools.join(", ")} 등을 활용해 화면을 직접 퍼블리싱
-                {project.noResponsive ? "했습니다." : "하고,"}
-                {!project.noResponsive &&
-                  " 아래와 같이 반응형까지 대응했습니다."}
-                {project.noResponsive &&
-                  " 데스크톱 사용 환경을 기준으로 한 내부 서비스라 별도의 반응형 버전은 제작하지 않았습니다."}
-              </p>
+              <div className="case__publishing-block">
+                <h3 className="case__challenge-subtitle">Implementation</h3>
+                <p className="case__publishing-desc">
+                  {/* Particle ("등을") attaches to the fixed word "등", not to
+                  the variable tool list, so this stays grammatically correct
+                  no matter what toolsUsed contains. */}
+                  {publishingTools.join(", ")} 등을 활용해 화면을 직접
+                  퍼블리싱했습니다.
+                </p>
+              </div>
             )}
-            {!project.noResponsive && (
-              <div className="case__responsive">
-                {project.responsive.map((src, i) =>
-                  project.images?.responsive?.[i] ? (
-                    <img
-                      key={src}
-                      className="case__responsive-item case__responsive-item--real"
-                      src={src}
-                      alt={`${project.title} ${i === 0 ? "태블릿" : "모바일"} 화면`}
-                      loading="lazy"
-                    />
-                  ) : (
-                    <div
-                      key={src}
-                      className="img-placeholder case__responsive-item"
-                      style={{ "--ph-a": "#171717", "--ph-b": project.accent }}
-                    >
-                      <span>
-                        {i === 0 ? "Tablet" : "Mobile"} 교체 영역 ({src})
-                      </span>
-                    </div>
-                  ),
-                )}
+
+            {/* RESPONSIVE — real tablet/mobile screens when they exist;
+            an honest one-line note (never a placeholder) when they don't. */}
+            <div className="case__publishing-block">
+              <h3 className="case__challenge-subtitle">Responsive</h3>
+              {project.noResponsive ? (
+                <p className="case__publishing-desc">
+                  데스크톱 사용 환경을 기준으로 한 내부 서비스라 별도의 반응형
+                  버전은 제작하지 않았습니다.
+                </p>
+              ) : (
+                <div className="case__responsive">
+                  {project.responsive.map((src, i) => {
+                    if (!project.images?.responsive?.[i]) {
+                      return (
+                        <div
+                          key={src}
+                          className="img-placeholder case__responsive-item"
+                          style={{
+                            "--ph-a": "#171717",
+                            "--ph-b": project.accent,
+                          }}
+                        >
+                          <span>
+                            {i === 0 ? "Tablet" : "Mobile"} 교체 영역 ({src})
+                          </span>
+                        </div>
+                      );
+                    }
+                    const alt = `${project.title} ${i === 0 ? "태블릿" : "모바일"} 화면`;
+                    return (
+                      <Zoomable
+                        key={src}
+                        onOpen={() => openLightbox(src, alt)}
+                        label={alt}
+                      >
+                        <img
+                          className="case__responsive-item case__responsive-item--real"
+                          src={src}
+                          alt={alt}
+                          loading="lazy"
+                        />
+                      </Zoomable>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
+            {/* INTERACTION — only shown when a project has a verified,
+            already-documented interactive behavior (see interactionNote in
+            src/data/projects.js). Not every project needs this subsection. */}
+            {project.interactionNote && (
+              <div className="case__publishing-block">
+                <h3 className="case__challenge-subtitle">Interaction</h3>
+                <p className="case__publishing-desc">
+                  {project.interactionNote}
+                </p>
               </div>
             )}
           </Reveal>
@@ -487,18 +689,58 @@ the title never overlaps whatever the photo itself contains. */}
             <h2 id="result-title" className="case__section-title">
               <span className="case__section-num">{num()}</span> {resultTitle}
             </h2>
-            <p className="case__result-text">{project.result}</p>
+            <div className="case__result-grid">
+              <div>
+                <h3 className="case__challenge-subtitle">{resultTitle}</h3>
+                <p className="case__result-text">{project.result}</p>
+              </div>
+              {/* MY CONTRIBUTION reuses two fields that already exist and are
+              already shown elsewhere on the page (overview.scope,
+              contribution) — no new figures are introduced here, just
+              brought together under the label a reviewer is looking for in
+              this section. */}
+              <div>
+                <h3 className="case__challenge-subtitle">My Contribution</h3>
+                <p className="case__result-text">{project.overview.scope}</p>
+                {project.contribution && (
+                  <p className="case__contribution case__contribution--result">
+                    기여도 {project.contribution}
+                  </p>
+                )}
+              </div>
+            </div>
           </Reveal>
 
           <div className="case__nav">
-            <Link to="/#works" className="case__back">
-              ← Back to Selected Works
+            <Link to="/#works" className="case__nav-link case__nav-link--back">
+              <span aria-hidden="true">←</span> Back to Portfolio
             </Link>
-            <Link to={`/work/${next.slug}`} className="case__next">
-              Next Project: {next.title} →
-            </Link>
+            <div className="case__nav-pair">
+              <Link
+                to={`/work/${prev.slug}`}
+                className="case__nav-link case__nav-link--prev"
+              >
+                <span className="case__nav-link-label">Previous Project</span>
+                {prev.title}
+              </Link>
+              <Link
+                to={`/work/${next.slug}`}
+                className="case__nav-link case__nav-link--next"
+              >
+                <span className="case__nav-link-label">Next Project</span>
+                {next.title}
+              </Link>
+            </div>
           </div>
         </div>
+
+        {lightbox && (
+          <Lightbox
+            src={lightbox.src}
+            alt={lightbox.alt}
+            onClose={closeLightbox}
+          />
+        )}
 
         <Contact />
       </main>
