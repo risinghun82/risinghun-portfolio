@@ -264,6 +264,13 @@ the hero's dark panel background — light border/text instead of dark. */
 }
 
 .case__body {
+  /* Matches the site-wide .container convention (max-width + auto margins)
+  used by Works/About/etc. — without it, on wide viewports this column just
+  fills the full-bleed .case background, so left-aligned text (Challenge,
+  My Role, ...) ends up hugging the left edge with a large empty gap on the
+  right instead of sitting in a centered, readable column. */
+  max-width: var(--max-width);
+  margin: 0 auto;
   padding: var(--space-section-y) var(--space-container-x);
 }
 
@@ -332,10 +339,15 @@ the hero's dark panel background — light border/text instead of dark. */
 }
 
 .case__statement-list {
+  /* No max-width here: this list is the only content in its row (unlike
+  Overview's two-column grid), so capping it to 68ch left a large empty gap
+  on the right of a centered 1440px-wide page. Filling the row keeps lines
+  readable in Korean (characters are wider than Latin, so even full-width
+  wrapping doesn't get excessively long) and matches the hero/overview text,
+  which were never capped either. */
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  max-width: 68ch;
 }
 
 .case__statement-list li {
@@ -355,13 +367,46 @@ the hero's dark panel background — light border/text instead of dark. */
   background: var(--project-accent, var(--accent));
 }
 
+/* Standalone lists that aren't already split into two columns by a parent
+grid (Challenge's groups, My Role's two-column block) — e.g. Approach &
+Solution. Flows items into two balanced columns instead of one narrow list
+with empty space beside it. */
+.case__statement-list--cols {
+  /* CSS multi-column layout doesn't apply to flex containers, so this
+  modifier switches back to block display — the base class's flex/gap was
+  only ever for the single-column stacking case. */
+  display: block;
+  column-count: 2;
+  column-gap: 3rem;
+}
+
+.case__statement-list--cols li {
+  break-inside: avoid;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 900px) {
+  .case__statement-list--cols {
+    column-count: 1;
+  }
+}
+
 /* 02. Challenge — Background & Goals / Existing Problems shown as two
-labeled groups within one section instead of two separate top-level
-sections. */
+labeled groups side by side (same row-filling idea as .case__overview-grid)
+instead of stacked, which on a wide centered page left one narrow list
+sitting next to a large empty gap. */
 .case__challenge {
-  display: flex;
-  flex-direction: column;
-  gap: 2.4rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .case__challenge {
+    grid-template-columns: 1fr;
+    gap: 2.4rem;
+  }
 }
 
 .case__challenge-subtitle {
@@ -373,18 +418,33 @@ sections. */
   margin-bottom: 1rem;
 }
 
-/* 03. My Role */
+/* 03. My Role — scope/contribution and the task list sit side by side
+(same row-filling idea as .case__overview-grid / .case__challenge) instead
+of stacked in one narrow column next to empty space. */
 .case__role-block {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: start;
+}
+
+.case__role-col {
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
   align-items: flex-start;
 }
 
+@media (max-width: 900px) {
+  .case__role-block {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
+
 .case__role-scope {
   font-size: var(--fs-lg);
   line-height: var(--lh-heading);
-  max-width: 68ch;
 }
 
 /* 05. Design — Color & Typography / screens grouped as sub-blocks of one
@@ -410,7 +470,6 @@ numbered section instead of three separate top-level ones. */
 .case__publishing-desc {
   font-size: var(--fs-lg);
   line-height: var(--lh-heading);
-  max-width: 68ch;
   margin-bottom: 2rem;
 }
 
@@ -528,7 +587,6 @@ instead, showing the whole screenshot uncropped. */
 .case__result-text {
   font-size: var(--fs-lg);
   line-height: var(--lh-heading);
-  max-width: 68ch;
 }
 
 .case__nav {

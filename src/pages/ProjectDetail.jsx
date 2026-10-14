@@ -253,21 +253,26 @@ the title never overlaps whatever the photo itself contains. */}
               <span className="case__section-num">{num()}</span> My Role
             </h2>
             <div className="case__role-block">
-              <p className="case__role-scope">{project.overview.scope}</p>
+              <div className="case__role-col">
+                <p className="case__role-scope">{project.overview.scope}</p>
+                {project.contribution && (
+                  <p className="case__contribution">
+                    기여도 {project.contribution}
+                  </p>
+                )}
+              </div>
               {/* Concrete tasks actually performed, not a repeat of the role
               chips already shown in the hero — this is the section a
               recruiter reads to answer "so what did they actually do
-              here?" See responsibilities in src/data/projects.js. */}
+              here?" See responsibilities in src/data/projects.js. Placed in
+              its own column (not stacked under the scope paragraph) so the
+              section fills the row the same way Overview does, instead of
+              one narrow stack next to empty space. */}
               <ul className="case__statement-list case__responsibilities">
                 {project.responsibilities.map((line) => (
                   <li key={line}>{line}</li>
                 ))}
               </ul>
-              {project.contribution && (
-                <p className="case__contribution">
-                  기여도 {project.contribution}
-                </p>
-              )}
             </div>
           </Reveal>
 
@@ -281,7 +286,7 @@ the title never overlaps whatever the photo itself contains. */}
               <span className="case__section-num">{num()}</span> Approach &amp;
               Solution
             </h2>
-            <ul className="case__statement-list">
+            <ul className="case__statement-list case__statement-list--cols">
               {project.direction.map((line) => (
                 <li key={line}>{line}</li>
               ))}
