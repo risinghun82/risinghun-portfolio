@@ -238,12 +238,8 @@ export const projects = [
     // Real in-app UI screenshots, separate from the print materials above.
     // Personal phone numbers visible in the source screenshots (sender +
     // recipient) were redacted before saving these — see public/images.
-    uiScreens: [
-      "/images/project-03-ui-01.jpg",
-      "/images/project-03-ui-02.jpg",
-      "/images/project-03-ui-03.jpg",
-    ],
-    uiScreenCaptions: ["새 메시지 작성", "주소록", "전송 결과 상세"],
+    uiScreens: ["/images/project-03-ui-01.jpg", "/images/project-03-ui-02.jpg"],
+    uiScreenCaptions: ["새 메시지 작성", "주소록"],
     // This project does not have a mobile/responsive version — skip the
     // "Responsive Screens" section entirely on the case study page rather
     // than showing placeholder or misleading images. See ProjectDetail.jsx.
