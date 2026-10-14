@@ -25,12 +25,15 @@
   border-radius: 50%;
   background: radial-gradient(
     closest-side,
-    rgba(255, 181, 71, calc(0.9 - var(--rise) * 0.2)) 0%,
-    rgba(255, 90, 31, calc(0.55 - var(--rise) * 0.1)) 42%,
+    rgba(255, 181, 71, calc(0.62 - var(--rise) * 0.14)) 0%,
+    rgba(255, 90, 31, calc(0.38 - var(--rise) * 0.08)) 42%,
     rgba(255, 90, 31, 0) 72%
   );
   filter: blur(6px);
-  opacity: calc(0.85 + var(--rise) * 0.15);
+  /* Toned down from 0.85-1.0 — at full strength the glow was competing
+     with the (now larger) headline for attention instead of sitting
+     behind it. Still clearly present, just subordinate to the text. */
+  opacity: calc(0.6 + var(--rise) * 0.15);
   pointer-events: none;
 }
 
@@ -93,15 +96,21 @@
      message. With that gone, a lighter gap here keeps the headline from
      sitting low on the first screen. */
   margin-top: clamp(1.6rem, 4vw, 2.8rem);
+  /* Content group width: the brief asks for ~600-700px rather than
+     letting the headline/description/CTA stretch to the full container.
+     A dedicated max-width here (not just on individual children) keeps
+     every piece — including the headline, which has no character-count
+     limit of its own — aligned to the same column edge. */
+  max-width: 700px;
 }
 
 .hero__headline {
   font-family: var(--font-display);
   font-weight: 700;
-  /* Tuned so the two common PC widths land inside the 52-60px target
-     (≈53px at 1440, ≈59px at 1920) instead of the ~50-58px it was
-     hitting before; the floor still gives phones a confident size. */
-  font-size: clamp(2.2rem, 1.25vw + 2.19rem, 3.75rem);
+  /* Bumped up again — against the dark background the previous ~53-59px
+     still read as too quiet for a first-screen headline. Now lands at
+     ≈61px/1440 and ≈72px/1920 while keeping mobile at a confident ~38px. */
+  font-size: clamp(2.375rem, 2.2vw + 1.86rem, 4.5rem);
   line-height: var(--lh-tight);
   letter-spacing: -0.02em;
 }
