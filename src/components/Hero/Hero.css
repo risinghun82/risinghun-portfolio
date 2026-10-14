@@ -48,9 +48,15 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  padding-top: 7.5rem;
-  padding-bottom: 3.5rem;
+  /* Was space-between, pinning the old foot message to the bottom edge.
+     That block is gone now, so flex-start + a deliberate padding-bottom
+     keeps the real content from drifting low while still leaving the
+     glow/scroll-cue area underneath it breathing room. */
+  justify-content: flex-start;
+  /* Was 7.5rem — on a short page like this it read as too much dead air
+     before anything meaningful appeared. */
+  padding-top: clamp(5.5rem, 11vw, 6.5rem);
+  padding-bottom: clamp(4rem, 9vw, 6rem);
 }
 
 /* Top row: brand mark kept, but demoted to a small identity line — the
@@ -66,7 +72,10 @@
 .hero__brand,
 .hero__experience {
   font-family: var(--font-display);
-  font-size: var(--fs-sm);
+  /* Eyebrow row: kept small and quiet on purpose — scoped clamp() so it
+     stays ~11px on narrow phones and settles at ~13px on desktop, never
+     touching the shared --fs-sm token used elsewhere. */
+  font-size: clamp(0.6875rem, 0.13vw + 0.66rem, 0.8125rem);
   letter-spacing: var(--ls-wider);
   text-transform: uppercase;
   color: var(--text-on-dark-muted);
@@ -77,22 +86,20 @@
 }
 
 .hero__main {
-  margin-top: clamp(2.5rem, 8vw, 5rem);
-}
-
-.hero__role {
-  font-family: var(--font-display);
-  font-size: var(--fs-md);
-  letter-spacing: var(--ls-wide);
-  text-transform: uppercase;
-  color: var(--sun-cream);
-  margin-bottom: 1.2rem;
+  /* Was clamp(2.5rem, 8vw, 5rem) — paired with the old space-between
+     layout that pushed everything down to make room for the foot
+     message. With that gone, a lighter gap here keeps the headline from
+     sitting low on the first screen. */
+  margin-top: clamp(1.6rem, 4vw, 2.8rem);
 }
 
 .hero__headline {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: clamp(2.1rem, 5.6vw, 4.6rem);
+  /* Was clamp(2.1rem, 5.6vw, 4.6rem) (~34px–74px) — brought the ceiling
+     down to spec (~32px–60px) so the line doesn't overpower the new
+     subtitle/description stack underneath it. */
+  font-size: clamp(2rem, 1.7vw + 1.6rem, 3.75rem);
   line-height: var(--lh-tight);
   letter-spacing: -0.02em;
 }
@@ -105,11 +112,34 @@
   color: var(--sun-orange);
 }
 
+.hero__subtitle {
+  font-family: var(--font-display);
+  font-weight: 500;
+  /* ~18px on mobile up to ~26px on large desktop. */
+  font-size: clamp(1.125rem, 0.52vw + 1rem, 1.625rem);
+  line-height: var(--lh-heading);
+  letter-spacing: var(--ls-tight);
+  color: var(--sun-cream);
+  margin-top: 1.1rem;
+}
+
+.hero__description {
+  /* Body font, not display — this is read as proof/reasoning copy, not a
+     headline, so it should sit quietly and stay easy to scan. */
+  font-family: var(--font-body);
+  /* ~15px on mobile up to ~17px on large desktop. */
+  font-size: clamp(0.9375rem, 0.13vw + 0.91rem, 1.0625rem);
+  line-height: var(--lh-body);
+  color: var(--text-on-dark-muted);
+  max-width: 46ch;
+  margin-top: 1.3rem;
+}
+
 .hero__expertise {
   display: flex;
   flex-wrap: wrap;
   gap: 0.7rem;
-  margin-top: 2rem;
+  margin-top: 2.4rem;
 }
 
 .hero__expertise li {
@@ -126,20 +156,24 @@
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
-  margin-top: 2.4rem;
+  margin-top: 2.6rem;
 }
 
-.hero__foot {
-  border-top: 1px solid rgba(255, 243, 228, 0.18);
-  padding-top: 1.6rem;
+/* Scoped hover polish for the two CTA buttons — adds lift + a soft glow
+   on top of the shared .btn color transition, without editing .btn
+   itself (that class is used across every section on the site). */
+.hero .btn {
+  transition:
+    background var(--dur-fast) var(--ease-rise),
+    color var(--dur-fast) var(--ease-rise),
+    border-color var(--dur-fast) var(--ease-rise),
+    transform var(--dur-fast) var(--ease-rise),
+    box-shadow var(--dur-fast) var(--ease-rise);
 }
 
-.hero__message {
-  font-family: var(--font-display);
-  font-size: var(--fs-lg);
-  line-height: var(--lh-heading);
-  letter-spacing: var(--ls-tight);
-  color: var(--text-on-dark-muted);
+.hero .btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 28px rgba(255, 90, 31, 0.28);
 }
 
 .hero__scroll {
@@ -188,7 +222,10 @@
 
 @media (max-width: 768px) {
   .hero__content {
+    /* Must clear the fixed nav bar (88px) with a little breathing room —
+       anything tighter and the eyebrow row sits under/behind it. */
     padding-top: 6.5rem;
+    padding-bottom: 3.5rem;
   }
 
   .hero__top {
@@ -198,7 +235,13 @@
   }
 
   .hero__main {
-    margin-top: 3rem;
+    margin-top: 1.4rem;
+  }
+
+  .hero__description {
+    /* Let it wrap naturally across the full column instead of staying
+       capped at a desktop reading width. */
+    max-width: none;
   }
 
   .hero__cta {
