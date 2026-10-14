@@ -136,14 +136,15 @@ function WorkItem({ project, reverse }) {
             ))}
           </ul>
           <p className="work-item__summary">{project.summary}</p>
+          {project.toolsUsed?.length > 0 && (
+            <p className="work-item__tools">
+              <span className="work-item__tools-label">Tools</span>
+              {project.toolsUsed.slice(0, 3).join(" · ")}
+            </p>
+          )}
           <div className="work-item__meta">
             <span>{project.year}</span>
             {project.contribution && <span>{project.contribution}</span>}
-            {project.toolsUsed?.length > 0 && (
-              <span className="work-item__tools">
-                {project.toolsUsed.slice(0, 3).join(" · ")}
-              </span>
-            )}
           </div>
           <span className="work-item__link">
             VIEW PROJECT <span aria-hidden="true">→</span>

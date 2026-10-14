@@ -125,7 +125,9 @@
 
 .work-item__number {
   font-family: var(--font-display);
-  font-size: var(--fs-sm);
+  /* Was var(--fs-sm) (~13.1px) — small English meta labels across this
+     card now share one flat 14px floor. */
+  font-size: 14px;
   letter-spacing: var(--ls-wide);
   /* Small caption-scale text — boosted contrast (see --text-caption-on-light). */
   color: var(--text-caption-on-light);
@@ -139,16 +141,19 @@
 .work-item__title {
   font-family: var(--font-display);
   font-weight: 700;
-  /* Spec: 28–32px. */
-  font-size: clamp(28px, 2vw, 32px);
-  letter-spacing: var(--ls-tight);
+  /* Was clamp(28px, 2vw, 32px) — nudged up so the project name reads as
+     the clear anchor of the info column, a step above the category line
+     beneath it rather than close to it in weight. */
+  font-size: clamp(30px, 2.4vw, 36px);
+  line-height: 1.15;
+  letter-spacing: -0.015em;
   color: var(--text-on-light);
 }
 
 .work-item__category {
-  /* Spec: small meta/caption text needs real contrast, not the lighter
-     muted tone used for larger paragraph copy. */
-  font-size: 13px;
+  /* Was 13px — small meta/caption text needs real contrast and a legible
+     floor, not the lighter muted tone (or tinier size) used elsewhere. */
+  font-size: 14px;
   color: var(--text-caption-on-light);
 }
 
@@ -162,11 +167,15 @@
 .work-item__scope li {
   font-family: var(--font-display);
   font-size: var(--fs-xs);
+  font-weight: 600;
   letter-spacing: 0.02em;
-  border: 1px solid rgba(23, 23, 23, 0.2);
+  border: 1px solid rgba(23, 23, 23, 0.28);
   padding: 0.4rem 0.8rem;
   border-radius: 999px;
-  color: var(--text-caption-on-light);
+  /* Was --text-caption-on-light — role scope is the thing a recruiter
+     scans for first, so it gets the darkest, most legible text on the
+     card rather than caption-level contrast. */
+  color: var(--text-on-light);
 }
 
 .work-item__summary {
@@ -183,19 +192,34 @@
   flex-wrap: wrap;
   row-gap: 0.3rem;
   column-gap: 1rem;
-  /* Spec: 12–13px minimum for meta info. */
-  font-size: 13px;
+  /* Was 13px — small caption rows like this one are exactly what read as
+     illegible "fine print" at the old size; a flat 14px with slightly
+     stronger color keeps it clearly a caption while staying readable. */
+  font-size: 14px;
   letter-spacing: 0.02em;
   color: var(--text-caption-on-light);
   margin-top: 0.6rem;
 }
 
-/* Compact "사용 기술" line — spec asks the tools actually used to show up
-   in the Featured Projects card itself, not only on the detail page.
-   Kept to the first few tools and folded into the existing meta row
-   rather than a new block, so the card doesn't get busier. */
+/* "Tools used" — a separate line from the year/contribution meta row
+   (previously folded into it, where it read as one more undifferentiated
+   caption rather than its own piece of information), with a small label
+   so it's unambiguous this is the tech stack, not another role tag. */
 .work-item__tools {
+  font-size: 14px;
+  letter-spacing: 0.02em;
   color: var(--text-caption-on-light);
+  margin-top: 0.7rem;
+}
+
+.work-item__tools-label {
+  font-family: var(--font-display);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  color: var(--project-accent, var(--accent));
+  margin-right: 0.6rem;
 }
 
 .work-item__link {
@@ -299,7 +323,7 @@ layout) so it doesn't visually compete with the featured rows. */
 
 .more-item__number {
   font-family: var(--font-display);
-  font-size: var(--fs-sm);
+  font-size: 14px;
   letter-spacing: var(--ls-wide);
   color: var(--text-caption-on-light);
 }
@@ -312,7 +336,7 @@ layout) so it doesn't visually compete with the featured rows. */
 }
 
 .more-item__category {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--text-caption-on-light);
   margin-top: 0.2rem;
 }
