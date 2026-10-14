@@ -107,11 +107,12 @@
 .hero__headline {
   font-family: var(--font-display);
   font-weight: 700;
-  /* Literal spec: clamp(44px, 4.2vw, 64px) — ≈60.5px/1440, 64px cap at
-     1920+. This is the single strongest visual element on the first
-     screen, deliberately larger than the subtitle/body beneath it. */
-  font-size: clamp(44px, 4.2vw, 64px);
-  line-height: 1.18;
+  /* ~17% larger than the previous clamp(44px, 4.2vw, 64px) — ≈70.6px/1440,
+     74px cap at 1920+ — so the headline reads as the clear first thing on
+     the screen rather than competing with the subtitle beneath it. Still
+     comfortably inside the 680px text column at every tested width. */
+  font-size: clamp(50px, 4.9vw, 74px);
+  line-height: 1.16;
   letter-spacing: -0.04em;
 }
 
@@ -131,7 +132,10 @@
   line-height: var(--lh-heading);
   letter-spacing: var(--ls-tight);
   color: var(--sun-cream);
-  margin-top: 1.1rem;
+  /* Was 1.1rem — the headline grew noticeably larger, so this needed a
+     bit more air to read as a clear break rather than crowding the last
+     headline line. */
+  margin-top: 1.6rem;
 }
 
 .hero__description {
@@ -143,9 +147,14 @@
   font-size: clamp(16px, 0.3vw + 15.5px, 17px);
   /* --lh-body is 1.7, already above the 1.6 minimum. */
   line-height: var(--lh-body);
-  color: var(--text-on-dark-muted);
+  /* Was var(--text-on-dark-muted) (62% opacity) — too dim at body size
+     against the dark gradient. Bumped contrast here only (not the shared
+     token, which other components still rely on at its original value). */
+  color: rgba(255, 243, 228, 0.82);
   max-width: 560px;
-  margin-top: 1.3rem;
+  /* Was 1.3rem — tightened so subtitle + description read as one grouped
+     block, now that the headline above has its own larger gap. */
+  margin-top: 0.9rem;
 }
 
 .hero__expertise {
@@ -259,8 +268,9 @@
   }
 
   .hero__headline {
-    /* Spec: clamp(32px, 8vw, 40px) on mobile. */
-    font-size: clamp(32px, 8vw, 40px);
+    /* ~16% larger than the previous clamp(32px, 8vw, 40px), matching the
+       desktop bump proportionally. */
+    font-size: clamp(37px, 9vw, 46px);
   }
 
   .hero__description {
