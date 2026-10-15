@@ -720,7 +720,7 @@ export default function ProjectDetail() {
       right edge, no matter how far the reader has scrolled. */}
       {createPortal(
         <Link
-          to="/#works"
+          to="/works"
           className="case__float-back"
           aria-label="포트폴리오로 돌아가기"
         >
@@ -789,10 +789,9 @@ the title never overlaps whatever the photo itself contains. */}
           </div>
 
           <div className="case__hero-panel">
-            <Link to="/#works" className="case__hero-crumb">
-              Back to Portfolio
-            </Link>
-
+            {/* The return-to-portfolio link lives once, in the global
+            Header (Nav.jsx, top-right). It used to be duplicated here as a
+            breadcrumb — removed so the hero shows only project info. */}
             <div className="case__hero-info">
               <span className="case__number">
                 PROJECT {project.number}
@@ -828,7 +827,7 @@ the title never overlaps whatever the photo itself contains. */}
           ))}
 
           <div className="case__nav">
-            <Link to="/#works" className="case__nav-link case__nav-link--back">
+            <Link to="/works" className="case__nav-link case__nav-link--back">
               <span aria-hidden="true">←</span> Back to Portfolio
             </Link>
             <div className="case__nav-pair">
