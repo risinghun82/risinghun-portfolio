@@ -75,7 +75,7 @@ export default function Nav() {
           </nav>
         ) : (
           <nav className="nav__links" aria-label="주요 섹션 이동">
-            <Link to="/#works" className="nav__link nav__link--back">
+            <Link to="/works" className="nav__link nav__link--back">
               ← Back to Portfolio
             </Link>
           </nav>
