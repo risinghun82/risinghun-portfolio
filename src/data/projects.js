@@ -216,6 +216,14 @@ export const projects = [
     // study to label itself honestly and frame its Challenge/Result
     // sections as exploration goals rather than a client engagement.
     personal: true,
+    // layoutVariant: "aligned" — NODEN 전용. Header/Footer가 쓰는 전역
+    // .container(1200px)와 본문(case__body)의 좌우 정렬 기준을 맞추고,
+    // Hero 분할 비율(58:42)·패널 padding(48-64px)·텍스트 블록 최대폭(440px)을
+    // 정리하는 가로 정렬 보정 — ProjectDetail.jsx가 이 값을 읽어 <main>에
+    // "case--aligned" 클래스를 추가하고, ProjectDetail.css의 모든 관련 규칙은
+    // `.case.case--aligned` 로만 스코프되어 있어 다른 프로젝트에는 전혀
+    // 적용되지 않음(기존 .case__body 1040px, Hero 1.35fr/1fr 비율 등 그대로).
+    layoutVariant: "aligned",
     // The hero photo's headline + CTA block sits in the lower half of the
     // source image (nav bar takes up the top). A pure vertical "center" crop
     // was slicing into the "DISCOVER L01" button, so bias the crop toward
