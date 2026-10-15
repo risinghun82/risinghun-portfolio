@@ -742,7 +742,13 @@ export default function ProjectDetail() {
         document.body,
       )}
 
-      <main className="case" style={{ "--project-accent": project.accent }}>
+      <main
+        className={
+          "case" +
+          (project.layoutVariant ? ` case--${project.layoutVariant}` : "")
+        }
+        style={{ "--project-accent": project.accent }}
+      >
         {/* Hero — image and title live in separate panels on purpose, so
 the title never overlaps whatever the photo itself contains. */}
         <section

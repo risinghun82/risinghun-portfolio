@@ -303,6 +303,79 @@ wins, without reaching for `!important`. */
   max-width: 1040px;
 }
 
+/* --------------------------------------------------------------------------
+NODEN-only horizontal alignment pass (project.layoutVariant === "aligned" in
+src/data/projects.js adds the "case--aligned" class to <main> — see
+ProjectDetail.jsx). Every rule below is scoped under `.case.case--aligned`
+(three-class selector, so it safely outranks the two-class rules above
+regardless of source order) and therefore only ever matches NODEN's own
+page; every other project's `.case` element lacks this class and keeps
+exactly the rules above, unchanged.
+-------------------------------------------------------------------------- */
+
+/* Body: was independently centered at its own 1040px cap — same center as
+the sitewide 1200px .container (Header/Footer), but different edges, which
+landed every section title and the body copy 80px to the right of the nav
+logo / footer content at desktop widths (measured: nav logo and footer both
+start at x=360 on a 1920px screen, case__body started at x=440). Reusing
+the exact same --max-width the site's own .container already uses for
+Header/Footer puts the body's left/right edges on the same line as both —
+true "글로벌 컨테이너" reuse, not a new bespoke number — and also gives the
+body the extra width it needs to read as continuous with the full-bleed
+hero above it instead of sitting as a narrow column underneath. (960px was
+reviewed too, but narrowing the body further would only widen the gap this
+round is meant to close — see the written report for the full comparison.) */
+.case.case--aligned .case__body {
+  max-width: var(--max-width);
+}
+
+/* Hero split: measured at ~57.4% / 42.6% (1.35fr / 1fr) already — nudged to
+the requested, exact 58% / 42%. */
+.case.case--aligned .case__hero {
+  grid-template-columns: 58% 42%;
+}
+
+/* Hero panel: horizontal padding measured as low as ~43px around 1440px
+(clamp(1.75rem, 3vw, 3rem) dips below its own 48px floor mid-range) — this
+clamp never drops under 48px. Desktop/tablet only; mobile keeps the
+original, already-comfortable padding (see override below). */
+.case.case--aligned .case__hero-panel {
+  padding: 2.5rem clamp(48px, 4vw, 64px);
+}
+
+/* Hero text block: title/description/meta measured 721px wide at 1920px
+and 526px at 1440px — far past a comfortable headline measure, which is
+exactly the "설명 패널의 가독성이 부족하다" complaint. Capping the whole
+info block (title, category, summary, role pills, meta row) keeps every
+line short and deliberate instead of stretching with the viewport. The
+summary paragraph already had its own 46ch cap and was unaffected; this
+mainly tightens the title and meta rows. Unscoped for mobile on purpose —
+the panel is already narrower than 440px there, so this is a no-op below
+~900px. */
+.case.case--aligned .case__hero-info {
+  max-width: 440px;
+}
+
+/* A touch more breathing room around the title now that it wraps across
+more lines at the new, narrower measure — strengthens the title/description
+hierarchy the brief asked for without changing either element's type scale
+or color. */
+.case.case--aligned .case__title {
+  margin: 0.8rem 0 0.6rem;
+}
+
+@media (max-width: 900px) {
+  /* Restore the mobile single-column hero and original panel padding —
+  both .case--aligned overrides above are desktop/tablet-only by intent. */
+  .case.case--aligned .case__hero {
+    grid-template-columns: 1fr;
+  }
+
+  .case.case--aligned .case__hero-panel {
+    padding: 2.5rem clamp(1.75rem, 3vw, 3rem);
+  }
+}
+
 @media (max-width: 1024px) {
   .case__body {
     padding-block: var(--space-section-y);
