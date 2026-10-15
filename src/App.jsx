@@ -22,8 +22,16 @@ function ScrollManager() {
     const pageChanged = prevPathname.current !== pathname;
     prevPathname.current = pathname;
 
-    if (hash) {
-      const el = document.querySelector(hash);
+    // "/works" is a dedicated route (see the Route below and Nav.jsx /
+    // ProjectDetail.jsx's "Back to Portfolio" links) that always renders
+    // Home and scrolls to the Featured Projects section. It exists so that
+    // link can be a real, router-resolved path — not a HashRouter path
+    // string with a second "#anchor" appended, which would otherwise
+    // produce a nested-hash URL like ".../#/#works".
+    const targetSelector = pathname === "/works" ? "#works" : hash;
+
+    if (targetSelector) {
+      const el = document.querySelector(targetSelector);
       if (el) {
         el.scrollIntoView({ behavior: pageChanged ? "auto" : "smooth" });
         return;
@@ -54,7 +62,10 @@ function PageTransition({ children }) {
   }, [pathname]);
 
   return (
-    <div key={pathname} className={`page-transition${visible ? " is-visible" : ""}`}>
+    <div
+      key={pathname}
+      className={`page-transition${visible ? " is-visible" : ""}`}
+    >
       {children}
     </div>
   );
@@ -68,6 +79,12 @@ export default function App() {
       <PageTransition>
         <Routes>
           <Route path="/" element={<Home />} />
+          {/* Same element as "/" — a real, distinct route (not a hash
+          anchor) so "Back to Portfolio" links can resolve to a path React
+          Router itself recognizes on direct URL entry, refresh, and
+          browser back/forward, with no nested "#". ScrollManager above
+          scrolls this to the Featured Projects section on mount. */}
+          <Route path="/works" element={<Home />} />
           <Route path="/work/:slug" element={<ProjectDetail />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
