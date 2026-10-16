@@ -489,10 +489,11 @@ with empty space beside it. */
 }
 
 /* Gimesee-only (project.approachBreakdown, see src/data/projects.js +
-ProjectDetail.jsx): Approach & Solution shown as Problem/Solution/Outcome
-cards instead of the flat two-column list above, to make explicit the
-link between the documented process and the actual screens shown in
-Design below. Other projects have no approachBreakdown and keep
+ProjectDetail.jsx): Approach & Solution shown as 4 numbered work cases
+(title + short description) instead of the flat two-column list above —
+each case separated by the same thin top-border divider used elsewhere on
+this page (.case__overview-facts div, .case__approach-card itself).
+Other projects have no approachBreakdown and keep
 .case__statement-list--cols exactly as-is. */
 .case__approach-grid {
   display: flex;
@@ -510,47 +511,34 @@ Design below. Other projects have no approachBreakdown and keep
   border-top: none;
 }
 
-.case__approach-screens {
-  font-family: var(--font-display);
-  font-size: var(--fs-xs);
-  letter-spacing: var(--ls-wide);
-  text-transform: uppercase;
-  color: var(--project-accent, var(--accent));
-  margin-bottom: 0.9rem;
-}
-
-.case__approach-row {
-  display: grid;
-  grid-template-columns: 110px 1fr;
-  gap: 1.2rem;
-  margin-bottom: 0.9rem;
+.case__approach-head {
+  display: flex;
   align-items: baseline;
+  gap: 0.9rem;
+  margin-bottom: 0.7rem;
 }
 
-.case__approach-row:last-child {
-  margin-bottom: 0;
-}
-
-.case__approach-label {
+/* Same small accent-colored numeral treatment as the section's own
+"01 Overview"-style numbering (.case__section-num), scaled down to a case
+index within this one section. */
+.case__approach-num {
   font-family: var(--font-display);
   font-size: var(--fs-sm);
   letter-spacing: var(--ls-wide);
-  text-transform: uppercase;
-  color: var(--text-on-light-muted);
+  color: var(--project-accent, var(--accent));
 }
 
-.case__approach-row p {
+.case__approach-subtitle {
+  font-family: var(--font-display);
+  font-size: clamp(1.05rem, 1.1vw, 1.2rem);
+  letter-spacing: var(--ls-tight);
+}
+
+.case__approach-desc {
   /* Spec: body 15-16px, line-height >= 1.65. */
   font-size: clamp(15px, 1vw, 16px);
   line-height: 1.7;
   margin: 0;
-}
-
-@media (max-width: 900px) {
-  .case__approach-row {
-    grid-template-columns: 1fr;
-    gap: 0.3rem;
-  }
 }
 
 /* 02. Challenge — Background & Goals / Existing Problems shown as two

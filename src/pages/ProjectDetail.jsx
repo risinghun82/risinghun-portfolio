@@ -371,34 +371,23 @@ export default function ProjectDetail() {
         <span className="case__section-num">{num()}</span> Approach &amp;
         Solution
       </h2>
-      {/* When approachBreakdown exists (Gimesee only, as of a previous
-      round), show each item as a Problem / Solution / Outcome card instead
-      of a flat bullet list — every line of text here is reused verbatim (or
-      split at an existing clause boundary) from problems/background/
-      direction/result in src/data/projects.js, never invented. Other
-      projects have no approachBreakdown and keep the original flat list
-      exactly as before. */}
+      {/* When approachBreakdown exists (Gimesee only), show each item as a
+      numbered work case (title + short description) instead of the flat
+      bullet list below. Every description is reused/paraphrased from
+      problems/background/direction in src/data/projects.js, never
+      invented. Other projects have no approachBreakdown and keep the
+      original flat list exactly as before. */}
       {project.approachBreakdown ? (
         <div className="case__approach-grid">
           {project.approachBreakdown.map((item, i) => (
             <div key={i} className="case__approach-card">
-              {item.screens && (
-                <p className="case__approach-screens">
-                  {item.screens.join(" · ")}
-                </p>
-              )}
-              <div className="case__approach-row">
-                <span className="case__approach-label">Problem</span>
-                <p>{item.problem}</p>
+              <div className="case__approach-head">
+                <span className="case__approach-num">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <h3 className="case__approach-subtitle">{item.title}</h3>
               </div>
-              <div className="case__approach-row">
-                <span className="case__approach-label">Solution</span>
-                <p>{item.solution}</p>
-              </div>
-              <div className="case__approach-row">
-                <span className="case__approach-label">Outcome</span>
-                <p>{item.outcome}</p>
-              </div>
+              <p className="case__approach-desc">{item.description}</p>
             </div>
           ))}
         </div>
