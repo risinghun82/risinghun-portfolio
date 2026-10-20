@@ -281,6 +281,37 @@
   object-position: var(--img-pos, left center);
 }
 
+/* Gimesee-only (project.cardAspect === "auto", see src/data/projects.js):
+the hero capture is a full website screenshot at ~2.08:1 (1904×915) — wider
+than this card's standard 16:10 box. Covering a 16:10 box at that aspect
+needs a ~23% horizontal crop, and no object-position avoids it entirely:
+anything that keeps the "gimesee" logo intact on the left (low --img-pos %)
+pushes the crop onto the right edge instead, slicing into the rightmost of
+the 4 advantage boxes near the bottom of the capture — which is what read
+as the logo being cut to "nesee" and the bottom boxes looking crammed/
+misaligned. Letting this one card use the screenshot's own natural ratio
+(same approach as ProjectDetail.css's .case__screen--auto for full-page
+captures) removes the crop entirely instead of trading one clipped area
+for another; the image is shown complete and undistorted, just at its own
+proportions rather than force-fit into 16:10. Two-class selector so this
+reliably overrides both the 16/10 rule above and the 4/3 mobile override
+below regardless of source order (same technique used in
+ProjectDetail.css's .case.case--aligned). */
+.work-item__media.work-item__media--auto {
+  aspect-ratio: auto;
+  /* .work-item uses align-items: stretch (grid default) so every other
+  card's fixed-aspect media box naturally matches its row's height. This
+  box has no fixed aspect-ratio anymore, so without this it would still get
+  stretched to match the text column's (taller) height, leaving a blank
+  strip of the wrapper's own background below the image. Sizing to its own
+  content instead keeps the wrapper exactly as tall as the image. */
+  align-self: start;
+}
+
+.work-item__media.work-item__media--auto .work-item__image {
+  height: auto;
+}
+
 /* Secondary "More Projects" grid — smaller, uniform cards for projects
 that still ship real work but carry a lighter personal contribution than
 the featured set above. Deliberately plain (no hover cursor, no reversed

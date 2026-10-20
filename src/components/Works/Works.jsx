@@ -93,7 +93,12 @@ function WorkItem({ project, reverse }) {
         className={`work-item ${reverse ? "work-item--reverse" : ""}`}
         style={{ "--project-accent": project.accent }}
       >
-        <div className="work-item__media">
+        <div
+          className={
+            "work-item__media" +
+            (project.cardAspect === "auto" ? " work-item__media--auto" : "")
+          }
+        >
           {project.images?.hero ? (
             <img
               className="work-item__image"
