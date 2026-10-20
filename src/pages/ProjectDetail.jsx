@@ -743,7 +743,9 @@ the title never overlaps whatever the photo itself contains. */}
         <section
           className={
             "case__hero" +
-            (project.heroFit === "contain" ? " case__hero--banner" : "")
+            (project.heroFit === "contain" && !project.heroFullHeight
+              ? " case__hero--banner"
+              : "")
           }
           data-nav-theme="dark"
         >
