@@ -41,14 +41,20 @@ export const projects = [
     // vertical "center" half still applies there, keeping the letterboxed
     // image centered top-to-bottom.
     imagePosition: "19% center",
+    // cardImage — main-page Works card only (see Works.jsx, which reads
+    // `cardImage || heroImage`). A separate, newer screenshot (지메시의
+    // 구독 서비스 소개 화면) requested specifically for the main-page
+    // Featured card; the detail-page Hero keeps using the original
+    // `heroImage` below untouched, so this does not affect /work/gimesee.
+    cardImage: "/images/project-03-card.jpg",
     // cardAspect: "auto" — main-page Works card only (see Works.jsx/css).
-    // This screenshot is ~2.08:1 (1904×915), wider than the card's normal
-    // 16:10 box; no --img-pos value could crop it to 16:10 without cutting
-    // either the "gimesee" logo (top-left) or the rightmost advantage box
-    // (bottom-right) — confirmed by checking the source file itself, which
-    // is not cropped or broken. Shows the full capture at its own ratio
-    // instead. Does not affect the detail-page Hero banner, which has its
-    // own separate fix below (heroFit/heroBg).
+    // Shows the card image at its own native ratio instead of forcing the
+    // normal 16:10 crop, so whichever file `cardImage` points to is never
+    // stretched or cropped — this new screenshot happens to already be
+    // ~1.60:1 (663×415), almost exactly 16:10, but keeping "auto" means it
+    // is always shown pixel-faithful regardless. Does not affect the
+    // detail-page Hero banner, which has its own separate fix below
+    // (heroFit/heroBg) and still renders the original heroImage file.
     cardAspect: "auto",
     // heroFit: "contain" + heroBg — detail-page Hero banner only (reuses the
     // same mechanism HRD Asset already uses below, see ProjectDetail.css's
