@@ -37,7 +37,18 @@ export const projects = [
     // generic "left center" crop pushes the headline text hard against the
     // right edge and leaves a dead gray gap on the left. Center the crop
     // closer to the text block instead — see Works.css / ProjectDetail.css.
+    // Still used by the detail-page Hero banner (ProjectDetail.css's
+    // .case__hero-image), which keeps its own fixed-aspect crop box.
     imagePosition: "19% center",
+    // cardAspect: "auto" — main-page Works card only (see Works.jsx/css).
+    // This screenshot is ~2.08:1 (1904×915), wider than the card's normal
+    // 16:10 box; no --img-pos value could crop it to 16:10 without cutting
+    // either the "gimesee" logo (top-left) or the rightmost advantage box
+    // (bottom-right) — confirmed by checking the source file itself, which
+    // is not cropped or broken. Shows the full capture at its own ratio
+    // instead. Does not affect the detail-page Hero banner, which still
+    // uses the imagePosition crop above.
+    cardAspect: "auto",
     summary:
       "자사 메시징 서비스 '지메시'의 웹 UI/UX 기획과 화면 디자인을 전담하며, 실무자 중심이던 B2B 도구를 일반 사용자도 쉽게 쓸 수 있는 서비스로 전환해가고 있습니다.",
     heroImage: "/images/project-03-hero.jpg",
