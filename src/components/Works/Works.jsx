@@ -102,7 +102,7 @@ function WorkItem({ project, reverse }) {
           {project.images?.hero ? (
             <img
               className="work-item__image"
-              src={project.heroImage}
+              src={project.cardImage || project.heroImage}
               alt={`${project.title} 대표 이미지`}
               loading="lazy"
               style={
