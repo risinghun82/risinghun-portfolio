@@ -56,41 +56,56 @@ export const projects = [
     // detail-page Hero banner, which has its own separate fix below
     // (heroFit/heroBg) and still renders the original heroImage file.
     cardAspect: "auto",
-    // heroFit: "contain" + heroBg — detail-page Hero banner only (reuses the
-    // same mechanism HRD Asset already uses below, see ProjectDetail.css's
-    // .case__hero-image--contain). Same root cause as cardAspect above: this
-    // screenshot is ~2.08:1, much wider than the hero panel's own box, so
-    // object-fit:cover (the default) crops ~35-40% off the image at this
-    // panel's typical aspect — cutting the bottom white advantage-card row
-    // and pushing the "gimesee" logo/phone illustration toward the crop
-    // edges. No --img-pos value fixes this (same issue as the main-page
-    // card): there's no crop window that keeps the top nav, the headline,
-    // the phone illustration AND the full bottom card all in frame at once.
-    // Showing the whole capture via contain instead removes the crop
-    // entirely, matching the actual Gimesee screen. Letterbox color sampled
-    // directly from the image's own top/bottom edge pixels (pure white,
-    // #ffffff), which is where contain will always letterbox here (the
-    // image is wider-aspect than the hero box at every breakpoint, so the
-    // bars land top/bottom, never left/right) — same "match the image's own
-    // edge color" approach as HRD Asset's heroBg below, so there's no visible
-    // seam between the image and the panel.
+    // detailHeroImage — detail-page Hero (/work/gimesee) only, see
+    // ProjectDetail.jsx (`detailHeroImage || heroImage`). Replaces the Hero's
+    // left image with a new screenshot of the actual message-composer
+    // screen (channel picker, WEB_PUSH preview, right-side feature cards) —
+    // a request specific to the detail page. heroImage below is left
+    // completely untouched and still points at the original full
+    // homepage-screenshot file, which keeps driving the main-page card via
+    // cardImage's fallback chain if cardImage were ever removed; this file
+    // is additive, not a replacement, and the original is still shipped.
+    detailHeroImage: "/images/project-03-hero-detail.png",
+    // heroFit: "contain" — this screenshot is 1462×472 (~3.10:1), far wider
+    // than the hero panel's own box, so object-fit: cover (the default)
+    // would crop deep into either side — there's no --img-pos value that
+    // keeps the left sidebar, center composer AND right-side feature cards
+    // all in frame at once, the same kind of mismatch as the previous
+    // image. Showing the whole screenshot via contain removes the crop
+    // entirely instead.
     heroFit: "contain",
-    heroBg: "#ffffff",
-    // heroFullHeight: true — keeps the hero at its normal ~560px height
-    // instead of the shorter "banner" height heroFit:"contain" uses by
-    // default (see ProjectDetail.jsx; HRD Asset below still gets the
-    // shorter height automatically, unaffected by this flag since it
-    // doesn't set it). That shorter height was tuned for HRD Asset's much
-    // more extreme ~3.7:1 banner crop; applying it to this ~2.08:1 full
-    // screenshot made the panel's own text content (which needs more
-    // height than the short banner floor) stretch the image box wider
-    // than it is tall, pushing the letterbox bars to the sides instead of
-    // top/bottom and leaving them lopsided (object-position's horizontal
-    // 19% bias, tuned for the old cover-crop, has no meaning once there's
-    // no crop). At the normal 560px height the box's own aspect ends up
-    // very close to the image's, so the letterbox is a minimal, even strip
-    // top and bottom instead.
-    heroFullHeight: true,
+    // Removed from this project: heroFullHeight (previously true here for
+    // the OLD, ~2.08:1 full-homepage screenshot). This new screenshot is
+    // much more extreme/banner-shaped (~3.10:1) — closer to HRD Asset's
+    // ~3.69:1 detail crop below than to a full-page capture — so the
+    // shorter "banner" 320px hero height that heroFit: "contain" already
+    // uses by default (see ProjectDetail.jsx) is the better fit here: at
+    // that height the box's own aspect (~3.45:1 at this panel's typical
+    // width) ends up close to the image's (~3.10:1), leaving only a small,
+    // even letterbox on the left/right rather than ballooning the Hero to
+    // ~560px tall with a much bigger top/bottom gap the way heroFullHeight
+    // would.
+    // heroBackdrop: true — detail-page Hero only, additive to heroFit:
+    // "contain" (see ProjectDetail.jsx/css's `.case__hero-media--backdrop`).
+    // This screenshot's own edges aren't one flat tone — the left edge is
+    // mostly the sidebar's blue (#0047ba) while the top/right/most-of-
+    // bottom are white — so a single flat heroBg color (the approach used
+    // for the old image, and for HRD Asset below) would clearly mismatch
+    // whichever edge it isn't sampled from and look like a seam, the same
+    // "flat box on a photo" problem that showed up on the main-page NODEN
+    // card and was fixed there with a blurred backdrop (see Works.css).
+    // Reusing that exact technique here instead: a blurred, zoomed-in copy
+    // of this same screenshot fills the box behind the sharp contain image,
+    // so the fill is always the photo's own colors, not a flat swatch —
+    // this is strictly additive and only applies to Gimesee, since every
+    // other heroFit: "contain" project (HRD Asset below) doesn't set this
+    // flag and keeps rendering through its existing flat heroBg exactly as
+    // before.
+    heroBackdrop: true,
+    // heroBg kept as a plain fallback fill behind the blurred backdrop
+    // (e.g. if the backdrop image fails to load) — sampled as this
+    // screenshot's own whole-image average tone.
+    heroBg: "#d2dde9",
     summary:
       "자사 메시징 서비스 '지메시'의 웹 UI/UX 기획과 화면 디자인을 전담하며, 실무자 중심이던 B2B 도구를 일반 사용자도 쉽게 쓸 수 있는 서비스로 전환해가고 있습니다.",
     heroImage: "/images/project-03-hero.jpg",
