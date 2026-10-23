@@ -312,6 +312,29 @@ ProjectDetail.css's .case.case--aligned). */
   height: auto;
 }
 
+/* NODEN-only (project.cardFit === "contain", see src/data/projects.js): the
+hero photo is a full-bleed 1920×974 (~1.97:1) moodshot with the headline +
+CTA block anchored at the left edge and the product visual (lamp) at the
+right edge — wider than this card's standard 16:10 box. Covering a 16:10
+box at that aspect needs ~19% cropped off one side, and no --img-pos value
+avoids it entirely: biasing left keeps the headline but slices the lamp at
+the right edge (this is what read as "부자연스럽게 잘린" to begin with);
+biasing right would clip into the headline instead. Unlike Gimesee's
+work-item__media--auto above, this card's OUTER box size must stay
+identical to every other project's (스펙: 카드 가로·세로 크기 변경 금지),
+so this keeps the fixed 16:10 aspect-ratio and just switches the image
+itself to object-fit: contain instead of resizing the box — same object-fit
+swap as ProjectDetail.css's .case__hero-image--contain, applied here to the
+main-page card only. The resulting small top/bottom letterbox is filled
+with --card-bg (sampled as the photo's own whole-image average tone,
+#2a2d30 — a near-match for NODEN's own --project-accent #2B3742) instead of
+the card's default cream placeholder, so there's no visible seam between
+the photo and the fill. */
+.work-item__media.work-item__media--contain .work-item__image {
+  object-fit: contain;
+  background: var(--card-bg, #ece9e3);
+}
+
 /* Secondary "More Projects" grid — smaller, uniform cards for projects
 that still ship real work but carry a lighter personal contribution than
 the featured set above. Deliberately plain (no hover cursor, no reversed

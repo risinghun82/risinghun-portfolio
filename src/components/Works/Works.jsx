@@ -96,7 +96,8 @@ function WorkItem({ project, reverse }) {
         <div
           className={
             "work-item__media" +
-            (project.cardAspect === "auto" ? " work-item__media--auto" : "")
+            (project.cardAspect === "auto" ? " work-item__media--auto" : "") +
+            (project.cardFit === "contain" ? " work-item__media--contain" : "")
           }
         >
           {project.images?.hero ? (
@@ -105,11 +106,14 @@ function WorkItem({ project, reverse }) {
               src={project.cardImage || project.heroImage}
               alt={`${project.title} 대표 이미지`}
               loading="lazy"
-              style={
-                project.imagePosition
+              style={{
+                ...(project.imagePosition
                   ? { "--img-pos": project.imagePosition }
-                  : undefined
-              }
+                  : undefined),
+                ...(project.cardBg
+                  ? { "--card-bg": project.cardBg }
+                  : undefined),
+              }}
             />
           ) : (
             <div
