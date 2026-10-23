@@ -577,6 +577,23 @@ export const projects = [
     // the 16:10 thumbnail box is a close enough match to this crop's own
     // ratio that cover-fit shows almost the whole screenshot uncropped.
     heroImage: "/images/project-05-hero.jpg",
+    // imagePosition: "center" — main-page Works card only in practice. This
+    // screenshot is 1707×961 (~1.776:1), only slightly wider than the
+    // card's 16:10 (1.6:1) box, so cover-fit only needs to crop ~9.9% of
+    // the width — but the unset default ("left center") put the entire
+    // crop on the right edge, slicing straight through the bottom FAQ
+    // grid's 5th (rightmost) card ("회원 아이디(ID)와 비밀번호(Password)를
+    // 잊어버...") mid-card/mid-word. Centering the crop instead removes
+    // ~85px from each side: the left side has a wide empty margin before
+    // the "모든 콘텐츠 / 고용노동부 A등급" headline even starts, so nothing
+    // there is affected, while the right side now lands right at the 5th
+    // FAQ card's own edge instead of through its middle — confirmed by
+    // marking both crop lines on the source file directly. (This field has
+    // no effect on the detail-page Hero: that uses the separate
+    // detailHeroImage below under heroFit: "contain", whose CSS class
+    // — .case__hero-image--contain — doesn't read --img-pos at all, so
+    // this card-only change can't touch /work/hrd-asset.)
+    imagePosition: "center",
     // The case-study hero panel is a much narrower box, so a separate crop
     // isolating just the trophy/badge strip is used there instead — see
     // detailHeroImage below. Using the full screenshot in that narrow panel
