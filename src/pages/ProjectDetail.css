@@ -61,6 +61,38 @@ image met the panel background. */
   background: var(--hero-bg, var(--night-brown));
 }
 
+/* Gimesee-only (project.heroBackdrop === true, see src/data/projects.js),
+additive to heroFit: "contain" above. A flat --hero-bg fill works when the
+source image's edges are one consistent tone (HRD Asset's dark banner,
+for example), but this screenshot's edges aren't: the left edge is mostly
+the sidebar's blue while the top/right/most of the bottom are white, so
+any single flat color reads as a visible seam against whichever edge it
+wasn't sampled from — the same "flat box on a photo" problem the main-page
+NODEN card had (see Works.css), fixed there with a blurred backdrop
+instead of a flat swatch. Reusing that exact technique here: a blurred,
+zoomed-in copy of the same screenshot (--hero-backdrop, set in
+ProjectDetail.jsx) fills the whole media box behind the sharp contain
+image, so the fill is always the photo's own colors. Scoped to this
+modifier class (opt-in per project) so HRD Asset's existing flat heroBg
+treatment is completely unaffected. */
+.case__hero-media.case__hero-media--backdrop::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: var(--hero-bg, var(--night-brown));
+  background-image: var(--hero-backdrop);
+  background-size: cover;
+  background-position: center;
+  transform: scale(1.18);
+  filter: blur(32px) brightness(0.94) saturate(1.05);
+  z-index: 0;
+}
+
+.case__hero-media.case__hero-media--backdrop .case__hero-image {
+  z-index: 1;
+  object-position: center;
+}
+
 @keyframes caseHeroImageIn {
   from {
     transform: scale(1.06);

@@ -749,7 +749,23 @@ the title never overlaps whatever the photo itself contains. */}
           }
           data-nav-theme="dark"
         >
-          <div className="case__hero-media">
+          <div
+            className={
+              "case__hero-media" +
+              (project.heroBackdrop ? " case__hero-media--backdrop" : "")
+            }
+            style={{
+              ...(project.imagePosition
+                ? { "--img-pos": project.imagePosition }
+                : {}),
+              ...(project.heroBg ? { "--hero-bg": project.heroBg } : {}),
+              ...(project.heroBackdrop
+                ? {
+                    "--hero-backdrop": `url(${project.detailHeroImage || project.heroImage})`,
+                  }
+                : {}),
+            }}
+          >
             {project.images?.hero ? (
               <img
                 className={
@@ -760,12 +776,6 @@ the title never overlaps whatever the photo itself contains. */}
                 }
                 src={project.detailHeroImage || project.heroImage}
                 alt={`${project.title} 대표 이미지`}
-                style={{
-                  ...(project.imagePosition
-                    ? { "--img-pos": project.imagePosition }
-                    : {}),
-                  ...(project.heroBg ? { "--hero-bg": project.heroBg } : {}),
-                }}
               />
             ) : (
               <div
