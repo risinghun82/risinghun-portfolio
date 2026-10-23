@@ -91,6 +91,19 @@ treatment is completely unaffected. */
 .case__hero-media.case__hero-media--backdrop .case__hero-image {
   z-index: 1;
   object-position: center;
+  /* .case__hero-image--contain (above) sets `background: var(--hero-bg,...)`
+  directly on the <img> itself as a flat-color fallback for projects that
+  DON'T use a blurred backdrop (HRD Asset). That rule still applies here
+  too (both classes are on the same element), and because this image sits
+  at z-index:1 — above the ::before blur layer at z-index:0 — that flat
+  color paints on top of the blur in every letterboxed gap, hiding it
+  completely. This was the actual cause of the "sky-blue empty strip"
+  visible at the top/bottom of Gimesee's Hero: not a height/layout
+  mismatch, but this flat fallback fully occluding the blur underneath it.
+  Transparent here lets the blurred backdrop actually show through, the
+  same override Works.css already applies to its own equivalent
+  foreground image for the main-page card's contain mode. */
+  background: transparent;
 }
 
 @keyframes caseHeroImageIn {
