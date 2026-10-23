@@ -273,7 +273,27 @@ export const projects = [
     // source image (nav bar takes up the top). A pure vertical "center" crop
     // was slicing into the "DISCOVER L01" button, so bias the crop toward
     // the bottom of the source image to keep the whole text group intact.
+    // Still used as-is by the detail-page Hero (/work/noden), which keeps
+    // its existing object-fit: cover crop — only the main-page card's
+    // display mode changes below (cardFit/cardBg), not this value or the
+    // detail page.
     imagePosition: "left 75%",
+    // cardFit: "contain" + cardBg — main-page Works card only (see
+    // Works.jsx/css). This hero photo is ~1.97:1 (1920×974), wider than the
+    // card's standard 16:10 box, with the headline+CTA block at the left
+    // edge and the product (lamp) visual at the right edge. No --img-pos
+    // crop keeps both: biasing left (as the detail-page Hero above does)
+    // keeps the headline but cuts the lamp off at the card's right edge —
+    // confirmed by checking the source file itself, which is not cropped or
+    // broken, it's just wider than the card. The card's outer box size must
+    // stay identical to every other project's here, so — unlike Gimesee's
+    // cardAspect: "auto" — this keeps the fixed 16:10 box and shows the
+    // full photo via object-fit: contain instead. Letterbox color sampled
+    // as the photo's own whole-image average tone (#2a2d30), which closely
+    // matches this project's own accent (#2B3742 below), so there's no
+    // visible seam.
+    cardFit: "contain",
+    cardBg: "#2a2d30",
     // Real screenshots of a self-built, self-directed site — see Works.jsx / ProjectDetail.jsx.
     images: {
       hero: true,
