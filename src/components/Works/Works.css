@@ -322,17 +322,50 @@ the right edge (this is what read as "부자연스럽게 잘린" to begin with);
 biasing right would clip into the headline instead. Unlike Gimesee's
 work-item__media--auto above, this card's OUTER box size must stay
 identical to every other project's (스펙: 카드 가로·세로 크기 변경 금지),
-so this keeps the fixed 16:10 aspect-ratio and just switches the image
-itself to object-fit: contain instead of resizing the box — same object-fit
-swap as ProjectDetail.css's .case__hero-image--contain, applied here to the
-main-page card only. The resulting small top/bottom letterbox is filled
-with --card-bg (sampled as the photo's own whole-image average tone,
-#2a2d30 — a near-match for NODEN's own --project-accent #2B3742) instead of
-the card's default cream placeholder, so there's no visible seam between
-the photo and the fill. */
+so this keeps the fixed 16:10 aspect-ratio and just switches the sharp
+image itself to object-fit: contain instead of resizing the box.
+A flat --card-bg fill behind the contain image (first attempt at this fix)
+still read as visibly awkward in review — a hard-edged solid-color bar
+sitting on top of a photo reads as "a box", not as part of the image, and
+object-position's inherited vertical "75%" bias (tuned for the old cover
+crop) pushed almost the entire gap to one side, making the seam worse.
+Replaced that flat fill with a blurred, zoomed-in copy of the SAME photo as
+a backdrop (::before, set from --card-backdrop in Works.jsx) filling the
+whole box behind the sharp contain image — the common "blurred letterbox"
+treatment (Apple/Spotify-style) for an image whose aspect doesn't match its
+frame. Because the backdrop is the photo itself, not a flat swatch, there's
+no seam to match at all regardless of where the sharp image sits — so the
+inherited "left 75%" --img-pos can stay untouched (it still only crops the
+backdrop layer's cover-fill, same as it always did for every other card;
+the sharp foreground is governed purely by contain + center, no cropping).
+--card-bg is kept as a solid fallback behind the backdrop image in case it
+fails to load. */
+.work-item__media.work-item__media--contain {
+  isolation: isolate;
+}
+
+.work-item__media.work-item__media--contain::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: var(--card-bg, #ece9e3);
+  background-image: var(--card-backdrop);
+  background-size: cover;
+  background-position: var(--img-pos, center);
+  /* Scale up before blurring so the blur's own soft edge never shows the
+  box's crisp corners/edges — only the interior of the zoomed backdrop is
+  ever visible. */
+  transform: scale(1.18);
+  filter: blur(32px) brightness(0.82) saturate(1.05);
+  z-index: 0;
+}
+
 .work-item__media.work-item__media--contain .work-item__image {
+  position: relative;
+  z-index: 1;
   object-fit: contain;
-  background: var(--card-bg, #ece9e3);
+  object-position: center;
+  background: transparent;
 }
 
 /* Secondary "More Projects" grid — smaller, uniform cards for projects

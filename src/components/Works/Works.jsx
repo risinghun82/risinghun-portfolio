@@ -99,6 +99,17 @@ function WorkItem({ project, reverse }) {
             (project.cardAspect === "auto" ? " work-item__media--auto" : "") +
             (project.cardFit === "contain" ? " work-item__media--contain" : "")
           }
+          style={{
+            ...(project.imagePosition
+              ? { "--img-pos": project.imagePosition }
+              : undefined),
+            ...(project.cardBg ? { "--card-bg": project.cardBg } : undefined),
+            ...(project.cardFit === "contain"
+              ? {
+                  "--card-backdrop": `url(${project.cardImage || project.heroImage})`,
+                }
+              : undefined),
+          }}
         >
           {project.images?.hero ? (
             <img
@@ -106,14 +117,6 @@ function WorkItem({ project, reverse }) {
               src={project.cardImage || project.heroImage}
               alt={`${project.title} 대표 이미지`}
               loading="lazy"
-              style={{
-                ...(project.imagePosition
-                  ? { "--img-pos": project.imagePosition }
-                  : undefined),
-                ...(project.cardBg
-                  ? { "--card-bg": project.cardBg }
-                  : undefined),
-              }}
             />
           ) : (
             <div
