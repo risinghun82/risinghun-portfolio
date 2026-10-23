@@ -74,17 +74,22 @@ export const projects = [
     // image. Showing the whole screenshot via contain removes the crop
     // entirely instead.
     heroFit: "contain",
-    // Removed from this project: heroFullHeight (previously true here for
-    // the OLD, ~2.08:1 full-homepage screenshot). This new screenshot is
-    // much more extreme/banner-shaped (~3.10:1) — closer to HRD Asset's
-    // ~3.69:1 detail crop below than to a full-page capture — so the
-    // shorter "banner" 320px hero height that heroFit: "contain" already
-    // uses by default (see ProjectDetail.jsx) is the better fit here: at
-    // that height the box's own aspect (~3.45:1 at this panel's typical
-    // width) ends up close to the image's (~3.10:1), leaving only a small,
-    // even letterbox on the left/right rather than ballooning the Hero to
-    // ~560px tall with a much bigger top/bottom gap the way heroFullHeight
-    // would.
+    // heroFullHeight: true — restores the Hero to its original ~560px
+    // height (the height every other non-banner project's detail Hero
+    // uses), per explicit instruction: the attached screenshot was
+    // authored against the EXISTING Hero image-area size, so the Hero's
+    // own height/split must not change to accommodate it. Measured via
+    // Playwright at the three required breakpoints: with contain, the
+    // box's aspect never matches this image's fixed 3.097:1 ratio exactly
+    // at normal screen widths either way (letterbox is unavoidable without
+    // cropping or distorting), but at 560px the top/bottom letterbox is
+    // larger than the shorter "banner" height would give (1440px: 147px
+    // vs 59px per side; 1920px: 102px vs 21px per side; mobile 390px is
+    // identical either way, since mobile uses its own fixed 4:3 override
+    // regardless of this flag). Restored anyway because keeping the Hero's
+    // existing size took priority over minimizing the letterbox — reported
+    // the exact numbers and traded this off explicitly before restoring.
+    heroFullHeight: true,
     // heroBackdrop: true — detail-page Hero only, additive to heroFit:
     // "contain" (see ProjectDetail.jsx/css's `.case__hero-media--backdrop`).
     // This screenshot's own edges aren't one flat tone — the left edge is
