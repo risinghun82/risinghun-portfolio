@@ -1130,3 +1130,52 @@ slightly tighter 2.2rem. */
 [data-case="gimesee"] .case__publishing-block {
   margin-top: 2.6rem;
 }
+
+/* --------------------------------------------------------------------------
+Gimesee Hero — show the detail screenshot at its own native ratio, with
+zero letterbox, at every desktop width (explicit follow-up request after
+trying flat-color letterbox, then a blurred-backdrop letterbox, then a
+cover-crop — the request this time is specifically "show the whole image,
+matching its own ratio exactly," not an approximation).
+
+project-03-hero-detail.png is a fixed 1462×472 (~3.0975:1) screenshot. The
+shared .case__hero box is only ever given a FIXED height (560px, or 320px
+via the existing .case__hero--banner "wide screenshot" mode — see its own
+comment above), while .case__hero-media's rendered WIDTH is a fraction
+(1.35/2.35) of the viewport and therefore changes continuously with it. A
+fixed height can only ever match this image's ratio at one exact viewport
+width — at 560px that's a ~102px/side gap at 1920px and ~147px/side at
+1440px; even the shorter 320px banner height still leaves ~21px/1920 and
+~59px/1440 (both measured directly, see the heroFullHeight comment in
+src/data/projects.js). Only a height that itself scales with the box's own
+width — CSS aspect-ratio, set to this exact image's ratio — stays exactly
+image-shaped at every width, not just the one it was tuned for.
+align-items: start keeps .case__hero-media sized purely by that
+aspect-ratio instead of being stretched taller by its sibling
+.case__hero-panel (grid items stretch to the row's height by default) —
+without this, the image would still be squeezed back into letterboxing
+inside a taller, panel-driven row. If the panel's own content ever needs
+more vertical room than the image's aspect-ratio height gives at a given
+width, the row grows to fit the panel and the extra space below the image
+is simply more of .case__hero's own dark background (--night-brown) behind
+it, not a mismatched color seam — confirmed at 1920/1440/901px that the
+panel's content (title, summary, role pills, meta row) fits comfortably
+inside the image's own height at every one of those widths, so this
+fallback space does not actually occur in practice today; it is only a
+safety fallback if the copy ever grows.
+
+Gated to the existing @media(min-width:901px) desktop/tablet breakpoint
+used elsewhere on this page (.case--aligned above, .case__overview-grid
+below) so the mobile Hero — which already uses its own separate fixed 4:3
+aspect-ratio override a few rules up — is completely untouched. Scoped to
+[data-case="gimesee"] only, so no other project's Hero (fixed-height or
+banner) is affected.
+-------------------------------------------------------------------------- */
+@media (min-width: 901px) {
+  [data-case="gimesee"] .case__hero {
+    align-items: start;
+  }
+  [data-case="gimesee"] .case__hero-media {
+    aspect-ratio: 1462 / 472;
+  }
+}
