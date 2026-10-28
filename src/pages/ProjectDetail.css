@@ -1131,75 +1131,14 @@ slightly tighter 2.2rem. */
   margin-top: 2.6rem;
 }
 
-/* --------------------------------------------------------------------------
-Gimesee Hero — show the detail screenshot at its own native ratio, with
-zero letterbox, at every desktop width (explicit follow-up request after
-trying flat-color letterbox, then a blurred-backdrop letterbox, then a
-cover-crop — the request this time is specifically "show the whole image,
-matching its own ratio exactly," not an approximation).
-
-project-03-hero-detail.png is a fixed 1462×472 (~3.0975:1) screenshot. The
-shared .case__hero box is only ever given a FIXED height (560px, or 320px
-via the existing .case__hero--banner "wide screenshot" mode — see its own
-comment above), while .case__hero-media's rendered WIDTH is a fraction
-(1.35/2.35) of the viewport and therefore changes continuously with it. A
-fixed height can only ever match this image's ratio at one exact viewport
-width — at 560px that's a ~102px/side gap at 1920px and ~147px/side at
-1440px; even the shorter 320px banner height still leaves ~21px/1920 and
-~59px/1440 (both measured directly, see the heroFullHeight comment in
-src/data/projects.js). Only a height that itself scales with the box's own
-width — CSS aspect-ratio, set to this exact image's ratio — stays exactly
-image-shaped at every width, not just the one it was tuned for.
-align-self: start on .case__hero-media (not align-items on the row) keeps
-ONLY the image box sized purely by that aspect-ratio instead of being
-stretched taller by its sibling .case__hero-panel (grid items stretch to
-the row's height by default) — without this, the image would still be
-squeezed back into letterboxing inside a taller, panel-driven row.
-
-Second bug, found right after shipping the above: .case__hero-panel uses
-`justify-content: center` to vertically center its own content within
-whatever height the row ends up — and the row's new height (driven by the
-much-shorter aspect-ratio image, or by the panel's own content when that's
-taller) is now often close to the panel's own content height, leaving
-little or no extra space for that centering to work with. With near-zero
-extra space, the centered block sits flush against the row's very top
-edge — which is exactly where the site's own fixed nav bar (a 88px-tall
-header, confirmed via getBoundingClientRect: top 0 / bottom 88 at every
-width) overlays on top of the page. The "PROJECT 01" label, the first line
-in that block, landed at y ≈ 42 — squarely inside that 0–88 header band —
-so it was invisible/clipped under the header at every desktop width tested
-(1920, 1440, 901), not just the narrow ones; this was missed at first
-because "Gimesee" (the next, much larger line) was still fully visible
-below the header and looked like enough visual confirmation on its own.
-Centering is inherently unreliable here since how much clear space it
-produces depends on the row's height vs. the panel's own content height,
-and the latter changes with viewport width as the title/description/role
-pills wrap differently — there's no single row height that guarantees
-clearance at every width through centering alone (confirmed: even a 480px
-floor only pushed the label to y ≈ 83–89, still touching the header, and
-901px's taller wrapped content ate the floor entirely, leaving y = 42
-unchanged). Fixed by dropping the centering dependency altogether for this
-panel: `justify-content: flex-start` plus a flat `padding-top: 7.5rem`
-(120px) anchors the label a fixed, guaranteed 120px from the row's own top
-edge regardless of row height or how much the content wraps, clearing the
-88px header by a comfortable, constant ~32px margin at every width —
-confirmed via getBoundingClientRect at 1920/1440/1024/901px.
-
-Gated to the existing @media(min-width:901px) desktop/tablet breakpoint
-used elsewhere on this page (.case--aligned above, .case__overview-grid
-below) so the mobile Hero — which already uses its own separate fixed 4:3
-aspect-ratio override a few rules up — is completely untouched. Scoped to
-[data-case="gimesee"] only, so no other project's Hero (fixed-height or
-banner, both of which already clear the header fine via their own taller
-fixed row heights) is affected.
--------------------------------------------------------------------------- */
-@media (min-width: 901px) {
-  [data-case="gimesee"] .case__hero-media {
-    align-self: start;
-    aspect-ratio: 1462 / 472;
-  }
-  [data-case="gimesee"] .case__hero-panel {
-    justify-content: flex-start;
-    padding-top: 7.5rem;
-  }
-}
+/* Gimesee Hero sizing went through several rounds (fixed 560px height +
+object-fit: cover → contain + fixed height, big letterbox → blurred-backdrop
+fill in that letterbox → back to cover+560 → contain + an aspect-ratio-
+matched box, zero letterbox but shrank the row enough to clip the "PROJECT
+01" label under the site header, fixed separately → explicitly reverted back
+to the very first cover+560 version). Nothing project-specific is needed
+here any more: with object-fit: cover and the shared fixed 560px
+.case__hero height (see src/data/projects.js's heroFullHeight on the Gimesee
+entry), Gimesee now renders through exactly the same unscoped rules above as
+every other non-banner project, so there is nothing left to scope under
+[data-case="gimesee"] for the Hero. */
