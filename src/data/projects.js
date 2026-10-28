@@ -66,45 +66,25 @@ export const projects = [
     // cardImage's fallback chain if cardImage were ever removed; this file
     // is additive, not a replacement, and the original is still shipped.
     detailHeroImage: "/images/project-03-hero-detail.png",
-    // heroFit: "contain" was used here (now removed, 2026-10-28, explicit
-    // request) because this screenshot is 1462×472 (~3.10:1), far wider than
-    // the hero panel's own box, so object-fit: cover (the default) crops
-    // into either side — there's no --img-pos value that keeps the left
-    // sidebar, center composer AND right-side feature cards all in frame at
-    // once. "contain" avoided that crop entirely, but it necessarily adds a
-    // letterbox gap (top/bottom empty space) to show the whole image
-    // un-cropped — confirmed by pixel-diff against the live site that this
-    // gap was rendering exactly as coded (symmetric, centered, no actual
-    // regression), but the gap itself — and the blurred-backdrop fill added
-    // inside it by the previous "하늘색 빈 공간" fix — read as if the image
-    // had shifted/floated instead of sitting flush in its box. Switching
-    // back to the default cover crop (by simply not setting heroFit) removes
-    // the gap entirely; the tradeoff, confirmed and accepted, is that the
-    // left sidebar and/or right-side promo cards get cropped off depending
-    // on viewport width, since cover+center keeps the central "새 메시지
-    // 작성" composer (the actual subject of this screenshot) in frame at
-    // every width instead. heroBackdrop below is left on specifically
-    // because it still forces object-position: center for this image (see
-    // ProjectDetail.css's `.case__hero-media--backdrop .case__hero-image`
-    // rule) — with no letterbox left to show through, its own blurred fill
-    // is simply invisible behind the now fully-opaque cover image, so it is
-    // harmless scaffolding kept in case "contain" is ever wanted again.
-    // heroFullHeight: true — restores the Hero to its original ~560px
-    // height (the height every other non-banner project's detail Hero
-    // uses), per explicit instruction: the attached screenshot was
-    // authored against the EXISTING Hero image-area size, so the Hero's
-    // own height/split must not change to accommodate it. Measured via
-    // Playwright at the three required breakpoints: with contain, the
-    // box's aspect never matches this image's fixed 3.097:1 ratio exactly
-    // at normal screen widths either way (letterbox is unavoidable without
-    // cropping or distorting), but at 560px the top/bottom letterbox is
-    // larger than the shorter "banner" height would give (1440px: 147px
-    // vs 59px per side; 1920px: 102px vs 21px per side; mobile 390px is
-    // identical either way, since mobile uses its own fixed 4:3 override
-    // regardless of this flag). Restored anyway because keeping the Hero's
-    // existing size took priority over minimizing the letterbox — reported
-    // the exact numbers and traded this off explicitly before restoring.
-    heroFullHeight: true,
+    // heroFit: "contain" — this screenshot is 1462×472 (~3.10:1), far wider
+    // than the hero panel's own box, so object-fit: cover (the default)
+    // crops into either side — there's no --img-pos value that keeps the
+    // left sidebar, center composer AND right-side feature cards all in
+    // frame at once. This went through a few rounds before landing here:
+    // "contain" at a fixed 560px height (big letterbox) → blurred-backdrop
+    // fill in that letterbox → object-fit: cover instead (zero letterbox,
+    // but crops the sidebar/cards) → back to "contain", this time paired
+    // with an aspect-ratio-driven box (see ProjectDetail.css's
+    // `[data-case="gimesee"] .case__hero-media { aspect-ratio: 1462/472 }`)
+    // instead of a fixed height, which is what actually removes the
+    // letterbox at every width rather than just shrinking it — "contain"
+    // only ever avoids cropping, it's the box's own shape (not the fit
+    // mode) that decides whether there's a gap. heroFullHeight (the
+    // previous fixed-560px override) is removed for the same reason — a
+    // fixed pixel height can only ever match this image's ratio at one
+    // viewport width, which is exactly what the aspect-ratio box now does
+    // at every width instead.
+    heroFit: "contain",
     // heroBackdrop: true — detail-page Hero only, additive to heroFit:
     // "contain" (see ProjectDetail.jsx/css's `.case__hero-media--backdrop`).
     // This screenshot's own edges aren't one flat tone — the left edge is
