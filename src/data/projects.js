@@ -66,41 +66,42 @@ export const projects = [
     // cardImage's fallback chain if cardImage were ever removed; this file
     // is additive, not a replacement, and the original is still shipped.
     detailHeroImage: "/images/project-03-hero-detail.png",
-    // heroFit: "contain" — this screenshot is 1462×472 (~3.10:1), far wider
-    // than the hero panel's own box, so object-fit: cover (the default)
-    // crops into either side — there's no --img-pos value that keeps the
-    // left sidebar, center composer AND right-side feature cards all in
-    // frame at once. This went through a few rounds before landing here:
-    // "contain" at a fixed 560px height (big letterbox) → blurred-backdrop
-    // fill in that letterbox → object-fit: cover instead (zero letterbox,
-    // but crops the sidebar/cards) → back to "contain", this time paired
-    // with an aspect-ratio-driven box (see ProjectDetail.css's
-    // `[data-case="gimesee"] .case__hero-media { aspect-ratio: 1462/472 }`)
-    // instead of a fixed height, which is what actually removes the
-    // letterbox at every width rather than just shrinking it — "contain"
-    // only ever avoids cropping, it's the box's own shape (not the fit
-    // mode) that decides whether there's a gap. heroFullHeight (the
-    // previous fixed-560px override) is removed for the same reason — a
-    // fixed pixel height can only ever match this image's ratio at one
-    // viewport width, which is exactly what the aspect-ratio box now does
-    // at every width instead.
-    heroFit: "contain",
-    // heroBackdrop: true — detail-page Hero only, additive to heroFit:
-    // "contain" (see ProjectDetail.jsx/css's `.case__hero-media--backdrop`).
-    // This screenshot's own edges aren't one flat tone — the left edge is
-    // mostly the sidebar's blue (#0047ba) while the top/right/most-of-
-    // bottom are white — so a single flat heroBg color (the approach used
-    // for the old image, and for HRD Asset below) would clearly mismatch
-    // whichever edge it isn't sampled from and look like a seam, the same
-    // "flat box on a photo" problem that showed up on the main-page NODEN
-    // card and was fixed there with a blurred backdrop (see Works.css).
-    // Reusing that exact technique here instead: a blurred, zoomed-in copy
-    // of this same screenshot fills the box behind the sharp contain image,
-    // so the fill is always the photo's own colors, not a flat swatch —
-    // this is strictly additive and only applies to Gimesee, since every
-    // other heroFit: "contain" project (HRD Asset below) doesn't set this
-    // flag and keeps rendering through its existing flat heroBg exactly as
-    // before.
+    // This screenshot is 1462×472 (~3.10:1), far wider than the hero
+    // panel's own box, so fitting it was never going to be a one-line
+    // change — this went through several rounds before settling back here,
+    // on the very first approach: object-fit: cover (the default — no
+    // heroFit override) at the same fixed 560px height every other
+    // non-banner project's detail Hero uses (heroFullHeight: true below).
+    // In order: cover+560 (crops the sidebar/cards, but a known, intentional
+    // tradeoff and the look every other project already has) → contain+560
+    // (shows the whole image, but a large top/bottom letterbox) →
+    // blurred-backdrop fill in that letterbox → back to cover+560 (explicit
+    // request, "꽉 차게") → contain + an aspect-ratio-matched box instead of
+    // a fixed height (zero letterbox at every width, explicit request to
+    // show the whole image with the right ratio) → that shrank the row
+    // enough to clip the "PROJECT 01" label under the site header, fixed in
+    // CSS → explicitly reverted back to this first cover+560 version
+    // (explicit request, "맨 처음 모습"). heroFullHeight/heroBackdrop/heroBg
+    // below are unchanged by any of this back-and-forth, so no other round's
+    // reasoning for them needed touching.
+    // heroFullHeight: true — restores the Hero to its original ~560px
+    // height (the height every other non-banner project's detail Hero
+    // uses), per explicit instruction: the attached screenshot was
+    // authored against the EXISTING Hero image-area size, so the Hero's
+    // own height/split must not change to accommodate it.
+    heroFullHeight: true,
+    // heroBackdrop: true — detail-page Hero only. This screenshot's own
+    // edges aren't one flat tone — the left edge is mostly the sidebar's
+    // blue (#0047ba) while the top/right/most-of-bottom are white — so a
+    // single flat heroBg color (the approach used for the old image, and
+    // for HRD Asset below) would clearly mismatch whichever edge it isn't
+    // sampled from and look like a seam, the same "flat box on a photo"
+    // problem that showed up on the main-page NODEN card and was fixed
+    // there with a blurred backdrop (see Works.css). With object-fit: cover
+    // (no letterbox to show through), this also just forces
+    // object-position: center for this image (see ProjectDetail.css's
+    // `.case__hero-media--backdrop .case__hero-image` rule) — harmless,
+    // kept so "contain" can be re-enabled later without extra changes.
     heroBackdrop: true,
     // heroBg kept as a plain fallback fill behind the blurred backdrop
     // (e.g. if the backdrop image fails to load) — sampled as this
