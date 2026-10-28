@@ -66,14 +66,29 @@ export const projects = [
     // cardImage's fallback chain if cardImage were ever removed; this file
     // is additive, not a replacement, and the original is still shipped.
     detailHeroImage: "/images/project-03-hero-detail.png",
-    // heroFit: "contain" — this screenshot is 1462×472 (~3.10:1), far wider
-    // than the hero panel's own box, so object-fit: cover (the default)
-    // would crop deep into either side — there's no --img-pos value that
-    // keeps the left sidebar, center composer AND right-side feature cards
-    // all in frame at once, the same kind of mismatch as the previous
-    // image. Showing the whole screenshot via contain removes the crop
-    // entirely instead.
-    heroFit: "contain",
+    // heroFit: "contain" was used here (now removed, 2026-10-28, explicit
+    // request) because this screenshot is 1462×472 (~3.10:1), far wider than
+    // the hero panel's own box, so object-fit: cover (the default) crops
+    // into either side — there's no --img-pos value that keeps the left
+    // sidebar, center composer AND right-side feature cards all in frame at
+    // once. "contain" avoided that crop entirely, but it necessarily adds a
+    // letterbox gap (top/bottom empty space) to show the whole image
+    // un-cropped — confirmed by pixel-diff against the live site that this
+    // gap was rendering exactly as coded (symmetric, centered, no actual
+    // regression), but the gap itself — and the blurred-backdrop fill added
+    // inside it by the previous "하늘색 빈 공간" fix — read as if the image
+    // had shifted/floated instead of sitting flush in its box. Switching
+    // back to the default cover crop (by simply not setting heroFit) removes
+    // the gap entirely; the tradeoff, confirmed and accepted, is that the
+    // left sidebar and/or right-side promo cards get cropped off depending
+    // on viewport width, since cover+center keeps the central "새 메시지
+    // 작성" composer (the actual subject of this screenshot) in frame at
+    // every width instead. heroBackdrop below is left on specifically
+    // because it still forces object-position: center for this image (see
+    // ProjectDetail.css's `.case__hero-media--backdrop .case__hero-image`
+    // rule) — with no letterbox left to show through, its own blurred fill
+    // is simply invisible behind the now fully-opaque cover image, so it is
+    // harmless scaffolding kept in case "contain" is ever wanted again.
     // heroFullHeight: true — restores the Hero to its original ~560px
     // height (the height every other non-banner project's detail Hero
     // uses), per explicit instruction: the attached screenshot was
