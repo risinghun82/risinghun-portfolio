@@ -67,23 +67,31 @@ export const projects = [
     // is additive, not a replacement, and the original is still shipped.
     detailHeroImage: "/images/project-03-hero-detail.png",
     // This screenshot is 1462×472 (~3.10:1), far wider than the hero
-    // panel's own box, so fitting it was never going to be a one-line
-    // change — this went through several rounds before settling back here,
-    // on the very first approach: object-fit: cover (the default — no
-    // heroFit override) at the same fixed 560px height every other
-    // non-banner project's detail Hero uses (heroFullHeight: true below).
-    // In order: cover+560 (crops the sidebar/cards, but a known, intentional
-    // tradeoff and the look every other project already has) → contain+560
-    // (shows the whole image, but a large top/bottom letterbox) →
-    // blurred-backdrop fill in that letterbox → back to cover+560 (explicit
-    // request, "꽉 차게") → contain + an aspect-ratio-matched box instead of
-    // a fixed height (zero letterbox at every width, explicit request to
-    // show the whole image with the right ratio) → that shrank the row
-    // enough to clip the "PROJECT 01" label under the site header, fixed in
-    // CSS → explicitly reverted back to this first cover+560 version
-    // (explicit request, "맨 처음 모습"). heroFullHeight/heroBackdrop/heroBg
-    // below are unchanged by any of this back-and-forth, so no other round's
-    // reasoning for them needed touching.
+    // panel's own box, so fitting it has gone through several rounds:
+    // cover+560 (crops the sidebar/cards — reported as a cropping BUG in a
+    // follow-up "긴급 수정" request, since the brief now explicitly requires
+    // the whole screenshot, sidebar-to-cards, to stay visible and
+    // undistorted) → contain+560 (shows the whole image, but a large
+    // top/bottom letterbox) → blurred-backdrop fill in that letterbox →
+    // briefly back to cover+560 (explicit request at the time, "꽉 차게") →
+    // contain + an aspect-ratio-matched box (zero letterbox, explicit
+    // request to show the whole image at its own ratio) → that shrank the
+    // row enough to clip the "PROJECT 01" label under the site header,
+    // fixed separately in CSS → explicitly reverted to cover+560 → this
+    // emergency-fix request reported cover's cropping as the bug to fix,
+    // so it lands back on heroFit: "contain" + the same aspect-ratio-matched
+    // box as before (see ProjectDetail.css's
+    // `[data-case="gimesee"] .case__hero-media { aspect-ratio: 1462/472 }`),
+    // this time also applied on mobile (previously left on the shared 4:3
+    // cover crop, which cropped this image there too) and kept clear of the
+    // header via the already-fixed panel padding. heroFullHeight stays true
+    // below — with heroFit: "contain" set, its only effect is to skip the
+    // shorter `.case__hero--banner` height (320px vs 560px) that would
+    // otherwise apply; since the aspect-ratio override replaces height
+    // entirely anyway, either value works, but 560/true matches every other
+    // non-banner project's starting height and keeps this flag's own
+    // meaning (explained where it's declared) intact.
+    heroFit: "contain",
     // heroFullHeight: true — restores the Hero to its original ~560px
     // height (the height every other non-banner project's detail Hero
     // uses), per explicit instruction: the attached screenshot was
@@ -97,11 +105,13 @@ export const projects = [
     // for HRD Asset below) would clearly mismatch whichever edge it isn't
     // sampled from and look like a seam, the same "flat box on a photo"
     // problem that showed up on the main-page NODEN card and was fixed
-    // there with a blurred backdrop (see Works.css). With object-fit: cover
-    // (no letterbox to show through), this also just forces
-    // object-position: center for this image (see ProjectDetail.css's
-    // `.case__hero-media--backdrop .case__hero-image` rule) — harmless,
-    // kept so "contain" can be re-enabled later without extra changes.
+    // there with a blurred backdrop (see Works.css). With the aspect-ratio
+    // box matching this image exactly, there is no letterbox for the blur
+    // to ever show through, so this is inert scaffolding again — kept only
+    // because it also forces object-position: center (see
+    // ProjectDetail.css's `.case__hero-media--backdrop .case__hero-image`
+    // rule), which no longer matters either once contain shows the image
+    // uncropped, but removing it buys nothing and risks more churn.
     heroBackdrop: true,
     // heroBg kept as a plain fallback fill behind the blurred backdrop
     // (e.g. if the backdrop image fails to load) — sampled as this
