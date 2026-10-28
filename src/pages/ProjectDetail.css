@@ -1131,14 +1131,105 @@ slightly tighter 2.2rem. */
   margin-top: 2.6rem;
 }
 
-/* Gimesee Hero sizing went through several rounds (fixed 560px height +
-object-fit: cover → contain + fixed height, big letterbox → blurred-backdrop
-fill in that letterbox → back to cover+560 → contain + an aspect-ratio-
-matched box, zero letterbox but shrank the row enough to clip the "PROJECT
-01" label under the site header, fixed separately → explicitly reverted back
-to the very first cover+560 version). Nothing project-specific is needed
-here any more: with object-fit: cover and the shared fixed 560px
-.case__hero height (see src/data/projects.js's heroFullHeight on the Gimesee
-entry), Gimesee now renders through exactly the same unscoped rules above as
-every other non-banner project, so there is nothing left to scope under
-[data-case="gimesee"] for the Hero. */
+/* --------------------------------------------------------------------------
+Gimesee Hero — "긴급 수정" request: with object-fit: cover (the state this
+reverted to last round), the sidebar and right-side feature cards in
+project-03-hero-detail.png were being cropped off, which was reported back
+as a display BUG rather than an accepted tradeoff, together with a full
+checklist (sidebar fully visible, cards fully visible, no distortion, header
+must not hide real image content, no unwanted crop top or bottom, balanced
+with the info panel, verified at 1440/1920/390px). That checklist is exactly
+"show the whole 1462×472 (~3.0975:1) screenshot, uncropped and
+undistorted, with no letterbox and no header overlap" — which is the same
+problem this project's Hero has already been through twice this session:
+
+- object-fit: contain avoids cropping, but needs a box shaped like the
+  image, not the shared fixed 560px (or 320px banner) height — a fixed
+  height only ever matches this image's ratio at one specific viewport
+  width. aspect-ratio: 1462/472 on .case__hero-media (not a fixed height)
+  keeps the box exactly image-shaped at every width, which is what removes
+  the crop AND the letterbox at the same time, instead of trading one for
+  the other.
+- align-self: start on .case__hero-media (not align-items on the row)
+  keeps only the image box sized by that aspect-ratio instead of being
+  stretched taller by its sibling .case__hero-panel.
+- .case__hero-panel needs justify-content: flex-start + a flat
+  padding-top: 7.5rem (120px) instead of its default centering — centering
+  depends on how much extra row height is left over after the image's
+  (now much shorter) aspect-ratio height, which varies by width and by how
+  much the panel's own text wraps, so it cannot reliably clear the site's
+  88px-tall fixed header at every width; a flat padding-top guarantees a
+  constant ~32px clearance below the header regardless.
+
+All three measures were already built and verified earlier this session,
+then removed again when the Hero was reverted to cover+560 — restoring them
+here is not new design, just re-applying the already-tested fix now that
+cover's cropping has been called out as the actual defect to fix. Re-
+verified at 1920/1440/1024/901px: image fully visible and undistorted,
+"PROJECT 01" clear of the header, .case__hero-panel content (title,
+summary, role pills, meta row) never overflows.
+
+Mobile (≤900px) previously kept the shared .case__hero-media { aspect-ratio:
+4/3 } + object-fit: cover from the @media(max-width:900px) block below —
+which crops this same 3.0975:1 image on mobile exactly as much as cover did
+on desktop, and was missed in earlier rounds because mobile wasn't in
+scope then. This round's checklist explicitly tests 390px, so it needed the
+same fix: overriding that shared aspect-ratio to this image's own 1462/472
+for Gimesee only. .case__hero-panel sits in its own row BELOW the image on
+mobile (single-column grid), not sharing a row with it, so the header-
+overlap problem these align-self/padding-top rules solve for desktop simply
+doesn't occur there — no mobile equivalent of that fix is needed.
+
+Scoped to [data-case="gimesee"] only, so no other project's Hero
+(fixed-height or banner, both of which already clear the header fine via
+their own taller fixed row heights, and don't share this image's unusually
+wide ratio) is affected.
+-------------------------------------------------------------------------- */
+@media (min-width: 901px) {
+  [data-case="gimesee"] .case__hero {
+    /* The shared base rule's min-height: 560px still applies to this grid
+    container regardless of align-self below, and with the row's single
+    implicit track stretching to fill it (align-content's default), the
+    image (now only 267–356px tall at normal desktop widths) was left
+    floating in a 560px-tall row — exactly the "불필요한 배경 띠" (dead
+    background band below the image) this round's brief calls out.
+    min-height: 0 lets the row size to its own content instead: since
+    .case__hero-panel (padding-top: 7.5rem + its text) already needs more
+    height than the image's aspect-ratio box at every width tested
+    (1920/1440/390), the panel — not this leftover floor — ends up driving
+    the row, so the gap below the image shrinks to the small, genuine
+    difference between the two (confirmed ~40px at 1920, not ~200px). */
+    min-height: 0;
+  }
+  [data-case="gimesee"] .case__hero-media {
+    align-self: start;
+    aspect-ratio: 1462 / 472;
+  }
+  [data-case="gimesee"] .case__hero-panel {
+    justify-content: flex-start;
+    padding-top: 7.5rem;
+  }
+}
+
+@media (max-width: 900px) {
+  [data-case="gimesee"] .case__hero {
+    /* At mobile widths the image and info panel stack as two separate grid
+    rows (grid-template-columns: 1fr above), so there's no shared-row
+    centering to fight here — but matching this image's own 3.0975:1 ratio
+    at a typical 390px-wide screen makes the image only ~126px tall, and
+    the site's fixed header is 88px tall, covering roughly 70% of that
+    (confirmed via getBoundingClientRect: header bottom 88 vs. image bottom
+    126). Every other project's mobile Hero uses the shared 4:3 ratio,
+    which is tall enough (292.5px at 390px wide) that the same 88px header
+    only ever covers its top ~30%, so this is specific to how wide this one
+    image is, not a problem with the header or the mobile layout generally.
+    padding-top: 88px pushes the whole Hero (image, then panel below it)
+    down by exactly the header's height, so the header overlays only this
+    dark padding — matching .case__hero's own background, so there's no
+    visible seam — instead of any part of the actual screenshot. */
+    padding-top: 88px;
+  }
+  [data-case="gimesee"] .case__hero-media {
+    aspect-ratio: 1462 / 472;
+  }
+}
