@@ -736,6 +736,16 @@ export default function ProjectDetail() {
           "case" +
           (project.layoutVariant ? ` case--${project.layoutVariant}` : "")
         }
+        // data-case — plain HTML attribute, zero visual effect on its own.
+        // Lets ProjectDetail.css scope a project-specific CSS pass (e.g.
+        // Gimesee's body-section alignment fixes) to exactly one project via
+        // an attribute selector, the same way .case--aligned already scopes
+        // NODEN's hero/container alignment pass — without reusing that same
+        // modifier (a different, unrelated set of fixes) or risking any
+        // shared, unscoped rule change that would touch every project at
+        // once. Present on every project; harmless unless a rule below
+        // specifically targets it.
+        data-case={project.slug}
         style={{ "--project-accent": project.accent }}
       >
         {/* Hero — image and title live in separate panels on purpose, so

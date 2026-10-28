@@ -1039,3 +1039,94 @@ instead of being cover-cropped back down to the box. */
   height: auto;
   object-fit: contain;
 }
+
+/* --------------------------------------------------------------------------
+Gimesee-only body-section alignment pass (requested: unify section-title
+left edge, content max-width, two-column grid ratios, image widths/gaps,
+caption position, divider length and vertical rhythm across Overview → My
+Role → Web Service UI → Challenge → Approach & Solution → Design/Marketing
+Design → Publishing → Result — Hero and every other project excluded).
+Every rule below is scoped under [data-case="gimesee"] (see the attribute
+added in ProjectDetail.jsx), so it can only ever match Gimesee's own page;
+every other project's <main> lacks that attribute value and keeps exactly
+the shared rules above, completely unchanged.
+
+Audited first with Playwright (getBoundingClientRect at 1920/1440/768/390)
+before changing anything:
+- Every .case__section-title and .case__body already shared the same left
+  edge (x) and the same 1040px max-width at every breakpoint — no fix
+  needed there, already consistent.
+- .case__overview-grid used grid-template-columns: 1.3fr 1fr while
+  Challenge/My Role/Result (.case__challenge / .case__role-block /
+  .case__result-grid) all used 1fr 1fr — so the vertical "seam" between
+  left/right content sat at a different x in Overview than in the other
+  three two-column sections immediately around it (measured: column 2
+  started at x=608 in Overview vs x=544 in My Role/Challenge/Result at
+  1920px) — this was the actual, measurable version of "컬럼 비율이
+  통일되지 않음". Fixed by matching Overview to the other three.
+- .case__screen-figure (every image + caption block in Web Service UI and
+  Marketing Design) rendered 40px narrower than its own grid column on
+  every side (measured 960px inside a 1040px single-column grid, 424px
+  inside a 504px two-column grid). Root cause: <figure> has a default
+  browser margin (margin: 1em 40px) that this codebase never resets, and
+  the grid's own default stretch sizing correctly absorbs that margin
+  (auto width = column width minus margins) — so the figure itself was
+  never actually misaligned, it just had 40px of real margin eating into
+  it on each side, same as any unreset <figure> would. Confirmed the same
+  measurement on every OTHER project's case__screen-figure too (NODEN,
+  Ppasak Camping, Ppasak Guys, HRD Asset all show the identical 40px
+  margin) — this is a real, site-wide default-margin leftover, not
+  something specific to Gimesee's markup. Per this round's explicit scope
+  limit (fix Gimesee only, don't change other projects' pages), the fix
+  below is still scoped to [data-case="gimesee"] rather than corrected in
+  the shared, unscoped .case__screen-figure rule itself, even though the
+  same one-line reset would be equally safe there.
+- .case__design-block (Design section's own sub-blocks) uses
+  margin-top: 2.6rem between "Color & Typography" and "Marketing Design",
+  while .case__publishing-block (Publishing's own sub-blocks) used
+  margin-top: 2.2rem between "Implementation" and "Responsive" — same kind
+  of sub-block spacing, different values. Unified Publishing to Design's
+  2.6rem.
+- Section-to-section padding (.case__section { padding: 3.2rem 0 }),
+  align-items: start on every two-column grid, and body-copy
+  font-size/line-height were already identical across all 8 sections —
+  left untouched.
+-------------------------------------------------------------------------- */
+
+/* Gated to desktop/tablet (matches the existing @media(max-width:900px)
+pattern used everywhere else on this page, e.g. .case--aligned above) so
+the shared mobile override (.case__overview-grid { grid-template-columns:
+1fr } below 900px) is never affected — this rule's higher specificity would
+otherwise win over that single-class mobile rule and break the mobile
+single-column stack. */
+@media (min-width: 901px) {
+  [data-case="gimesee"] .case__overview-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Every .case__screen-figure on this page (Web Service UI's 2 screens,
+Marketing Design's 3) was 40px narrower than its own grid column on every
+side — not a layout bug, just the browser's default UA stylesheet margin on
+<figure> (margin: 1em 40px) never having been reset here. That left-over
+40px/side margin was being correctly absorbed by the grid's default
+stretch sizing (auto width = column width minus margins), which is why the
+image rendered 80px narrower than the column instead of overflowing it —
+but it also meant the image AND its caption (both plain children of this
+margin-having figure) sat 40px in from the column's real edges. Resetting
+the margin lets the same default stretch fill the full column edge-to-edge,
+which is what Overview's prose block, every section title, and every other
+non-image block on this page already do. (Tried `width: 100%` first — that
+actually made it worse: an explicit width is added ON TOP of the leftover
+margin instead of absorbing it, overflowing the column by 40px on the
+right. A plain margin reset is the correct, minimal fix.) */
+[data-case="gimesee"] .case__screen-figure {
+  margin: 0;
+}
+
+/* Publishing's IMPLEMENTATION → RESPONSIVE gap now matches Design's own
+COLOR & TYPOGRAPHY → MARKETING DESIGN gap (2.6rem) instead of its previous,
+slightly tighter 2.2rem. */
+[data-case="gimesee"] .case__publishing-block {
+  margin-top: 2.6rem;
+}
