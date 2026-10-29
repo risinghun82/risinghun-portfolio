@@ -1169,6 +1169,35 @@ verified at 1920/1440/1024/901px: image fully visible and undistorted,
 "PROJECT 01" clear of the header, .case__hero-panel content (title,
 summary, role pills, meta row) never overflows.
 
+FOLLOW-UP, same image, new defect — found by actually measuring the live
+DOM (getBoundingClientRect / naturalWidth-Height / computed styles) instead
+of guessing from CSS source, per an explicit request to stop guessing:
+the image itself was never cropped or distorted (img naturalWidth/Height
+1462×472 = 3.0975:1 matches the aspect-ratio box to 4 decimal places, and
+the rendered <img> box exactly equals the .case__hero-media box at every
+width checked — object-fit: contain had zero letterboxing left to do).
+The actual defect was the site's fixed 88px header: .case__hero-media
+(align-self: start) sits at the grid row's own top edge, which is the
+page's very top edge (.case__hero has no padding-top on desktop), directly
+under the fixed header — true of every project's Hero, but only visible
+as a real problem here because this image's aspect-ratio box is so short
+(233–356px across normal desktop widths) that the header's 88px covers
+roughly a third of it, hiding the screenshot's own top chrome (the mock
+app's logo/menu bar), not just decorative margin the way it does on every
+other, taller Hero. Confirmed via getBoundingClientRect: header bottom 88
+> media top 0 at every desktop width tested. Fixed the same way mobile
+below already was: padding-top: 88px on .case__hero itself (not on
+.case__hero-media, whose own absolutely-positioned <img> is inset:0 to
+the padding box and so ignores padding on itself — it has to be the grid
+container's padding, which shifts both tracks' start position as a
+block). .case__hero-panel's old padding-top: 7.5rem (120px) existed only
+to manufacture the same 88px of header clearance a different way, by
+brute-forcing extra height into the panel; with the hero itself now
+providing that clearance for both columns at once, keeping 120px on top
+of it would double up the clearance and reinflate the "불필요한 배경 띠"
+(dead space below the image) this same round already fixed once — so it
+drops to 2rem, just a bit of breathing room, not a header workaround.
+
 Mobile (≤900px) previously kept the shared .case__hero-media { aspect-ratio:
 4/3 } + object-fit: cover from the @media(max-width:900px) block below —
 which crops this same 3.0975:1 image on mobile exactly as much as cover did
@@ -1193,21 +1222,34 @@ wide ratio) is affected.
     image (now only 267–356px tall at normal desktop widths) was left
     floating in a 560px-tall row — exactly the "불필요한 배경 띠" (dead
     background band below the image) this round's brief calls out.
-    min-height: 0 lets the row size to its own content instead: since
-    .case__hero-panel (padding-top: 7.5rem + its text) already needs more
-    height than the image's aspect-ratio box at every width tested
-    (1920/1440/390), the panel — not this leftover floor — ends up driving
-    the row, so the gap below the image shrinks to the small, genuine
-    difference between the two (confirmed ~40px at 1920, not ~200px). */
+    min-height: 0 lets the row size to its own content instead. */
     min-height: 0;
+    /* padding-top: 88px — see the long comment above. Pushes the whole
+    grid content area (both the media and panel tracks) down by exactly
+    the fixed header's height, so .case__hero-media's own top edge (it
+    sits at align-self: start, i.e. flush with this row's top) lands right
+    below the header instead of right behind it. Measured on the live
+    site before this fix: header bottom 88px vs. media top 0px at every
+    desktop width — a full 88px of the image's own top edge hidden behind
+    the header. After: media top 88px, zero overlap. */
+    padding-top: 88px;
   }
   [data-case="gimesee"] .case__hero-media {
     align-self: start;
     aspect-ratio: 1462 / 472;
   }
   [data-case="gimesee"] .case__hero-panel {
+    /* justify-content stays flex-start (predictable, content-driven
+    instead of depending on leftover row height) but padding-top drops
+    from the old 7.5rem (120px) workaround to a plain 2rem — the 88px
+    header-clearance job that padding used to do alone is now handled by
+    .case__hero's own padding-top above, shared with the image, so this
+    only needs to be a bit of breathing room under the header, not a full
+    clearance hack. Keeping the old 120px on top of the new 88px would
+    double-clear the header and reinflate the dead space below the image
+    that min-height: 0 above was added to remove. */
     justify-content: flex-start;
-    padding-top: 7.5rem;
+    padding-top: 2rem;
   }
 }
 
