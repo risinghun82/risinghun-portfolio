@@ -528,6 +528,52 @@ export default function ProjectDetail() {
         </div>
       </div>
 
+      {/* Exhibition & Backwall Design — Gimesee-only (project.exhibitionScreens),
+      directly after Marketing Design and before the generic flyerScreens
+      slot below. Three backwall panels (left/front/right) that make up one
+      physical exhibition booth, shown as one project in a 3-up grid instead
+      of as three separate screens — see .case__screens--exhibition in
+      ProjectDetail.css. case__screen--auto (no forced aspect-ratio) keeps
+      every panel at its own true proportions, same mechanism already used
+      for flyerScreens/full-page captures below, so nothing is cropped or
+      stretched. */}
+      {project.exhibitionScreens && (
+        <div className="case__design-block">
+          <h3 className="case__design-subtitle">
+            {project.exhibitionTitle || "Exhibition & Backwall Design"}
+          </h3>
+          {project.exhibitionDescription && (
+            <p className="case__screens-desc">
+              {project.exhibitionDescription}
+            </p>
+          )}
+          <div className="case__screens case__screens--exhibition">
+            {project.exhibitionScreens.map((src, i) => {
+              const alt =
+                project.exhibitionCaptions?.[i] ||
+                `${project.title} 전시 백월 ${i + 1}`;
+              return (
+                <figure key={src} className="case__screen-figure">
+                  <Zoomable onOpen={() => openLightbox(src, alt)} label={alt}>
+                    <img
+                      className="case__screen case__screen--real case__screen--auto"
+                      src={src}
+                      alt={alt}
+                      loading="lazy"
+                    />
+                  </Zoomable>
+                  {project.exhibitionCaptions?.[i] && (
+                    <figcaption className="case__screen-caption">
+                      {project.exhibitionCaptions[i]}
+                    </figcaption>
+                  )}
+                </figure>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
       {project.flyerScreens && (
         <div className="case__design-block">
           <h3 className="case__design-subtitle">

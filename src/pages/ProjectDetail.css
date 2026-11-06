@@ -780,6 +780,40 @@ grid-column 확장이 의미가 없어 별도 처리 불필요 — 앞면 → �
   }
 }
 
+/* Exhibition & Backwall Design (Gimesee-only, project.exhibitionScreens) —
+three backwall panels (left/front/right) of one physical booth, shown as a
+PC 3-column grid so all three read as one exhibition space rather than
+three unrelated screenshots — same gap/alignment convention as the other
+.case__screens variants above. Collapses to 1 column on mobile, same
+breakpoint as every other screens variant, keeping the left → front →
+right reading order (the array order in projects.js) intact top-to-bottom.
+No aspect-ratio is set here: the images themselves (case__screen--auto on
+each <img>, same mechanism as flyerScreens below) already share one
+identical ratio, and auto-height keeps every panel fully visible at that
+ratio with zero cropping, instead of forcing a box ratio that would need
+object-fit to compensate. */
+.case__screens--exhibition {
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(24px, 2vw, 32px);
+}
+
+@media (max-width: 900px) {
+  .case__screens--exhibition {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Short one-line project description shown above an image gallery (used
+by Exhibition & Backwall Design) — same body-text size/leading as
+.case__publishing-desc, just with bottom spacing since a screens grid
+follows it immediately instead of being the block's last element. */
+.case__screens-desc {
+  font-size: clamp(15px, 1vw, 17px);
+  line-height: 1.65;
+  color: var(--text-on-light-muted);
+  margin-bottom: 1.4rem;
+}
+
 .case__screen-figure {
   display: flex;
   flex-direction: column;
