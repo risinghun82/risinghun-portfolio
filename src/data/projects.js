@@ -213,17 +213,24 @@ export const projects = [
     // 홍보 이미지를 PC 2열 갤러리(모바일 1열)로 전환 — 다른 프로젝트의 일반
     // screens 블록(HRD Asset의 Desktop Screens 등)은 이 플래그가 없으므로
     // 기존 1열 레이아웃 그대로 유지됨. 원본 비율은 변경하지 않음.
+    //
+    // 순서 변경 요청: 3단 리플렛 앞/뒷면이 한 세트로 보이도록 먼저 배치하고
+    // (1행에 나란히), 조선일보 지면광고는 세 번째로 내림. screens와
+    // screenCaptions는 index로 1:1 매칭되므로 두 배열을 같은 순서로 함께
+    // 재배열 — 파일 자체나 캡션 문구는 그대로, 순서만 [앞면, 뒷면, 조선일보]로
+    // 변경. 3번째(마지막) 항목을 2열 전체 폭으로 넓히는 처리는
+    // ProjectDetail.css의 .case__screens--marketing 쪽에서 담당.
     screensLayout: "gallery",
     screensTitle: "Marketing Design",
     screenCaptions: [
-      "조선일보 지면광고 배너 — 서비스 인지도 확보를 위한 오프라인 광고 소재를 디자인했습니다.",
       "3단 리플렛 — 앞면. 전시회 배포용 리플렛의 레이아웃과 비주얼을 직접 디자인했습니다.",
       "3단 리플렛 — 뒷면. 서비스 주요 기능과 이용 방법을 한눈에 보여주는 정보 구성을 맡았습니다.",
+      "조선일보 지면광고 배너 — 서비스 인지도 확보를 위한 오프라인 광고 소재를 디자인했습니다.",
     ],
     screens: [
-      "/images/project-03-screen-01.jpg",
       "/images/project-03-screen-02.jpg",
       "/images/project-03-screen-03.jpg",
+      "/images/project-03-screen-01.jpg",
     ],
     // Real in-app UI screenshots, separate from the print materials above.
     // Personal phone numbers visible in the source screenshots (sender +
