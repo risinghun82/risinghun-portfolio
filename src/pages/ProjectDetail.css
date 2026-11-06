@@ -759,6 +759,21 @@ gap) is unaffected. */
   gap: clamp(24px, 2vw, 32px);
 }
 
+/* 순서 변경: projects.js의 screens/screenCaptions가 이제 [리플렛 앞면,
+리플렛 뒷면, 조선일보] 순서이므로, 1·2번째(앞/뒷면)는 이 2열 그리드에
+자동으로 1행 좌우에 나란히 배치됨 — 같은 1fr/1fr 열과 같은 aspect-ratio:16/9를
+공유하므로 높이도 자동으로 동일. 3번째(조선일보, 가로가 긴 지면광고 배너)는
+한쪽 열에만 걸치면 폭이 반으로 줄어 가독성이 떨어지므로, 2행 전체에서 두 열을
+모두 차지하도록 넓힘 — 이미지 자체의 object-fit/aspect-ratio는 그대로라
+내용이 잘리거나 늘어나지 않고, 폭만 넓어짐. :nth-child(3)이 곧 :last-child —
+이 레이아웃은 항상 정확히 3장이므로 순서가 바뀌어도 "마지막 항목 = 조선일보"만
+유지되면 이 규칙은 그대로 맞게 적용됨. 모바일(아래 @media)은 이미 1열이라
+grid-column 확장이 의미가 없어 별도 처리 불필요 — 앞면 → 뒷면 → 조선일보 순서
+그대로 세로 1열. */
+.case__screens--marketing .case__screen-figure:nth-child(3) {
+  grid-column: 1 / -1;
+}
+
 @media (max-width: 900px) {
   .case__screens--marketing {
     grid-template-columns: 1fr;
