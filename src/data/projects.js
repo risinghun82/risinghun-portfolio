@@ -232,6 +232,29 @@ export const projects = [
       "/images/project-03-screen-03.jpg",
       "/images/project-03-screen-01.jpg",
     ],
+    // Exhibition & Backwall Design — KINTEX 전시 부스 백월(좌/정면/우측)
+    // 그래픽 3장. Marketing Design 바로 다음, Print & Flyer 자리(현재 Gimesee는
+    // flyerScreens를 쓰지 않음) 앞에 새로 추가된 블록 — 3장을 "별개 작업물"이
+    // 아니라 하나의 전시 디자인 프로젝트로 묶어 보여주기 위해 screens(배너
+    // 갤러리)와는 별도의 3열 그리드(.case__screens--exhibition, CSS 참고)를
+    // 사용. 전달받은 PNG 원본은 8000×6897(1.16:1, 세 장 모두 동일 비율) —
+    // 내용·색상·텍스트는 전혀 건드리지 않고 웹 전송용으로 2000px 폭까지만
+    // 리사이즈(다른 project-03 이미지들과 비슷한 파일 크기를 맞추기 위함),
+    // 원본 비율은 그대로 유지. 왜곡/크롭 없이 전체가 보여야 하므로 JSX에서
+    // aspect-ratio 고정 없이 자연 비율대로 렌더링(case__screen--auto, 기존
+    // flyerScreens/풀샷 스크린샷에도 쓰이는 방식 그대로 재사용).
+    exhibitionTitle: "Exhibition & Backwall Design",
+    exhibitionDescription: "KINTEX Exhibition · Backwall Graphic Design",
+    exhibitionCaptions: [
+      "01 LEFT BACKWALL",
+      "02 FRONT BACKWALL",
+      "03 RIGHT BACKWALL",
+    ],
+    exhibitionScreens: [
+      "/images/project-03-backwall-01.jpg",
+      "/images/project-03-backwall-02.jpg",
+      "/images/project-03-backwall-03.jpg",
+    ],
     // Real in-app UI screenshots, separate from the print materials above.
     // Personal phone numbers visible in the source screenshots (sender +
     // recipient) were redacted before saving these — see public/images.
