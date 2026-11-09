@@ -780,18 +780,25 @@ grid-column 확장이 의미가 없어 별도 처리 불필요 — 앞면 → �
   }
 }
 
-/* Exhibition & Backwall Design (Gimesee-only, project.exhibitionScreens) —
-three backwall panels (left/front/right) of one physical booth, shown as a
-PC 3-column grid so all three read as one exhibition space rather than
-three unrelated screenshots — same gap/alignment convention as the other
-.case__screens variants above. Collapses to 1 column on mobile, same
-breakpoint as every other screens variant, keeping the left → front →
-right reading order (the array order in projects.js) intact top-to-bottom.
-No aspect-ratio is set here: the images themselves (case__screen--auto on
-each <img>, same mechanism as flyerScreens below) already share one
-identical ratio, and auto-height keeps every panel fully visible at that
-ratio with zero cropping, instead of forcing a box ratio that would need
-object-fit to compensate. */
+/* Exhibition & Backwall Design (Gimesee-only, project.exhibitionGroups) —
+each exhibition/event is its own self-contained group (see
+.case__exhibition-group below); this is the 3-up grid used by the KINTEX
+group specifically (group.layout === "grid-3"), so all three backwall
+panels (left/front/right) read as one exhibition space rather than three
+unrelated screenshots — same gap/alignment convention as the other
+.case__screens variants above. No aspect-ratio is set here: the images
+themselves (case__screen--auto on each <img>, same mechanism as
+flyerScreens below) already share one identical ratio, and auto-height
+keeps every panel fully visible at that ratio with zero cropping, instead
+of forcing a box ratio that would need object-fit to compensate.
+Responsive: 3 columns stay full-size down through desktop/laptop widths;
+at tablet widths (901-640px) a 3rd column would squeeze each panel too
+narrow to read comfortably, so this drops to 2 columns first (checked at
+768px) rather than jumping straight to 1 the way the simpler 2-image
+galleries above do; true phone widths (≤640px, checked at 390px) collapse
+to the same single column every other screens variant on this page uses,
+keeping the left → front → right reading order (the array order in
+projects.js) intact top-to-bottom. */
 .case__screens--exhibition {
   grid-template-columns: repeat(3, 1fr);
   gap: clamp(24px, 2vw, 32px);
@@ -799,8 +806,45 @@ object-fit to compensate. */
 
 @media (max-width: 900px) {
   .case__screens--exhibition {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .case__screens--exhibition {
     grid-template-columns: 1fr;
   }
+}
+
+/* Exhibition Promotion Graphics (group.layout === "grid-2") — two separate
+event backwalls (일잘러페스타 2025, G-FAIR 2025) shown side by side in one
+row so they're easy to compare at a glance, same 1fr/1fr pairing already
+used by .case__screens--pair / the Marketing Design gallery's front+back
+row. Both images share one aspect ratio (case__screen--auto, same as the
+KINTEX group above), so the two cards come out the same height and their
+captions start on the same line automatically — no extra alignment rule
+needed. Two images never get too cramped to need a 768px tablet step the
+way the 3-up KINTEX grid above does, so this only has the one phone-width
+breakpoint, same cutover as every other 2-up screens variant on this
+page. */
+.case__screens--exhibition-promo {
+  grid-template-columns: repeat(2, 1fr);
+  gap: clamp(24px, 2vw, 32px);
+}
+
+@media (max-width: 640px) {
+  .case__screens--exhibition-promo {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* One exhibition/event inside Exhibition & Backwall Design — stacked with
+the same rhythm .case__role-group already uses for its own sub-groups
+(PLANNING/DESIGN/PUBLISHING under My Role), so unrelated jobs (KINTEX vs.
+일잘러페스타 vs. G-FAIR) read as separate projects under one shared section
+title instead of one continuous gallery. */
+.case__exhibition-group + .case__exhibition-group {
+  margin-top: 2.2rem;
 }
 
 /* Short one-line project description shown above an image gallery (used
@@ -818,6 +862,19 @@ follows it immediately instead of being the block's last element. */
   display: flex;
   flex-direction: column;
   gap: 0.6rem;
+}
+
+/* Small bold label above a descriptive caption (Exhibition Promotion
+Graphics only, group.titles in projects.js) — e.g. "01. 일잘러페스타 2025"
+sitting above its own sentence-length caption. Same font-size/line-height
+as .case__screen-caption itself (just bolder + its own block + small gap),
+so caption typography stays unified across every screens variant on this
+page instead of introducing a second caption size. */
+.case__screen-caption-title {
+  display: block;
+  font-weight: 700;
+  color: var(--text-on-light);
+  margin-bottom: 0.3rem;
 }
 
 .case__screen-caption {

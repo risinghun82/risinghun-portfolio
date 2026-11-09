@@ -528,49 +528,74 @@ export default function ProjectDetail() {
         </div>
       </div>
 
-      {/* Exhibition & Backwall Design — Gimesee-only (project.exhibitionScreens),
+      {/* Exhibition & Backwall Design — Gimesee-only (project.exhibitionGroups),
       directly after Marketing Design and before the generic flyerScreens
-      slot below. Three backwall panels (left/front/right) that make up one
-      physical exhibition booth, shown as one project in a 3-up grid instead
-      of as three separate screens — see .case__screens--exhibition in
+      slot below. Each group is a separate, self-contained exhibition/event
+      (KINTEX's 3 backwall panels; a later round's 2 separate promo-graphic
+      events) instead of one flat gallery, so unrelated jobs read as
+      unrelated projects rather than one long strip of images — see
+      .case__exhibition-group / .case__screens--exhibition(-promo) in
       ProjectDetail.css. case__screen--auto (no forced aspect-ratio) keeps
       every panel at its own true proportions, same mechanism already used
       for flyerScreens/full-page captures below, so nothing is cropped or
-      stretched. */}
-      {project.exhibitionScreens && (
+      stretched; the shared Zoomable lightbox below is reused as-is. */}
+      {project.exhibitionGroups && (
         <div className="case__design-block">
           <h3 className="case__design-subtitle">
             {project.exhibitionTitle || "Exhibition & Backwall Design"}
           </h3>
-          {project.exhibitionDescription && (
-            <p className="case__screens-desc">
-              {project.exhibitionDescription}
-            </p>
-          )}
-          <div className="case__screens case__screens--exhibition">
-            {project.exhibitionScreens.map((src, i) => {
-              const alt =
-                project.exhibitionCaptions?.[i] ||
-                `${project.title} 전시 백월 ${i + 1}`;
-              return (
-                <figure key={src} className="case__screen-figure">
-                  <Zoomable onOpen={() => openLightbox(src, alt)} label={alt}>
-                    <img
-                      className="case__screen case__screen--real case__screen--auto"
-                      src={src}
-                      alt={alt}
-                      loading="lazy"
-                    />
-                  </Zoomable>
-                  {project.exhibitionCaptions?.[i] && (
-                    <figcaption className="case__screen-caption">
-                      {project.exhibitionCaptions[i]}
-                    </figcaption>
-                  )}
-                </figure>
-              );
-            })}
-          </div>
+          {project.exhibitionGroups.map((group) => (
+            <div key={group.groupTitle} className="case__exhibition-group">
+              <h4 className="case__challenge-subtitle">
+                {group.groupLabel
+                  ? `${group.groupLabel} — ${group.groupTitle}`
+                  : group.groupTitle}
+              </h4>
+              {group.description && (
+                <p className="case__screens-desc">{group.description}</p>
+              )}
+              <div
+                className={
+                  "case__screens" +
+                  (group.layout === "grid-2"
+                    ? " case__screens--exhibition-promo"
+                    : " case__screens--exhibition")
+                }
+              >
+                {group.screens.map((src, i) => {
+                  const title = group.titles?.[i];
+                  const caption = group.captions?.[i];
+                  const alt =
+                    caption || title || `${project.title} 전시 디자인 ${i + 1}`;
+                  return (
+                    <figure key={src} className="case__screen-figure">
+                      <Zoomable
+                        onOpen={() => openLightbox(src, alt)}
+                        label={alt}
+                      >
+                        <img
+                          className="case__screen case__screen--real case__screen--auto"
+                          src={src}
+                          alt={alt}
+                          loading="lazy"
+                        />
+                      </Zoomable>
+                      {(title || caption) && (
+                        <figcaption className="case__screen-caption">
+                          {title && (
+                            <strong className="case__screen-caption-title">
+                              {title}
+                            </strong>
+                          )}
+                          {caption}
+                        </figcaption>
+                      )}
+                    </figure>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
         </div>
       )}
 
