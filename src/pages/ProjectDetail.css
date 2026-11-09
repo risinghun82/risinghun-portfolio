@@ -676,6 +676,31 @@ numbered section instead of three separate top-level ones. */
   margin-bottom: 1.4rem;
 }
 
+/* Marketing Design (project.marketingSection, Gimesee-only) — A/B sub-group
+inside one "05. Marketing Design" case__design-block (see
+ProjectDetail.jsx). Sits one level below .case__design-subtitle (the
+section's own h3) and one level above each subgroup's small-caps label
+(.case__challenge-subtitle, reused as-is for KINTEX/CES/Promotion Graphics
+inside group B) — bigger + full-opacity text instead of another uppercase
+small-caps row, so "A. Print / Promotion Design" and "B. Exhibition /
+Backwall Design" read as the two headline groups they are, not one more
+meta label at the same weight as everything below it. */
+.case__marketing-group-title {
+  font-family: var(--font-display);
+  font-size: var(--fs-md);
+  font-weight: 700;
+  color: var(--text-on-light);
+  margin-bottom: 1rem;
+}
+
+/* Same spacing rhythm as .case__exhibition-group + .case__exhibition-group
+below (and .case__role-groups above) between group A and group B, so the
+two read as distinct groups without a stray double margin from each
+group's own last child. */
+.case__marketing-group + .case__marketing-group {
+  margin-top: 2.8rem;
+}
+
 /* 06. Publishing — now split into IMPLEMENTATION / RESPONSIVE / INTERACTION
 sub-blocks (see ProjectDetail.jsx), each stacked with the same spacing as
 the Design section's own sub-blocks. */

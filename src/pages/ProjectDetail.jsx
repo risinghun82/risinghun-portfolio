@@ -405,6 +405,40 @@ export default function ProjectDetail() {
   // then every screen (in-app UI, campaign/print materials, flyer) as
   // evidence, grouped under one section instead of three separate top-level
   // ones.
+  // renderMarketingFigure — shared figure markup (Zoomable image + optional
+  // bold title + caption) reused by every sub-group inside Marketing Design
+  // (project.marketingSection, Gimesee-only): group A's flat print/promo
+  // grid and group B's nested KINTEX / CES / Promotion-Graphics subgroups
+  // all render through this one function instead of three near-duplicate
+  // blocks that could drift out of sync. Identical to the figure markup the
+  // legacy screensTitle/exhibitionGroups blocks below still use directly
+  // (kept as-is, untouched, for every other project).
+  const renderMarketingFigure = (src, i, captions, titles) => {
+    const title = titles?.[i];
+    const caption = captions?.[i];
+    const alt = caption || title || `${project.title} 마케팅 디자인 ${i + 1}`;
+    return (
+      <figure key={src} className="case__screen-figure">
+        <Zoomable onOpen={() => openLightbox(src, alt)} label={alt}>
+          <img
+            className="case__screen case__screen--real case__screen--auto"
+            src={src}
+            alt={alt}
+            loading="lazy"
+          />
+        </Zoomable>
+        {(title || caption) && (
+          <figcaption className="case__screen-caption">
+            {title && (
+              <strong className="case__screen-caption-title">{title}</strong>
+            )}
+            {caption}
+          </figcaption>
+        )}
+      </figure>
+    );
+  };
+
   const renderDesign = () => (
     <Reveal
       as="section"
@@ -471,75 +505,141 @@ export default function ProjectDetail() {
         </div>
       )}
 
-      <div className="case__design-block">
-        <h3 className="case__design-subtitle">
-          {project.screensTitle || "Key UI Screens"}
-        </h3>
-        <div
-          className={
-            "case__screens" +
-            (project.screensLayout === "gallery"
-              ? " case__screens--marketing"
-              : "")
-          }
-        >
-          {project.screens.map((src, i) => {
-            if (!project.images?.screens?.[i]) {
-              return (
-                <div
-                  key={src}
-                  className="img-placeholder case__screen"
-                  style={{
-                    "--ph-a": project.accent,
-                    "--ph-b": "#24100B",
-                  }}
-                >
-                  <span>
-                    Screen 0{i + 1} 교체 영역 ({src})
-                  </span>
+      {/* Marketing Design (project.marketingSection, Gimesee-only) — unifies
+      what used to be two separate top-level blocks (the flat "Marketing
+      Design" print/promo gallery below, and a standalone "Exhibition &
+      Backwall Design" block further down) into ONE section with two
+      explicit sub-groups, per this round's request: recruiters should read
+      A) Print/Promotion Design (리플렛 앞/뒤 세트 + 조선일보 배너, unchanged
+      from before) and B) Exhibition/Backwall Design (KINTEX + the newly
+      added CES backwall/table pair + the existing Exhibition Promotion
+      Graphics pair) as one continuous "오프라인 홍보물" story instead of two
+      disconnected sections. Gated on project.marketingSection so every
+      other project (which doesn't set this field) falls through unchanged
+      to the original screensTitle block immediately below, then its own
+      exhibitionGroups block (always absent for non-Gimesee projects) —
+      zero markup change for anyone else. */}
+      {project.marketingSection && (
+        <div className="case__design-block">
+          <h3 className="case__design-subtitle">
+            {project.marketingSection.title}
+          </h3>
+          {project.marketingSection.description && (
+            <p className="case__screens-desc">
+              {project.marketingSection.description}
+            </p>
+          )}
+          {project.marketingSection.groups.map((group) => (
+            <div key={group.id} className="case__marketing-group">
+              <h4 className="case__marketing-group-title">
+                {group.groupLabel
+                  ? `${group.groupLabel}. ${group.groupTitle}`
+                  : group.groupTitle}
+              </h4>
+              {group.description && (
+                <p className="case__screens-desc">{group.description}</p>
+              )}
+              {group.kind === "nested" ? (
+                group.subgroups.map((sg) => (
+                  <div key={sg.groupTitle} className="case__exhibition-group">
+                    <h5 className="case__challenge-subtitle">
+                      {sg.groupTitle}
+                    </h5>
+                    {sg.description && (
+                      <p className="case__screens-desc">{sg.description}</p>
+                    )}
+                    <div
+                      className={
+                        "case__screens" +
+                        (sg.layout === "grid-3"
+                          ? " case__screens--exhibition"
+                          : " case__screens--exhibition-promo")
+                      }
+                    >
+                      {sg.screens.map((src, i) =>
+                        renderMarketingFigure(src, i, sg.captions, sg.titles),
+                      )}
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="case__screens case__screens--marketing">
+                  {group.screens.map((src, i) =>
+                    renderMarketingFigure(src, i, group.captions),
+                  )}
                 </div>
-              );
-            }
-            const alt =
-              project.screenCaptions?.[i] || `${project.title} 화면 ${i + 1}`;
-            return (
-              <figure key={src} className="case__screen-figure">
-                <Zoomable onOpen={() => openLightbox(src, alt)} label={alt}>
-                  <img
-                    className={
-                      "case__screen case__screen--real" +
-                      (project.screensAspect === "auto"
-                        ? " case__screen--auto"
-                        : "")
-                    }
-                    src={src}
-                    alt={alt}
-                    loading="lazy"
-                  />
-                </Zoomable>
-                {project.screenCaptions?.[i] && (
-                  <figcaption className="case__screen-caption">
-                    {project.screenCaptions[i]}
-                  </figcaption>
-                )}
-              </figure>
-            );
-          })}
+              )}
+            </div>
+          ))}
         </div>
-      </div>
+      )}
 
-      {/* Exhibition & Backwall Design — Gimesee-only (project.exhibitionGroups),
-      directly after Marketing Design and before the generic flyerScreens
-      slot below. Each group is a separate, self-contained exhibition/event
-      (KINTEX's 3 backwall panels; a later round's 2 separate promo-graphic
-      events) instead of one flat gallery, so unrelated jobs read as
-      unrelated projects rather than one long strip of images — see
-      .case__exhibition-group / .case__screens--exhibition(-promo) in
-      ProjectDetail.css. case__screen--auto (no forced aspect-ratio) keeps
-      every panel at its own true proportions, same mechanism already used
-      for flyerScreens/full-page captures below, so nothing is cropped or
-      stretched; the shared Zoomable lightbox below is reused as-is. */}
-      {project.exhibitionGroups && (
+      {!project.marketingSection && (
+        <div className="case__design-block">
+          <h3 className="case__design-subtitle">
+            {project.screensTitle || "Key UI Screens"}
+          </h3>
+          <div
+            className={
+              "case__screens" +
+              (project.screensLayout === "gallery"
+                ? " case__screens--marketing"
+                : "")
+            }
+          >
+            {project.screens.map((src, i) => {
+              if (!project.images?.screens?.[i]) {
+                return (
+                  <div
+                    key={src}
+                    className="img-placeholder case__screen"
+                    style={{
+                      "--ph-a": project.accent,
+                      "--ph-b": "#24100B",
+                    }}
+                  >
+                    <span>
+                      Screen 0{i + 1} 교체 영역 ({src})
+                    </span>
+                  </div>
+                );
+              }
+              const alt =
+                project.screenCaptions?.[i] || `${project.title} 화면 ${i + 1}`;
+              return (
+                <figure key={src} className="case__screen-figure">
+                  <Zoomable onOpen={() => openLightbox(src, alt)} label={alt}>
+                    <img
+                      className={
+                        "case__screen case__screen--real" +
+                        (project.screensAspect === "auto"
+                          ? " case__screen--auto"
+                          : "")
+                      }
+                      src={src}
+                      alt={alt}
+                      loading="lazy"
+                    />
+                  </Zoomable>
+                  {project.screenCaptions?.[i] && (
+                    <figcaption className="case__screen-caption">
+                      {project.screenCaptions[i]}
+                    </figcaption>
+                  )}
+                </figure>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* Exhibition & Backwall Design — legacy standalone block, kept for any
+      other project that might set exhibitionGroups directly without the
+      new marketingSection wrapper above. Gimesee itself no longer sets
+      project.exhibitionGroups (its KINTEX/CES/Promotion-Graphics subgroups
+      now live inside project.marketingSection's group B instead), so this
+      stays dormant for Gimesee and unaffected for everyone else. */}
+      {!project.marketingSection && project.exhibitionGroups && (
         <div className="case__design-block">
           <h3 className="case__design-subtitle">
             {project.exhibitionTitle || "Exhibition & Backwall Design"}
