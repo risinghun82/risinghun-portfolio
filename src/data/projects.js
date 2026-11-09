@@ -232,28 +232,68 @@ export const projects = [
       "/images/project-03-screen-03.jpg",
       "/images/project-03-screen-01.jpg",
     ],
-    // Exhibition & Backwall Design — KINTEX 전시 부스 백월(좌/정면/우측)
-    // 그래픽 3장. Marketing Design 바로 다음, Print & Flyer 자리(현재 Gimesee는
-    // flyerScreens를 쓰지 않음) 앞에 새로 추가된 블록 — 3장을 "별개 작업물"이
-    // 아니라 하나의 전시 디자인 프로젝트로 묶어 보여주기 위해 screens(배너
-    // 갤러리)와는 별도의 3열 그리드(.case__screens--exhibition, CSS 참고)를
-    // 사용. 전달받은 PNG 원본은 8000×6897(1.16:1, 세 장 모두 동일 비율) —
-    // 내용·색상·텍스트는 전혀 건드리지 않고 웹 전송용으로 2000px 폭까지만
-    // 리사이즈(다른 project-03 이미지들과 비슷한 파일 크기를 맞추기 위함),
-    // 원본 비율은 그대로 유지. 왜곡/크롭 없이 전체가 보여야 하므로 JSX에서
-    // aspect-ratio 고정 없이 자연 비율대로 렌더링(case__screen--auto, 기존
-    // flyerScreens/풀샷 스크린샷에도 쓰이는 방식 그대로 재사용).
+    // Exhibition & Backwall Design — 전시 디자인 실무를 보여주는 블록 전체의
+    // 제목(아래 exhibitionGroups가 그 안의 소그룹들). Marketing Design 바로
+    // 다음, Print & Flyer 자리(현재 Gimesee는 flyerScreens를 쓰지 않음) 앞.
     exhibitionTitle: "Exhibition & Backwall Design",
-    exhibitionDescription: "KINTEX Exhibition · Backwall Graphic Design",
-    exhibitionCaptions: [
-      "01 LEFT BACKWALL",
-      "02 FRONT BACKWALL",
-      "03 RIGHT BACKWALL",
-    ],
-    exhibitionScreens: [
-      "/images/project-03-backwall-01.jpg",
-      "/images/project-03-backwall-02.jpg",
-      "/images/project-03-backwall-03.jpg",
+    // exhibitionGroups — 전시 디자인 작업물을 "하나의 긴 갤러리"가 아니라
+    // 서로 다른 전시/행사 2건으로 구분해 보여주기 위한 구조. 기존에는
+    // exhibitionScreens/exhibitionCaptions 평면 배열 하나였지만(KINTEX 백월
+    // 3장만 있던 시점), 이번에 전혀 다른 행사의 백월 2장(일잘러페스타 2025,
+    // G-FAIR 2025)이 추가되면서 "다른 프로젝트"로 명확히 구분해 달라는 요청에
+    // 따라 그룹 배열로 재구성. 각 그룹은 자기 완결적(screens/captions/레이아웃
+    // 모두 포함)이라 그룹을 더 추가해도 다른 그룹에 영향 없음.
+    //
+    // GROUP 01 — KINTEX Exhibition: 기존 백월 좌/정면/우측 3장, 순서·이미지
+    // 파일 그대로 유지(이번 라운드에서 변경 금지 대상). layout:"grid-3"으로
+    // .case__screens--exhibition(3열, 참고: ProjectDetail.css) 사용.
+    //
+    // GROUP 02 — Exhibition Promotion Graphics: 이번에 새로 추가된 일잘러
+    // 페스타 2025 / G-FAIR 2025 백월 2장. 전달받은 PNG 원본(둘 다 8000×6897,
+    // 1.16:1, 기존 KINTEX 백월 3장과 동일 비율)을 내용·색상·텍스트 변경 없이
+    // 웹 전송용 2000px 폭으로만 리사이즈(다른 project-03 이미지들과 동일한
+    // 방식). layout:"grid-2"로 .case__screens--exhibition-promo(2열) 사용 —
+    // 두 이미지가 같은 1fr 열과 같은 원본 비율을 공유하므로 카드 높이가
+    // 자동으로 같아지고, 그 아래 캡션의 시작선도 자연히 일치함. titles는
+    // 각 카드 캡션 맨 위에 작게 표시되는 프로젝트명 — 요청하신 "01. 일잘러
+    // 페스타 2025" / "02. G-FAIR 2025" 그대로, captions 설명 문장 위에 붙는다
+    // (ProjectDetail.jsx의 case__screen-caption-title 참고).
+    //
+    // 두 그룹 모두 왜곡/크롭 없이 전체가 보여야 하므로 JSX에서 aspect-ratio
+    // 고정 없이 자연 비율대로 렌더링(case__screen--auto, 기존 flyerScreens/
+    // 풀샷 스크린샷에도 쓰이는 방식 그대로 재사용) + 기존 Zoomable 라이트박스
+    // 그대로 사용.
+    exhibitionGroups: [
+      {
+        groupLabel: "GROUP 01",
+        groupTitle: "KINTEX Exhibition",
+        description: "KINTEX Exhibition · Backwall Graphic Design",
+        layout: "grid-3",
+        screens: [
+          "/images/project-03-backwall-01.jpg",
+          "/images/project-03-backwall-02.jpg",
+          "/images/project-03-backwall-03.jpg",
+        ],
+        captions: [
+          "01 LEFT BACKWALL",
+          "02 FRONT BACKWALL",
+          "03 RIGHT BACKWALL",
+        ],
+      },
+      {
+        groupLabel: "GROUP 02",
+        groupTitle: "Exhibition Promotion Graphics",
+        layout: "grid-2",
+        screens: [
+          "/images/project-03-exhibition-promo-01.jpg",
+          "/images/project-03-exhibition-promo-02.jpg",
+        ],
+        titles: ["01. 일잘러페스타 2025", "02. G-FAIR 2025"],
+        captions: [
+          "일잘러페스타 2025 전시 홍보용 백월 그래픽 디자인. 핵심 메시지와 프로모션 혜택을 대형 타이포그래피 및 강한 컬러 대비로 표현했습니다.",
+          "G-FAIR 2025 전시 홍보용 백월 디자인. 서비스 혜택과 브랜드 메시지를 직관적으로 전달할 수 있도록 구성했습니다.",
+        ],
+      },
     ],
     // Real in-app UI screenshots, separate from the print materials above.
     // Personal phone numbers visible in the source screenshots (sender +
