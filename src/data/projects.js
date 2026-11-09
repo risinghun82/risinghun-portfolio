@@ -207,94 +207,118 @@ export const projects = [
       publishing: ["HTML/CSS 퍼블리싱"],
     },
     // 실제 화면(A. WEB SERVICE UI)을 먼저, 오프라인 홍보물(B. MARKETING
-    // DESIGN)을 그다음에 배치 — uiScreens가 먼저 렌더링되고 이 screens 블록이
-    // 그 뒤에 오는 현재 순서를 그대로 유지.
-    // screensLayout: "gallery" — Gimesee 전용 플래그. 세로로 나열되던 3개
-    // 홍보 이미지를 PC 2열 갤러리(모바일 1열)로 전환 — 다른 프로젝트의 일반
-    // screens 블록(HRD Asset의 Desktop Screens 등)은 이 플래그가 없으므로
-    // 기존 1열 레이아웃 그대로 유지됨. 원본 비율은 변경하지 않음.
+    // DESIGN)을 그다음에 배치 — uiScreens가 먼저 렌더링되고 이 marketingSection
+    // 블록이 그 뒤에 오는 현재 순서를 그대로 유지.
     //
-    // 순서 변경 요청: 3단 리플렛 앞/뒷면이 한 세트로 보이도록 먼저 배치하고
-    // (1행에 나란히), 조선일보 지면광고는 세 번째로 내림. screens와
-    // screenCaptions는 index로 1:1 매칭되므로 두 배열을 같은 순서로 함께
-    // 재배열 — 파일 자체나 캡션 문구는 그대로, 순서만 [앞면, 뒷면, 조선일보]로
-    // 변경. 3번째(마지막) 항목을 2열 전체 폭으로 넓히는 처리는
-    // ProjectDetail.css의 .case__screens--marketing 쪽에서 담당.
-    screensLayout: "gallery",
-    screensTitle: "Marketing Design",
-    screenCaptions: [
-      "3단 리플렛 — 앞면. 전시회 배포용 리플렛의 레이아웃과 비주얼을 직접 디자인했습니다.",
-      "3단 리플렛 — 뒷면. 서비스 주요 기능과 이용 방법을 한눈에 보여주는 정보 구성을 맡았습니다.",
-      "조선일보 지면광고 배너 — 서비스 인지도 확보를 위한 오프라인 광고 소재를 디자인했습니다.",
-    ],
-    screens: [
-      "/images/project-03-screen-02.jpg",
-      "/images/project-03-screen-03.jpg",
-      "/images/project-03-screen-01.jpg",
-    ],
-    // Exhibition & Backwall Design — 전시 디자인 실무를 보여주는 블록 전체의
-    // 제목(아래 exhibitionGroups가 그 안의 소그룹들). Marketing Design 바로
-    // 다음, Print & Flyer 자리(현재 Gimesee는 flyerScreens를 쓰지 않음) 앞.
-    exhibitionTitle: "Exhibition & Backwall Design",
-    // exhibitionGroups — 전시 디자인 작업물을 "하나의 긴 갤러리"가 아니라
-    // 서로 다른 전시/행사 2건으로 구분해 보여주기 위한 구조. 기존에는
-    // exhibitionScreens/exhibitionCaptions 평면 배열 하나였지만(KINTEX 백월
-    // 3장만 있던 시점), 이번에 전혀 다른 행사의 백월 2장(일잘러페스타 2025,
-    // G-FAIR 2025)이 추가되면서 "다른 프로젝트"로 명확히 구분해 달라는 요청에
-    // 따라 그룹 배열로 재구성. 각 그룹은 자기 완결적(screens/captions/레이아웃
-    // 모두 포함)이라 그룹을 더 추가해도 다른 그룹에 영향 없음.
-    //
-    // GROUP 01 — KINTEX Exhibition: 기존 백월 좌/정면/우측 3장, 순서·이미지
-    // 파일 그대로 유지(이번 라운드에서 변경 금지 대상). layout:"grid-3"으로
-    // .case__screens--exhibition(3열, 참고: ProjectDetail.css) 사용.
-    //
-    // GROUP 02 — Exhibition Promotion Graphics: 이번에 새로 추가된 일잘러
-    // 페스타 2025 / G-FAIR 2025 백월 2장. 전달받은 PNG 원본(둘 다 8000×6897,
-    // 1.16:1, 기존 KINTEX 백월 3장과 동일 비율)을 내용·색상·텍스트 변경 없이
-    // 웹 전송용 2000px 폭으로만 리사이즈(다른 project-03 이미지들과 동일한
-    // 방식). layout:"grid-2"로 .case__screens--exhibition-promo(2열) 사용 —
-    // 두 이미지가 같은 1fr 열과 같은 원본 비율을 공유하므로 카드 높이가
-    // 자동으로 같아지고, 그 아래 캡션의 시작선도 자연히 일치함. titles는
-    // 각 카드 캡션 맨 위에 작게 표시되는 프로젝트명 — 요청하신 "01. 일잘러
-    // 페스타 2025" / "02. G-FAIR 2025" 그대로, captions 설명 문장 위에 붙는다
-    // (ProjectDetail.jsx의 case__screen-caption-title 참고).
-    //
-    // 두 그룹 모두 왜곡/크롭 없이 전체가 보여야 하므로 JSX에서 aspect-ratio
-    // 고정 없이 자연 비율대로 렌더링(case__screen--auto, 기존 flyerScreens/
-    // 풀샷 스크린샷에도 쓰이는 방식 그대로 재사용) + 기존 Zoomable 라이트박스
-    // 그대로 사용.
-    exhibitionGroups: [
-      {
-        groupLabel: "GROUP 01",
-        groupTitle: "KINTEX Exhibition",
-        description: "KINTEX Exhibition · Backwall Graphic Design",
-        layout: "grid-3",
-        screens: [
-          "/images/project-03-backwall-01.jpg",
-          "/images/project-03-backwall-02.jpg",
-          "/images/project-03-backwall-03.jpg",
-        ],
-        captions: [
-          "01 LEFT BACKWALL",
-          "02 FRONT BACKWALL",
-          "03 RIGHT BACKWALL",
-        ],
-      },
-      {
-        groupLabel: "GROUP 02",
-        groupTitle: "Exhibition Promotion Graphics",
-        layout: "grid-2",
-        screens: [
-          "/images/project-03-exhibition-promo-01.jpg",
-          "/images/project-03-exhibition-promo-02.jpg",
-        ],
-        titles: ["01. 일잘러페스타 2025", "02. G-FAIR 2025"],
-        captions: [
-          "일잘러페스타 2025 전시 홍보용 백월 그래픽 디자인. 핵심 메시지와 프로모션 혜택을 대형 타이포그래피 및 강한 컬러 대비로 표현했습니다.",
-          "G-FAIR 2025 전시 홍보용 백월 디자인. 서비스 혜택과 브랜드 메시지를 직관적으로 전달할 수 있도록 구성했습니다.",
-        ],
-      },
-    ],
+    // marketingSection — Gimesee 전용. 과거에는 "Marketing Design"(리플렛
+    // 2장+조선일보 평면 갤러리)과 "Exhibition & Backwall Design"(KINTEX +
+    // 전시 홍보 그래픽 exhibitionGroups)이 서로 다른 두 개의 최상위
+    // case__design-block이었음. 채용담당자가 ① 리플렛 앞/뒤 관계를 한 세트로
+    // 바로 이해하고 ② 조선일보 광고를 별도 홍보물로 인지하고 ③ 오프라인
+    // 전시 디자인 역량(킨텍스, CES, 전시 홍보 그래픽)까지 한 섹션 안에서
+    // 이어서 보도록, 두 블록을 "05. Marketing Design" 아래 A/B 두 하위
+    // 그룹으로 통합 — ProjectDetail.jsx의 project.marketingSection 분기만
+    // Gimesee에 적용되고, 다른 프로젝트는 이 필드가 없으므로 기존
+    // screensTitle/exhibitionGroups 렌더링 경로를 그대로 사용(영향 없음).
+    marketingSection: {
+      title: "Marketing Design",
+      description:
+        "서비스 홍보를 위한 지면광고, 리플렛, 전시 백월 및 현장 그래픽까지 온·오프라인 프로모션 디자인을 함께 진행했습니다.",
+      groups: [
+        // A. Print / Promotion Design — 기존 "Marketing Design" 평면
+        // 갤러리와 데이터 동일(파일/캡션/순서 그대로), 그룹 래퍼만 추가.
+        // 리플렛 앞/뒷면이 한 세트로 보이도록 1행 좌우에 나란히(2열) 배치하고
+        // 조선일보 지면광고는 2행에서 단독으로 전체 폭을 차지 —
+        // ProjectDetail.css .case__screens--marketing의 nth-child(3) 규칙이
+        // 그대로 적용됨(kind: "flat"이면 이 클래스를 사용하도록 JSX에서 고정).
+        {
+          id: "print",
+          groupLabel: "A",
+          groupTitle: "Print / Promotion Design",
+          kind: "flat",
+          captions: [
+            "3단 리플렛 앞면 — 서비스 주요 기능과 이용 흐름을 한눈에 전달하는 정보형 리플렛 앞면입니다.",
+            "3단 리플렛 뒷면 — 배포용 리플렛 뒷면으로, 서비스 소개와 활용 포인트를 시각적으로 구성했습니다.",
+            "조선일보 지면광고 배너 — 서비스 인지도 확보를 위한 오프라인 지면 광고 배너 디자인입니다.",
+          ],
+          screens: [
+            "/images/project-03-screen-02.jpg",
+            "/images/project-03-screen-03.jpg",
+            "/images/project-03-screen-01.jpg",
+          ],
+        },
+        // B. Exhibition / Backwall Design — 전시/오프라인 현장 디자인 역량을
+        // 한데 모은 그룹. 하위에 3개의 독립된 전시/행사(KINTEX, 미국 CES,
+        // 전시 홍보 그래픽)를 subgroups로 나열 — 각 행사는 자기 완결적이라
+        // 그룹을 더 추가해도 다른 그룹에 영향 없음. 권장 순서(킨텍스 →
+        // CES 백월/테이블 → 전시 홍보 그래픽)대로 배치.
+        {
+          id: "exhibition",
+          groupLabel: "B",
+          groupTitle: "Exhibition / Backwall Design",
+          kind: "nested",
+          subgroups: [
+            // B-1. KINTEX Exhibition — 기존 백월 좌/정면/우측 3장, 순서·
+            // 이미지 파일 그대로 유지(변경 금지 대상). layout:"grid-3"으로
+            // .case__screens--exhibition(3열) 사용.
+            {
+              groupTitle: "KINTEX Exhibition",
+              description:
+                "킨텍스 전시 현장용 백월 그래픽으로, 서비스 핵심 메시지와 비주얼 아이덴티티를 전달하도록 디자인했습니다.",
+              layout: "grid-3",
+              screens: [
+                "/images/project-03-backwall-01.jpg",
+                "/images/project-03-backwall-02.jpg",
+                "/images/project-03-backwall-03.jpg",
+              ],
+              captions: [
+                "01 LEFT BACKWALL",
+                "02 FRONT BACKWALL",
+                "03 RIGHT BACKWALL",
+              ],
+            },
+            // B-2. CES Backwall & Table Design — 신규 추가. 미국 CES 참가
+            // 당시 사용한 백월(세로형 배너, 941×1672 원본)과 테이블 디자인
+            // (정방형, 758×761 원본)을 한 그룹으로 묶어 2열에 나란히 배치.
+            // 두 이미지 모두 원본 내용·텍스트·색상 변경 없이 긴 변 2000px로만
+            // 리사이즈(JPEG, 다른 project-03 이미지와 동일한 처리 방식).
+            // 세로형/정방형 비율이 섞여 있어 카드 높이가 서로 다르지만,
+            // 비율을 유지하는 쪽을 우선해 억지로 맞추지 않음(case__screen--auto).
+            {
+              groupTitle: "CES Backwall & Table Design",
+              description:
+                "미국 CES 참가 당시 사용한 백월 및 부스 테이블 그래픽 디자인입니다.",
+              layout: "grid-2",
+              screens: [
+                "/images/project-03-ces-backwall.jpg",
+                "/images/project-03-ces-table.jpg",
+              ],
+              titles: ["01. CES Backwall Design", "02. CES Table Design"],
+              captions: [
+                "CES 참가용 백월 디자인으로, 글로벌 전시 환경에 맞춰 핵심 메시지와 시각 요소를 구성했습니다.",
+                "부스 테이블 그래픽 디자인으로, 전시 현장에서 브랜드 노출과 메시지 전달을 강화했습니다.",
+              ],
+            },
+            // B-3. Exhibition Promotion Graphics — 기존 GROUP 02(일잘러페스타
+            // 2025 / G-FAIR 2025) 그대로 유지, 위치만 이 그룹의 세 번째
+            // subgroup으로 이동. 파일·캡션·titles 변경 없음.
+            {
+              groupTitle: "Exhibition Promotion Graphics",
+              layout: "grid-2",
+              screens: [
+                "/images/project-03-exhibition-promo-01.jpg",
+                "/images/project-03-exhibition-promo-02.jpg",
+              ],
+              titles: ["01. 일잘러페스타 2025", "02. G-FAIR 2025"],
+              captions: [
+                "일잘러페스타 2025 전시 홍보용 백월 그래픽 디자인. 핵심 메시지와 프로모션 혜택을 대형 타이포그래피 및 강한 컬러 대비로 표현했습니다.",
+                "G-FAIR 2025 전시 홍보용 백월 디자인. 서비스 혜택과 브랜드 메시지를 직관적으로 전달할 수 있도록 구성했습니다.",
+              ],
+            },
+          ],
+        },
+      ],
+    },
     // Real in-app UI screenshots, separate from the print materials above.
     // Personal phone numbers visible in the source screenshots (sender +
     // recipient) were redacted before saving these — see public/images.
