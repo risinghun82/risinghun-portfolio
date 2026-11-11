@@ -641,6 +641,27 @@ export const projects = [
       ],
       publishing: ["HTML/CSS 반응형 퍼블리싱"],
     },
+    // sectionOrder — Ppasak Guys 전용. 기존 순서(Overview → Challenge → My
+    // Role → Approach & Solution → Design → Publishing → Result)는 Web
+    // Design(Key UI Screens) 다음에 이커머스/프로모션 콘텐츠가 오고, 그 다음에야
+    // Publishing이 맨 아래에 등장해 "웹 디자인 → 이커머스 → 다시 웹
+    // 퍼블리싱"으로 흐름이 어색했습니다. Overview/My Role을 한 섹션으로,
+    // Challenge/Approach & Solution을 한 섹션으로 합치고, Web Design(Key UI
+    // Screens) 바로 다음에 Publishing을 배치해 "웹사이트를 만드는 과정"이
+    // 하나의 흐름으로 읽히도록, 그리고 이커머스 상세페이지와 오프라인
+    // 프로모션물을 별도 섹션으로 분리해 05 E-commerce Design → 06 Promotion
+    // Design → 07 Result 순으로 재배치합니다. 각 섹션의 실제 내용/이미지는
+    // 전혀 바꾸지 않았고, 순서와 일부 레이아웃만 다릅니다. 다른 프로젝트는 이
+    // 필드가 없으므로 영향받지 않습니다.
+    sectionOrder: [
+      "overviewRole",
+      "webDesign",
+      "publishing",
+      "challengeSolution",
+      "ecommerceDesign",
+      "promotionDesign",
+      "result",
+    ],
     // Key UI Screens(B2B 랜딩페이지 본문)이 핵심 사례로 먼저 읽히도록 캡션 추가
     // — 아래 direction 배열에 이미 있는 실제 작업 내용을 그대로 가져와 연결.
     screenCaptions: [
@@ -711,6 +732,11 @@ export const projects = [
       "/images/project-04-responsive-01.jpg",
       "/images/project-04-responsive-02.jpg",
     ],
+    // 두 이미지는 실제로는 "PC"가 아니라 태블릿/모바일 목업 그래픽(이미지 안에도
+    // "TABLET EXPERIENCE" / "MOBILE EXPERIENCE" 라벨이 그대로 박혀 있음) — 캡션도
+    // 실제 콘텐츠에 맞게 Tablet/Mobile로 명확히 구분해 표기한다. (Publishing
+    // 섹션에서만 쓰이는 선택 필드: 다른 프로젝트는 설정하지 않으므로 영향 없음.)
+    responsiveCaptions: ["Tablet 반응형 화면", "Mobile 반응형 화면"],
     toolsUsed: ["Figma", "Photoshop", "HTML/CSS", "반응형 퍼블리싱"],
     result:
       "정량 효과를 페이지 상단부로 끌어올린 이후, 스크롤 없이도 핵심 메시지가 전달된다는 내부 피드백을 받았습니다. B2B 랜딩페이지일수록 감성보다 숫자가 먼저 설득한다는 것을 확인한 프로젝트입니다.",
