@@ -657,6 +657,43 @@ own instead of folded into one flat list. */
   margin-top: 0;
 }
 
+/* Ppasak Guys-only (Round 4, renderOverviewRole): Overview and My Role now
+flow as one continuous 2-column grid instead of two stacked grids (see
+case__overview-grid usage in ProjectDetail.jsx), so these two modifiers
+only ever apply there — the base .case__role-groups/.case__role-group
+rules above stay completely untouched for every other project's separate
+My Role section. case__overview-role-intro gives the left column's "My
+Role" sub-block the same border-top divider rhythm the facts list already
+uses on the right, and case__role-groups--merged gives the PLANNING/
+DESIGN/PUBLISHING groups that same divider instead of only a gap, so both
+columns share one consistent list/divider language top to bottom. */
+.case__overview-role-intro {
+  margin-top: 1.8rem;
+  padding-top: 1.4rem;
+  border-top: 1px solid rgba(23, 23, 23, 0.14);
+}
+
+.case__overview-role-intro .case__challenge-subtitle {
+  margin-bottom: 0.8rem;
+}
+
+.case__role-groups--merged {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+  margin-top: 1.8rem;
+}
+
+.case__role-groups--merged .case__role-group {
+  padding-top: 1.1rem;
+  border-top: 1px solid rgba(23, 23, 23, 0.14);
+}
+
+.case__role-groups--merged .case__role-group:first-child {
+  padding-top: 0;
+  border-top: none;
+}
+
 /* 05. Design — Color & Typography / screens grouped as sub-blocks of one
 numbered section instead of three separate top-level ones. */
 .case__design-block {
@@ -791,13 +828,46 @@ would ever apply. */
   max-width: 360px;
 }
 
-/* The bounded preview box itself (renderEcommercePreviewFigure) — crops
-the long portrait source to a fixed 4:5 window via object-fit:cover,
-anchored to the top (object-position: top) so the headline/opening panel
-stays visible as the "teaser". The <img src> is never altered; clicking
-(via the existing Zoomable/Lightbox) still opens the exact original file
-at full size, so nothing about the source image is deleted or modified —
-only its on-page preview size is capped. */
+/* Round 4 rebuild: the two E-commerce Design work samples (01 Product
+Detail, 02 Storytelling) now render as two same-width cards inside ONE
+case__screens--pair grid (see renderEcommerceCard/renderEcommerceDesign in
+ProjectDetail.jsx) instead of each sitting alone in its own
+case__screens--tall block capped at max-width:360px — that left a large
+empty gap on wide viewports and made the two samples look small and
+disconnected. align-items:start keeps both cards' top edges flush even
+though their captions differ in length. */
+.case__screens--ecommerce {
+  align-items: start;
+}
+
+.case__ecommerce-card {
+  display: flex;
+  flex-direction: column;
+}
+
+/* <figure> carries a UA default margin (1em 40px) that nothing on this
+page resets globally (a pre-existing, sitewide quirk — see the "portfolio
+image polish" notes further down); inside a full-width single-column
+screens grid that ~80px is barely noticeable, but inside these new
+same-width paired cards it was quietly eating into the exact "표시 크기"
+this round is meant to maximize. Reset only inside .case__ecommerce-card
+so every other section's case__screen-figure (Web Design, Publishing,
+Promotion Design, every other project) keeps its current, unchanged
+sizing. */
+.case__ecommerce-card .case__screen-figure {
+  margin: 0;
+}
+
+/* The bounded preview box itself (renderEcommerceCard) — crops the long
+portrait source to a fixed window via object-fit:cover, anchored to the
+top (object-position: top) so the headline/opening panel stays visible as
+the "teaser". Taller + full card width than the Round 3 version (was
+max-width:360px/4:5 — now fills the paired card's full column width at a
+3:4 ratio, roughly doubling the on-page image size on a typical 1440px
+layout). The <img src> is never altered; clicking (via the existing
+Zoomable/Lightbox) still opens the exact original file at full size, so
+nothing about the source image is deleted or modified — only its on-page
+preview size is capped. */
 .case__ecommerce-preview-figure {
   position: relative;
   overflow: hidden;
@@ -814,27 +884,41 @@ only its on-page preview size is capped. */
   display: block;
   width: 100%;
   height: 100%;
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 3 / 4;
   object-fit: cover;
   object-position: top center;
   border: 1px solid rgba(23, 23, 23, 0.1);
   border-radius: 8px;
 }
 
-/* Small "전체 이미지 보기" pill overlaid on the preview, so it's visually
-obvious the card is a cropped teaser and clicking opens the full original
-— not just discoverable via the generic zoom-in cursor. */
-.case__ecommerce-preview-badge {
+/* Bottom gradient + "전체 이미지 보기" label (replaces the Round 3 floating
+corner pill) — reads as part of the image's own "there's more below" cue
+rather than a chip stuck on top of it, and gives the crop line a soft edge
+instead of a hard cut. */
+.case__ecommerce-preview-fade {
   position: absolute;
-  right: 14px;
-  bottom: 14px;
-  padding: 0.45rem 0.9rem;
-  border-radius: 999px;
-  background: rgba(23, 23, 23, 0.72);
-  color: #fff;
-  font-size: var(--fs-xs);
-  letter-spacing: 0.02em;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 96px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 16px;
+  background: linear-gradient(
+    to bottom,
+    rgba(23, 23, 23, 0) 0%,
+    rgba(23, 23, 23, 0.6) 100%
+  );
+  border-radius: 0 0 8px 8px;
   pointer-events: none;
+}
+
+.case__ecommerce-preview-badge {
+  color: #fff;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  letter-spacing: 0.02em;
 }
 
 /* Gimesee-only (project.screensLayout === "gallery"): Marketing Design's
@@ -1069,6 +1153,21 @@ each get their own clearly labeled space. */
   margin-top: 0.6rem;
 }
 
+/* Ppasak Guys-only (Round 4): Result is the page's last, text-only section
+right after several large image sections, so its "MY CONTRIBUTION" figure
+was easy to read as an afterthought. Giving just this already-distinct
+meta line a bit more color/weight (same small size — body copy itself is
+untouched) separates "무엇을 만들었는가"(Result, plain body text) from "내가
+어디까지 기여했는가"(contribution %, now visually anchored) without adding
+any new content. Scoped via [data-case] so every other project's Result
+section (same shared class) is unaffected. */
+[data-case="ppasak-guys"] .case__contribution--result {
+  margin-top: 0.9rem;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--project-accent, var(--accent));
+}
+
 /* Project-to-project navigation — Back to Portfolio on the left, Previous/
 Next grouped together on the right, all three built from one shared pill
 style so they read as one consistent control instead of three differently
@@ -1194,6 +1293,57 @@ viewport portal (see Lightbox in ProjectDetail.jsx). */
   border-radius: 6px;
   box-shadow: 0 24px 64px rgba(0, 0, 0, 0.4);
   cursor: default;
+}
+
+/* Tall-image handling (Round 4, see Lightbox in ProjectDetail.jsx) —
+`display: contents` by default so this wrapper is invisible to layout and
+every existing project's Lightbox usage (a normal-ratio screenshot) keeps
+the exact original "contain inside the viewport" sizing above, completely
+unchanged. Only once JS detects a tall image (height > 1.3x width, e.g.
+the 678×2576 storytelling comic) does the --tall modifier switch this to
+a fixed-width, vertically scrollable frame so the image renders at a
+legible width instead of being squeezed down to fit the viewport height. */
+.case__lightbox-frame {
+  display: contents;
+}
+
+.case__lightbox-frame--tall {
+  display: block;
+  width: min(92vw, 640px);
+  max-height: 88vh;
+  overflow-y: auto;
+  border-radius: 6px;
+  cursor: zoom-in;
+  -webkit-overflow-scrolling: touch;
+}
+
+.case__lightbox-frame--tall .case__lightbox-image {
+  display: block;
+  width: 100%;
+  max-width: none;
+  max-height: none;
+  height: auto;
+  box-shadow: none;
+}
+
+/* Click-to-zoom-in toggle (tall images only) — widens the frame so fine
+detail (comic speech-bubble text) is easier to read, still scrollable. */
+.case__lightbox-frame--zoomed {
+  width: min(96vw, 980px);
+  cursor: zoom-out;
+}
+
+.case__lightbox-hint {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(0.75rem, 2.5vw, 1.5rem);
+  transform: translateX(-50%);
+  margin: 0;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  pointer-events: none;
 }
 
 .case__lightbox-close {

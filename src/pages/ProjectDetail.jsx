@@ -11,8 +11,23 @@ import "./ProjectDetail.css";
  * a fixed overlay, matching the rest of this file's existing pattern (see
  * the floating back button below). Click the backdrop, press Escape, or
  * click the close control to dismiss.
+ *
+ * Tall-image handling (Round 4): the default max-width/max-height:100%
+ * image fit works fine for normal screenshots, but a very long portrait
+ * source (e.g. the 678×2576 storytelling comic) gets squeezed down to fit
+ * the viewport HEIGHT, which makes it render far too narrow to read —
+ * exactly the "Lightbox가 긴 세로 이미지를 정상적으로 표시하지 못하는" case. Once
+ * the image loads, its natural aspect ratio decides the mode: a tall image
+ * (height > 1.3x width) switches to a fixed-width, vertically scrollable
+ * frame instead (so it renders at a legible width and the rest is reached
+ * by scrolling), with a click-to-zoom-in/out toggle for extra legibility.
+ * A normal-ratio image keeps the original contain-in-viewport behavior,
+ * unchanged.
  */
 function Lightbox({ src, alt, onClose }) {
+  const [tall, setTall] = useState(false);
+  const [zoomed, setZoomed] = useState(false);
+
   useEffect(() => {
     const onKey = (e) => {
       if (e.key === "Escape") onClose();
@@ -20,6 +35,22 @@ function Lightbox({ src, alt, onClose }) {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [onClose]);
+
+  const handleImageLoad = (e) => {
+    const img = e.currentTarget;
+    // Threshold is deliberately high (2.0, i.e. more than twice as tall as
+    // wide). Every existing screenshot/mockup sitewide — including this
+    // project's own tablet/mobile Publishing shots and flyers (ratios up
+    // to ~1.8) — already renders at a legible width under the normal
+    // contain-in-viewport fit and must keep that exact behavior. Only the
+    // 678×2576 storytelling comic (ratio ~3.8) is actually too narrow under
+    // that fit; a lower threshold would also catch already-fine images
+    // (e.g. the 860×1527 product-detail shot, ratio ~1.78) and needlessly
+    // change their Lightbox behavior too.
+    if (img.naturalWidth && img.naturalHeight / img.naturalWidth > 2.0) {
+      setTall(true);
+    }
+  };
 
   return createPortal(
     <div
@@ -37,12 +68,30 @@ function Lightbox({ src, alt, onClose }) {
       >
         ×
       </button>
-      <img
-        className="case__lightbox-image"
-        src={src}
-        alt={alt}
-        onClick={(e) => e.stopPropagation()}
-      />
+      <div
+        className={
+          "case__lightbox-frame" +
+          (tall ? " case__lightbox-frame--tall" : "") +
+          (tall && zoomed ? " case__lightbox-frame--zoomed" : "")
+        }
+        onClick={(e) => {
+          e.stopPropagation();
+          if (tall) setZoomed((z) => !z);
+        }}
+      >
+        <img
+          className="case__lightbox-image"
+          src={src}
+          alt={alt}
+          onLoad={handleImageLoad}
+        />
+      </div>
+      {tall && (
+        <p className="case__lightbox-hint" aria-hidden="true">
+          {zoomed ? "클릭하면 축소됩니다" : "클릭하면 확대됩니다"} · 스크롤하여
+          전체 보기
+        </p>
+      )}
     </div>,
     document.body,
   );
@@ -950,6 +999,14 @@ export default function ProjectDetail() {
       className="case__section"
       aria-labelledby="overview-title"
     >
+      {/* Round 4: Overview + My Role now flow as ONE continuous 2-column
+      grid instead of two separately-stacked grids. Previously the left
+      column ended after a single short description/scope line while the
+      right column kept going (facts + role groups), leaving a large block
+      of empty space under the left column. Folding My Role's intro
+      directly under the description (left) and the role groups directly
+      under the facts list (right) removes that dead space and keeps both
+      columns starting at the same top row. */}
       <div className="case__overview-grid">
         <div>
           <h2 id="overview-title" className="case__section-title">
@@ -957,41 +1014,41 @@ export default function ProjectDetail() {
             Role
           </h2>
           <p className="case__overview-desc">{project.overview.description}</p>
-        </div>
-        <dl className="case__overview-facts">
-          <div>
-            <dt>Client</dt>
-            <dd>{project.overview.client}</dd>
-          </div>
-          <div>
-            <dt>Year / Period</dt>
-            <dd>{project.overview.duration}</dd>
-          </div>
-          <div>
-            <dt>Role</dt>
-            <dd>{project.role}</dd>
-          </div>
-          <div>
-            <dt>Tools</dt>
-            <dd>{project.toolsUsed.join(" · ")}</dd>
-          </div>
-          {project.contribution && (
-            <div>
-              <dt>Contribution</dt>
-              <dd>{project.contribution}</dd>
-            </div>
-          )}
-        </dl>
-      </div>
 
-      <div className="case__design-block">
-        <h3 className="case__design-subtitle">My Role</h3>
-        <div className="case__role-block">
-          <div className="case__role-col">
+          <div className="case__overview-role-intro">
+            <h3 className="case__challenge-subtitle">My Role</h3>
             <p className="case__role-scope">{project.overview.scope}</p>
           </div>
+        </div>
+
+        <div>
+          <dl className="case__overview-facts">
+            <div>
+              <dt>Client</dt>
+              <dd>{project.overview.client}</dd>
+            </div>
+            <div>
+              <dt>Year / Period</dt>
+              <dd>{project.overview.duration}</dd>
+            </div>
+            <div>
+              <dt>Role</dt>
+              <dd>{project.role}</dd>
+            </div>
+            <div>
+              <dt>Tools</dt>
+              <dd>{project.toolsUsed.join(" · ")}</dd>
+            </div>
+            {project.contribution && (
+              <div>
+                <dt>Contribution</dt>
+                <dd>{project.contribution}</dd>
+              </div>
+            )}
+          </dl>
+
           {project.roleBreakdown ? (
-            <div className="case__role-groups">
+            <div className="case__role-groups case__role-groups--merged">
               {[
                 ["PLANNING", project.roleBreakdown.planning],
                 ["DESIGN", project.roleBreakdown.design],
@@ -1011,11 +1068,13 @@ export default function ProjectDetail() {
               )}
             </div>
           ) : (
-            <ul className="case__statement-list case__responsibilities">
-              {project.responsibilities.map((line) => (
-                <li key={line}>{line}</li>
-              ))}
-            </ul>
+            <div className="case__role-groups--merged">
+              <ul className="case__statement-list case__responsibilities">
+                {project.responsibilities.map((line) => (
+                  <li key={line}>{line}</li>
+                ))}
+              </ul>
+            </div>
           )}
         </div>
       </div>
@@ -1195,51 +1254,66 @@ export default function ProjectDetail() {
     </Reveal>
   );
 
-  // E-commerce Design preview-card figure — same title/caption figure
-  // shape as renderMarketingFigure, but the image sits inside a bounded,
-  // object-fit:cover preview box (.case__ecommerce-preview-figure) instead
-  // of rendering at its full natural height. These two source images
-  // (상품 상세페이지, 스토리텔링 만화) are very long portrait scans; showing them
-  // at full height would make this section far longer than any other on
-  // the page. The <img>'s src is completely unchanged — only its on-page
-  // preview box is capped. Clicking still opens the exact original file at
-  // full size via the existing Lightbox, so the source image itself is
-  // never deleted or modified.
-  const renderEcommercePreviewFigure = (src, i, captions, titles) => {
-    const title = titles?.[i];
-    const caption = captions?.[i];
-    const alt = caption || title || `${project.title} 이커머스 디자인 ${i + 1}`;
+  // E-commerce Design preview card — Round 4 rebuild. Previously each group
+  // (01 Product Detail, 02 Storytelling) sat in its own full-width
+  // case__design-block, each rendering a single narrow (max-width:360px),
+  // left-aligned card — leaving a large empty gap to the right on every
+  // viewport and making the two work samples read as small/disconnected.
+  // Now both groups render as two same-width cards inside ONE
+  // case__screens--pair grid (full card width, no max-width cap), so they
+  // read as one paired design group with a shared top edge and width. The
+  // group label lives inside the card now (there's no longer a shared
+  // h3 above a single-image grid). The source <img> itself is completely
+  // unchanged — only its on-page preview box is capped (object-fit:cover,
+  // bottom gradient instead of a floating badge so the "more below" cue
+  // reads as part of the image, not an overlay chip) — clicking still opens
+  // the exact original file via the existing Lightbox.
+  const renderEcommerceCard = (group) => {
+    const src = group.screens[0];
+    const title = group.titles?.[0];
+    const caption = group.captions?.[0];
+    const alt = caption || title || `${project.title} 이커머스 디자인`;
+    const heading = group.groupLabel
+      ? `${group.groupLabel}. ${group.groupTitle}`
+      : group.groupTitle;
     return (
-      <figure key={src} className="case__screen-figure">
-        <div className="case__ecommerce-preview-figure">
-          <Zoomable onOpen={() => openLightbox(src, alt)} label={alt}>
-            <img
-              className="case__ecommerce-preview-img"
-              src={src}
-              alt={alt}
-              loading="lazy"
-            />
-          </Zoomable>
-          <span className="case__ecommerce-preview-badge" aria-hidden="true">
-            전체 이미지 보기
-          </span>
-        </div>
-        {(title || caption) && (
-          <figcaption className="case__screen-caption">
-            {title && (
-              <strong className="case__screen-caption-title">{title}</strong>
-            )}
-            {caption}
-          </figcaption>
+      <div key={group.id} className="case__ecommerce-card">
+        <h3 className="case__design-subtitle">{heading}</h3>
+        {group.description && (
+          <p className="case__screens-desc">{group.description}</p>
         )}
-      </figure>
+        <figure className="case__screen-figure">
+          <div className="case__ecommerce-preview-figure">
+            <Zoomable onOpen={() => openLightbox(src, alt)} label={alt}>
+              <img
+                className="case__ecommerce-preview-img"
+                src={src}
+                alt={alt}
+                loading="lazy"
+              />
+            </Zoomable>
+            <div className="case__ecommerce-preview-fade" aria-hidden="true">
+              <span className="case__ecommerce-preview-badge">
+                전체 이미지 보기 ↗
+              </span>
+            </div>
+          </div>
+          {(title || caption) && (
+            <figcaption className="case__screen-caption">
+              {title && (
+                <strong className="case__screen-caption-title">{title}</strong>
+              )}
+              {caption}
+            </figcaption>
+          )}
+        </figure>
+      </div>
     );
   };
 
   // 05. E-commerce Design — the "tall" groups from ecommerceSection (01
-  // Product Detail, 02 Storytelling Promotion) as their own top-level
-  // section, using the preview-card treatment above instead of the old
-  // full-height case__screens--tall gallery.
+  // Product Detail, 02 Storytelling Promotion) as same-width paired cards
+  // (see renderEcommerceCard above).
   const renderEcommerceDesign = () => {
     const tallGroups =
       project.ecommerceSection?.groups.filter((g) => g.kind === "tall") || [];
@@ -1258,28 +1332,9 @@ export default function ProjectDetail() {
             {project.ecommerceSection.description}
           </p>
         )}
-        {tallGroups.map((group) => (
-          <div key={group.id} className="case__design-block">
-            <h3 className="case__design-subtitle">
-              {group.groupLabel
-                ? `${group.groupLabel}. ${group.groupTitle}`
-                : group.groupTitle}
-            </h3>
-            {group.description && (
-              <p className="case__screens-desc">{group.description}</p>
-            )}
-            <div className="case__screens case__screens--tall">
-              {group.screens.map((src, i) =>
-                renderEcommercePreviewFigure(
-                  src,
-                  i,
-                  group.captions,
-                  group.titles,
-                ),
-              )}
-            </div>
-          </div>
-        ))}
+        <div className="case__screens case__screens--pair case__screens--ecommerce">
+          {tallGroups.map((group) => renderEcommerceCard(group))}
+        </div>
       </Reveal>
     );
   };
