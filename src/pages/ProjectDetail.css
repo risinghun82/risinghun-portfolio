@@ -771,6 +771,31 @@ portrait image doesn't run the full width of the page at full height. */
   }
 }
 
+/* E-commerce & Marketing Design groups 01/02 (project.ecommerceSection,
+Ppasak Guys-only) — a single tall seroform (portrait) source image, e.g.
+the 860×1527 오픈마켓 상품 상세페이지와 678×2576 세로 스크롤 만화 홍보물. Neither
+is a UI screenshot, so forcing either into the fixed-ratio/grid-column
+boxes above would either crop them (case__screen, 16:9) or stretch them
+edge-to-edge at full section width (case__screens--pair's 1-col mobile
+fallback, or plain .case__screens) — both wrong for a document-style
+image meant to be read top-to-bottom at roughly its own resolution.
+Centers the figure at a width that neither upscales past the source's own
+pixel width (860px / 678px) nor crops/distorts it — case__screen--auto
+(height:auto) on the <img> itself still does the actual ratio-preservation,
+same mechanism as every other "auto" gallery on this page; this class only
+constrains and centers the column it sits in. No media query needed: on
+mobile the figure's 100% width already resolves to the (narrower) page
+container before this max-width would ever apply. */
+.case__screens--tall {
+  grid-template-columns: 1fr;
+  justify-items: center;
+}
+
+.case__screens--tall .case__screen-figure {
+  width: 100%;
+  max-width: 600px;
+}
+
 /* Gimesee-only (project.screensLayout === "gallery"): Marketing Design's
 3 vertically-stacked large images become a PC 2-column gallery per this
 round's spec, gap 24-32px (tighter than the default 36-48px so this

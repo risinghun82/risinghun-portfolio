@@ -699,7 +699,57 @@ export default function ProjectDetail() {
         </div>
       )}
 
-      {project.flyerScreens && (
+      {/* E-commerce & Marketing Design (project.ecommerceSection,
+      Ppasak Guys-only). Same group-list shape/rendering pattern as
+      project.marketingSection above (groupLabel/groupTitle header via
+      .case__marketing-group, figures via the shared renderMarketingFigure
+      helper) so this doesn't introduce a parallel markup path: only the
+      "tall" kind is new (single seroform 원본 이미지, 센터 정렬 + 비율 유지,
+      .case__screens--tall — see ProjectDetail.css), "pair" reuses the exact
+      2열/1열 그리드 the old standalone flyerScreens block used. */}
+      {project.ecommerceSection && (
+        <div className="case__design-block">
+          <h3 className="case__design-subtitle">
+            {project.ecommerceSection.title}
+          </h3>
+          {project.ecommerceSection.description && (
+            <p className="case__screens-desc">
+              {project.ecommerceSection.description}
+            </p>
+          )}
+          {project.ecommerceSection.groups.map((group) => (
+            <div key={group.id} className="case__marketing-group">
+              <h4 className="case__marketing-group-title">
+                {group.groupLabel
+                  ? `${group.groupLabel}. ${group.groupTitle}`
+                  : group.groupTitle}
+              </h4>
+              {group.description && (
+                <p className="case__screens-desc">{group.description}</p>
+              )}
+              <div
+                className={
+                  "case__screens" +
+                  (group.kind === "tall"
+                    ? " case__screens--tall"
+                    : " case__screens--pair")
+                }
+              >
+                {group.screens.map((src, i) =>
+                  renderMarketingFigure(src, i, group.captions, group.titles),
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Print & Flyer Design — legacy standalone block, kept for any other
+      project that might set flyerScreens directly (Ppasak Guys itself no
+      longer does: its flyer images now live inside project.ecommerceSection
+      group 03 above instead), same gating precedent as exhibitionGroups
+      above. */}
+      {!project.ecommerceSection && project.flyerScreens && (
         <div className="case__design-block">
           <h3 className="case__design-subtitle">
             {project.flyerScreensTitle || "Print & Flyer Design"}
