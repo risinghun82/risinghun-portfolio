@@ -771,29 +771,70 @@ portrait image doesn't run the full width of the page at full height. */
   }
 }
 
-/* E-commerce & Marketing Design groups 01/02 (project.ecommerceSection,
-Ppasak Guys-only) — a single tall seroform (portrait) source image, e.g.
-the 860×1527 오픈마켓 상품 상세페이지와 678×2576 세로 스크롤 만화 홍보물. Neither
-is a UI screenshot, so forcing either into the fixed-ratio/grid-column
-boxes above would either crop them (case__screen, 16:9) or stretch them
-edge-to-edge at full section width (case__screens--pair's 1-col mobile
-fallback, or plain .case__screens) — both wrong for a document-style
-image meant to be read top-to-bottom at roughly its own resolution.
-Centers the figure at a width that neither upscales past the source's own
-pixel width (860px / 678px) nor crops/distorts it — case__screen--auto
-(height:auto) on the <img> itself still does the actual ratio-preservation,
-same mechanism as every other "auto" gallery on this page; this class only
-constrains and centers the column it sits in. No media query needed: on
-mobile the figure's 100% width already resolves to the (narrower) page
-container before this max-width would ever apply. */
+/* E-commerce Design groups 01/02 (project.ecommerceSection, Ppasak
+Guys-only, rendered by renderEcommerceDesign) — a single tall seroform
+(portrait) source image, e.g. the 860×1527 오픈마켓 상품 상세페이지와 678×2576
+세로 스크롤 만화 홍보물. Round 3: these are now shown as a bounded preview
+card (.case__ecommerce-preview-figure below) rather than at full natural
+height, so this class only needs to keep that card left-aligned and capped
+at a sensible preview width instead of stretching edge-to-edge at full
+section width. No media query needed: on mobile the figure's 100% width
+already resolves to the (narrower) page container before this max-width
+would ever apply. */
 .case__screens--tall {
   grid-template-columns: 1fr;
-  justify-items: center;
+  justify-items: start;
 }
 
 .case__screens--tall .case__screen-figure {
   width: 100%;
-  max-width: 600px;
+  max-width: 360px;
+}
+
+/* The bounded preview box itself (renderEcommercePreviewFigure) — crops
+the long portrait source to a fixed 4:5 window via object-fit:cover,
+anchored to the top (object-position: top) so the headline/opening panel
+stays visible as the "teaser". The <img src> is never altered; clicking
+(via the existing Zoomable/Lightbox) still opens the exact original file
+at full size, so nothing about the source image is deleted or modified —
+only its on-page preview size is capped. */
+.case__ecommerce-preview-figure {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.case__ecommerce-preview-figure .case__zoomable {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.case__ecommerce-preview-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  object-position: top center;
+  border: 1px solid rgba(23, 23, 23, 0.1);
+  border-radius: 8px;
+}
+
+/* Small "전체 이미지 보기" pill overlaid on the preview, so it's visually
+obvious the card is a cropped teaser and clicking opens the full original
+— not just discoverable via the generic zoom-in cursor. */
+.case__ecommerce-preview-badge {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  background: rgba(23, 23, 23, 0.72);
+  color: #fff;
+  font-size: var(--fs-xs);
+  letter-spacing: 0.02em;
+  pointer-events: none;
 }
 
 /* Gimesee-only (project.screensLayout === "gallery"): Marketing Design's
@@ -961,6 +1002,16 @@ instead, showing the whole screenshot uncropped. */
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: clamp(36px, 3vw, 48px);
+}
+
+/* Ppasak Guys-only (Round 3): Publishing now shows explicit Tablet/Mobile
+captions below each image (project.responsiveCaptions, see
+ProjectDetail.jsx), so the two cards top-align instead of stretching to
+match each other's height — scoped via [data-case] (same pattern as the
+Gimesee-only rules further down) so no other project's Publishing grid is
+affected. */
+[data-case="ppasak-guys"] .case__responsive {
+  align-items: start;
 }
 
 .case__responsive-item {

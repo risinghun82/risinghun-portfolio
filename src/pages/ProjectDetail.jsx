@@ -842,19 +842,43 @@ export default function ProjectDetail() {
                 );
               }
               const alt = `${project.title} ${i === 0 ? "태블릿" : "모바일"} 화면`;
+              // Explicit per-item caption (project.responsiveCaptions —
+              // Ppasak Guys-only so far): wrap in the shared
+              // case__screen-figure/case__screen-caption pair so "Tablet"
+              // vs "Mobile" is visibly labeled, not just in the alt text.
+              // Every other project has no responsiveCaptions and keeps
+              // the exact bare-image markup as before.
+              const label = project.responsiveCaptions?.[i];
+              if (!label) {
+                return (
+                  <Zoomable
+                    key={src}
+                    onOpen={() => openLightbox(src, alt)}
+                    label={alt}
+                  >
+                    <img
+                      className="case__responsive-item case__responsive-item--real"
+                      src={src}
+                      alt={alt}
+                      loading="lazy"
+                    />
+                  </Zoomable>
+                );
+              }
               return (
-                <Zoomable
-                  key={src}
-                  onOpen={() => openLightbox(src, alt)}
-                  label={alt}
-                >
-                  <img
-                    className="case__responsive-item case__responsive-item--real"
-                    src={src}
-                    alt={alt}
-                    loading="lazy"
-                  />
-                </Zoomable>
+                <figure key={src} className="case__screen-figure">
+                  <Zoomable onOpen={() => openLightbox(src, alt)} label={alt}>
+                    <img
+                      className="case__responsive-item case__responsive-item--real"
+                      src={src}
+                      alt={alt}
+                      loading="lazy"
+                    />
+                  </Zoomable>
+                  <figcaption className="case__screen-caption">
+                    {label}
+                  </figcaption>
+                </figure>
               );
             })}
           </div>
@@ -905,6 +929,390 @@ export default function ProjectDetail() {
     </Reveal>
   );
 
+  // --- Ppasak Guys-only sections (sectionOrder: see src/data/projects.js) ---
+  // Reordering/merging/splitting the narrative into Overview & My Role →
+  // Web Design → Publishing → Challenge & Solution → E-commerce Design →
+  // Promotion Design → Result, so "Web Design → Publishing" reads as one
+  // continuous "building the website" beat instead of Publishing sitting
+  // at the very bottom after the e-commerce/promo content. No other
+  // project sets this sectionOrder, so renderOverview/renderChallenge/
+  // renderRole/renderApproach/renderDesign above stay completely unused
+  // for Ppasak Guys but otherwise untouched for everyone else.
+
+  // 01. Overview & My Role — merges the original Overview (description +
+  // facts table) and My Role (scope + task breakdown) sections into one.
+  // Identical content to both originals; the only thing removed is the
+  // repeated contribution percentage, since it's already shown in the
+  // Overview facts table just above.
+  const renderOverviewRole = () => (
+    <Reveal
+      as="section"
+      className="case__section"
+      aria-labelledby="overview-title"
+    >
+      <div className="case__overview-grid">
+        <div>
+          <h2 id="overview-title" className="case__section-title">
+            <span className="case__section-num">{num()}</span> Overview &amp; My
+            Role
+          </h2>
+          <p className="case__overview-desc">{project.overview.description}</p>
+        </div>
+        <dl className="case__overview-facts">
+          <div>
+            <dt>Client</dt>
+            <dd>{project.overview.client}</dd>
+          </div>
+          <div>
+            <dt>Year / Period</dt>
+            <dd>{project.overview.duration}</dd>
+          </div>
+          <div>
+            <dt>Role</dt>
+            <dd>{project.role}</dd>
+          </div>
+          <div>
+            <dt>Tools</dt>
+            <dd>{project.toolsUsed.join(" · ")}</dd>
+          </div>
+          {project.contribution && (
+            <div>
+              <dt>Contribution</dt>
+              <dd>{project.contribution}</dd>
+            </div>
+          )}
+        </dl>
+      </div>
+
+      <div className="case__design-block">
+        <h3 className="case__design-subtitle">My Role</h3>
+        <div className="case__role-block">
+          <div className="case__role-col">
+            <p className="case__role-scope">{project.overview.scope}</p>
+          </div>
+          {project.roleBreakdown ? (
+            <div className="case__role-groups">
+              {[
+                ["PLANNING", project.roleBreakdown.planning],
+                ["DESIGN", project.roleBreakdown.design],
+                ["PUBLISHING", project.roleBreakdown.publishing],
+              ].map(
+                ([label, items]) =>
+                  items?.length > 0 && (
+                    <div key={label} className="case__role-group">
+                      <h4 className="case__challenge-subtitle">{label}</h4>
+                      <ul className="case__statement-list">
+                        {items.map((line) => (
+                          <li key={line}>{line}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  ),
+              )}
+            </div>
+          ) : (
+            <ul className="case__statement-list case__responsibilities">
+              {project.responsibilities.map((line) => (
+                <li key={line}>{line}</li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </div>
+    </Reveal>
+  );
+
+  // 02. Web Design — Color & Typography + Key UI Screens, pulled out of
+  // the shared Design section into their own top-level section so it can
+  // sit directly before Publishing. Markup is identical to the
+  // corresponding sub-blocks inside renderDesign (unchanged, still used by
+  // every other project) — only relocated, nothing redesigned.
+  const renderWebDesign = () => (
+    <Reveal
+      as="section"
+      className="case__section"
+      aria-labelledby="web-design-title"
+    >
+      <h2 id="web-design-title" className="case__section-title">
+        <span className="case__section-num">{num()}</span> Web Design
+      </h2>
+
+      <div className="case__design-block">
+        <h3 className="case__design-subtitle">Color &amp; Typography</h3>
+        <div className="case__palette">
+          {project.colorTypography.colors.map((c) => (
+            <span key={c} className="case__swatch" style={{ background: c }}>
+              {c}
+            </span>
+          ))}
+        </div>
+        <ul className="case__typefaces">
+          {project.colorTypography.typefaces.map((t) => (
+            <li key={t}>{t}</li>
+          ))}
+        </ul>
+      </div>
+
+      <div className="case__design-block">
+        <h3 className="case__design-subtitle">
+          {project.screensTitle || "Key UI Screens"}
+        </h3>
+        <div
+          className={
+            "case__screens" +
+            (project.screensLayout === "gallery"
+              ? " case__screens--marketing"
+              : "")
+          }
+        >
+          {project.screens.map((src, i) => {
+            if (!project.images?.screens?.[i]) {
+              return (
+                <div
+                  key={src}
+                  className="img-placeholder case__screen"
+                  style={{
+                    "--ph-a": project.accent,
+                    "--ph-b": "#24100B",
+                  }}
+                >
+                  <span>
+                    Screen 0{i + 1} 교체 영역 ({src})
+                  </span>
+                </div>
+              );
+            }
+            const alt =
+              project.screenCaptions?.[i] || `${project.title} 화면 ${i + 1}`;
+            return (
+              <figure key={src} className="case__screen-figure">
+                <Zoomable onOpen={() => openLightbox(src, alt)} label={alt}>
+                  <img
+                    className={
+                      "case__screen case__screen--real" +
+                      (project.screensAspect === "auto"
+                        ? " case__screen--auto"
+                        : "")
+                    }
+                    src={src}
+                    alt={alt}
+                    loading="lazy"
+                  />
+                </Zoomable>
+                {project.screenCaptions?.[i] && (
+                  <figcaption className="case__screen-caption">
+                    {project.screenCaptions[i]}
+                  </figcaption>
+                )}
+              </figure>
+            );
+          })}
+        </div>
+      </div>
+    </Reveal>
+  );
+
+  // 04. Challenge & Solution — merges Challenge (Problem/Requirement) and
+  // Approach & Solution into one section. Content identical to both
+  // originals; the Approach & Solution heading simply drops from a second
+  // h2 to an h3 sub-heading, removing the duplicate section-level wording.
+  const renderChallengeSolution = () => (
+    <Reveal
+      as="section"
+      className="case__section"
+      aria-labelledby="challenge-title"
+    >
+      <h2 id="challenge-title" className="case__section-title">
+        <span className="case__section-num">{num()}</span> {challengeTitle}{" "}
+        &amp; Solution
+      </h2>
+      <div className="case__challenge">
+        {project.personal ? (
+          <>
+            <div className="case__challenge-group">
+              <h3 className="case__challenge-subtitle">{backgroundLabel}</h3>
+              <ul className="case__statement-list">
+                {project.background.map((line) => (
+                  <li key={line}>{line}</li>
+                ))}
+              </ul>
+            </div>
+            <div className="case__challenge-group">
+              <h3 className="case__challenge-subtitle">{problemsLabel}</h3>
+              <ul className="case__statement-list case__statement-list--flagged">
+                {project.problems.map((line) => (
+                  <li key={line}>{line}</li>
+                ))}
+              </ul>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="case__challenge-group">
+              <h3 className="case__challenge-subtitle">{problemsLabel}</h3>
+              <ul className="case__statement-list case__statement-list--flagged">
+                {project.problems.map((line) => (
+                  <li key={line}>{line}</li>
+                ))}
+              </ul>
+            </div>
+            <div className="case__challenge-group">
+              <h3 className="case__challenge-subtitle">{backgroundLabel}</h3>
+              <ul className="case__statement-list">
+                {project.background.map((line) => (
+                  <li key={line}>{line}</li>
+                ))}
+              </ul>
+            </div>
+          </>
+        )}
+      </div>
+
+      <div className="case__design-block">
+        <h3 className="case__design-subtitle">Approach &amp; Solution</h3>
+        {project.approachBreakdown ? (
+          <div className="case__approach-grid">
+            {project.approachBreakdown.map((item, i) => (
+              <div key={i} className="case__approach-card">
+                <div className="case__approach-head">
+                  <span className="case__approach-num">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <h4 className="case__approach-subtitle">{item.title}</h4>
+                </div>
+                <p className="case__approach-desc">{item.description}</p>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <ul className="case__statement-list case__statement-list--cols">
+            {project.direction.map((line) => (
+              <li key={line}>{line}</li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </Reveal>
+  );
+
+  // E-commerce Design preview-card figure — same title/caption figure
+  // shape as renderMarketingFigure, but the image sits inside a bounded,
+  // object-fit:cover preview box (.case__ecommerce-preview-figure) instead
+  // of rendering at its full natural height. These two source images
+  // (상품 상세페이지, 스토리텔링 만화) are very long portrait scans; showing them
+  // at full height would make this section far longer than any other on
+  // the page. The <img>'s src is completely unchanged — only its on-page
+  // preview box is capped. Clicking still opens the exact original file at
+  // full size via the existing Lightbox, so the source image itself is
+  // never deleted or modified.
+  const renderEcommercePreviewFigure = (src, i, captions, titles) => {
+    const title = titles?.[i];
+    const caption = captions?.[i];
+    const alt = caption || title || `${project.title} 이커머스 디자인 ${i + 1}`;
+    return (
+      <figure key={src} className="case__screen-figure">
+        <div className="case__ecommerce-preview-figure">
+          <Zoomable onOpen={() => openLightbox(src, alt)} label={alt}>
+            <img
+              className="case__ecommerce-preview-img"
+              src={src}
+              alt={alt}
+              loading="lazy"
+            />
+          </Zoomable>
+          <span className="case__ecommerce-preview-badge" aria-hidden="true">
+            전체 이미지 보기
+          </span>
+        </div>
+        {(title || caption) && (
+          <figcaption className="case__screen-caption">
+            {title && (
+              <strong className="case__screen-caption-title">{title}</strong>
+            )}
+            {caption}
+          </figcaption>
+        )}
+      </figure>
+    );
+  };
+
+  // 05. E-commerce Design — the "tall" groups from ecommerceSection (01
+  // Product Detail, 02 Storytelling Promotion) as their own top-level
+  // section, using the preview-card treatment above instead of the old
+  // full-height case__screens--tall gallery.
+  const renderEcommerceDesign = () => {
+    const tallGroups =
+      project.ecommerceSection?.groups.filter((g) => g.kind === "tall") || [];
+    if (tallGroups.length === 0) return null;
+    return (
+      <Reveal
+        as="section"
+        className="case__section"
+        aria-labelledby="ecommerce-design-title"
+      >
+        <h2 id="ecommerce-design-title" className="case__section-title">
+          <span className="case__section-num">{num()}</span> E-commerce Design
+        </h2>
+        {project.ecommerceSection.description && (
+          <p className="case__screens-desc">
+            {project.ecommerceSection.description}
+          </p>
+        )}
+        {tallGroups.map((group) => (
+          <div key={group.id} className="case__design-block">
+            <h3 className="case__design-subtitle">
+              {group.groupLabel
+                ? `${group.groupLabel}. ${group.groupTitle}`
+                : group.groupTitle}
+            </h3>
+            {group.description && (
+              <p className="case__screens-desc">{group.description}</p>
+            )}
+            <div className="case__screens case__screens--tall">
+              {group.screens.map((src, i) =>
+                renderEcommercePreviewFigure(
+                  src,
+                  i,
+                  group.captions,
+                  group.titles,
+                ),
+              )}
+            </div>
+          </div>
+        ))}
+      </Reveal>
+    );
+  };
+
+  // 06. Promotion Design — the "pair" group from ecommerceSection (03
+  // Print & Promotional Graphics, the existing 2 offline flyers), unchanged
+  // full-ratio rendering via the shared renderMarketingFigure helper.
+  const renderPromotionDesign = () => {
+    const pairGroup = project.ecommerceSection?.groups.find(
+      (g) => g.kind === "pair",
+    );
+    if (!pairGroup) return null;
+    return (
+      <Reveal
+        as="section"
+        className="case__section"
+        aria-labelledby="promotion-design-title"
+      >
+        <h2 id="promotion-design-title" className="case__section-title">
+          <span className="case__section-num">{num()}</span> Promotion Design
+        </h2>
+        {pairGroup.description && (
+          <p className="case__screens-desc">{pairGroup.description}</p>
+        )}
+        <div className="case__screens case__screens--pair">
+          {pairGroup.screens.map((src, i) =>
+            renderMarketingFigure(src, i, pairGroup.captions, pairGroup.titles),
+          )}
+        </div>
+      </Reveal>
+    );
+  };
+
   const sectionRenderers = {
     overview: renderOverview,
     challenge: renderChallenge,
@@ -914,6 +1322,11 @@ export default function ProjectDetail() {
     design: renderDesign,
     publishing: renderPublishing,
     result: renderResult,
+    overviewRole: renderOverviewRole,
+    webDesign: renderWebDesign,
+    challengeSolution: renderChallengeSolution,
+    ecommerceDesign: renderEcommerceDesign,
+    promotionDesign: renderPromotionDesign,
   };
 
   return (
