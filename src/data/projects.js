@@ -651,18 +651,62 @@ export const projects = [
       "/images/project-04-screen-01.jpg",
       "/images/project-04-screen-02.jpg",
     ],
-    // Offline flyer designed alongside the landing page for the same
-    // campaign — shown as its own section under Key UI Screens rather than
-    // mixed into the on-screen UI shots.
-    flyerScreensTitle: "Print & Flyer Design",
-    flyerScreens: [
-      "/images/project-04-flyer-02.jpg",
-      "/images/project-04-flyer-01.jpg",
-    ],
-    flyerCaptions: [
-      "전단지 — 설치 안내 & 실제 설치 사례",
-      "전단지 — 서비스 소개 & 판매랭킹",
-    ],
+    // E-commerce & Marketing Design (project.ecommerceSection,
+    // Ppasak Guys-only) — was two separate things before: an unlabeled
+    // "Print & Flyer Design" block (flyerScreens/flyerCaptions, now folded
+    // into group 03 below with the same images/captions/order untouched)
+    // plus no e-commerce story at all. 빠삭한 녀석들 상품은 이 B2B 랜딩페이지
+    // 캠페인과 별개로 쿠팡/G마켓/옥션/네이버 스마트스토어 등 오픈마켓에도 실제
+    // 등록·판매되었고, 그 상세페이지·스토리텔링 홍보물 제작 경험을 같은
+    // 프로젝트 안에서 보여주기 위해 3개 그룹으로 재구성: 01 상품 상세페이지,
+    // 02 스토리텔링(만화) 홍보, 03 기존 오프라인 전단지. 01/02는 세로형 원본
+    // 이미지라 Key UI Screens와 같은 그리드 강제 대신 전용 "tall" 레이아웃
+    // (.case__screens--tall, 중앙 정렬 + 원본 비율 유지, ProjectDetail.css 참고)
+    // 을 쓰고, 03은 기존 flyerScreens/flyerCaptions와 동일한 2열/1열 pair
+    // 레이아웃을 그대로 재사용한다.
+    ecommerceSection: {
+      title: "E-commerce & Marketing Design",
+      description:
+        "이 랜딩페이지 캠페인과 함께, 쿠팡·G마켓·옥션·네이버 스마트스토어 등 오픈마켓에 빠삭한 녀석들 상품을 등록·운영하며 상품 상세페이지 디자인, 상품 이미지·콘텐츠 구성, 채널별 홍보 콘텐츠 제작까지 함께 진행했습니다.",
+      groups: [
+        {
+          id: "product-detail",
+          groupLabel: "01",
+          groupTitle: "Product Detail Design",
+          kind: "tall",
+          screens: ["/images/project-04-ecommerce-detail.jpg"],
+          titles: ["대용량 스낵 패키지 상품 상세페이지"],
+          captions: [
+            "컵라면, 건어물, 스낵으로 구성된 대용량 패키지 상품의 특징과 구성 정보를 시각적으로 전달하기 위해 제작한 상품 상세페이지입니다.",
+          ],
+        },
+        {
+          id: "storytelling",
+          groupLabel: "02",
+          groupTitle: "Storytelling Promotion",
+          kind: "tall",
+          screens: ["/images/project-04-ecommerce-cartoon.jpg"],
+          titles: ["스토리형 상품 홍보 콘텐츠"],
+          captions: [
+            "대용량 스낵 패키지를 소개하기 위해 만화 형식의 스토리텔링 콘텐츠를 제작했습니다. 사용 상황과 제품의 특징을 친근한 이야기로 전달하도록 구성했습니다.",
+          ],
+        },
+        {
+          id: "print-promo",
+          groupLabel: "03",
+          groupTitle: "Print & Promotional Graphics",
+          kind: "pair",
+          screens: [
+            "/images/project-04-flyer-02.jpg",
+            "/images/project-04-flyer-01.jpg",
+          ],
+          captions: [
+            "전단지 — 설치 안내 & 실제 설치 사례",
+            "전단지 — 서비스 소개 & 판매랭킹",
+          ],
+        },
+      ],
+    },
     responsive: [
       "/images/project-04-responsive-01.jpg",
       "/images/project-04-responsive-02.jpg",
