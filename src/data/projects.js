@@ -674,17 +674,19 @@ export const projects = [
     ],
     // E-commerce & Marketing Design (project.ecommerceSection,
     // Ppasak Guys-only) — was two separate things before: an unlabeled
-    // "Print & Flyer Design" block (flyerScreens/flyerCaptions, now folded
-    // into group 03 below with the same images/captions/order untouched)
-    // plus no e-commerce story at all. 빠삭한 녀석들 상품은 이 B2B 랜딩페이지
-    // 캠페인과 별개로 쿠팡/G마켓/옥션/네이버 스마트스토어 등 오픈마켓에도 실제
-    // 등록·판매되었고, 그 상세페이지·스토리텔링 홍보물 제작 경험을 같은
-    // 프로젝트 안에서 보여주기 위해 3개 그룹으로 재구성: 01 상품 상세페이지,
-    // 02 스토리텔링(만화) 홍보, 03 기존 오프라인 전단지. 01/02는 세로형 원본
-    // 이미지라 Key UI Screens와 같은 그리드 강제 대신 전용 "tall" 레이아웃
-    // (.case__screens--tall, 중앙 정렬 + 원본 비율 유지, ProjectDetail.css 참고)
-    // 을 쓰고, 03은 기존 flyerScreens/flyerCaptions와 동일한 2열/1열 pair
-    // 레이아웃을 그대로 재사용한다.
+    // "Print & Flyer Design" block plus no e-commerce story at all. 빠삭한
+    // 녀석들 상품은 이 B2B 랜딩페이지 캠페인과 별개로 쿠팡/G마켓/옥션/네이버
+    // 스마트스토어 등 오픈마켓에도 실제 등록·판매되었고, 그 상세페이지·
+    // 스토리텔링 홍보물 제작 경험을 같은 프로젝트 안에서 보여주기 위해 2개
+    // 그룹으로 재구성: 01 상품 상세페이지, 02 스토리텔링(만화) 홍보. 둘 다
+    // 세로형 원본 이미지라 Key UI Screens와 같은 그리드 강제 대신 전용 "tall"
+    // 레이아웃(.case__screens--tall, 중앙 정렬 + 원본 비율 유지,
+    // ProjectDetail.css 참고)을 쓴다. (기존 03 "Print & Promotional
+    // Graphics" 전단지 그룹은 이번 라운드에서 project.promotionSection의
+    // B. Offline Promotion으로 이동 — 이미지/캡션/레이아웃은 완전히 동일하게
+    // 유지되고, 06 Promotion Design 섹션에서만 렌더링된다. 05 E-commerce
+    // Design은 원래도 kind === "tall" 그룹만 걸러서 렌더링했으므로, 이 그룹이
+    // 여기 있었든 없었든 05 섹션이 실제로 보여주는 내용은 전혀 바뀌지 않는다.)
     ecommerceSection: {
       title: "E-commerce & Marketing Design",
       description:
@@ -712,10 +714,46 @@ export const projects = [
             "대용량 스낵 패키지를 소개하기 위해 만화 형식의 스토리텔링 콘텐츠를 제작했습니다. 사용 상황과 제품의 특징을 친근한 이야기로 전달하도록 구성했습니다.",
           ],
         },
+      ],
+    },
+    // Promotion Design (project.promotionSection, Ppasak Guys-only, 06번
+    // 섹션) — 이번 라운드 신규 추가: 실제 쇼핑몰(고도몰) 운영 당시 메인
+    // 페이지에 썼던 "7월 판매랭킹 TOP 5" 프로모션 배너를 A. Online
+    // Promotion으로 추가하고, 기존 B. Offline Promotion(전단지 2개, 위
+    // ecommerceSection의 구 "print-promo" 그룹과 완전히 동일한 이미지·캡션·
+    // 순서)을 그대로 옮겨왔다. 원본 스크린샷(브라우저 주소창 + 좌측
+    // 카테고리 메뉴 + 하단 "인기상품" 섹션까지 포함된 실제 캡처본)은
+    // project-04-promo-online-full.jpg로 손대지 않고 그대로 보존했고, 화면
+    // 전시용으로는 배너 영역만 정확히 잘라낸(비율 재조정 없이 순수 크롭만)
+    // project-04-promo-online-banner.jpg를 만들어 썼다 — 트로피/카피/랭킹
+    // 카드 중 어느 것도 잘리지 않도록 픽셀 단위로 경계를 확인했다
+    // (ProjectDetail.jsx의 renderOnlinePromotionBanner가 그 아래에 "실제
+    // 화면 전체보기" 링크를 하나 더 둬서, 보존해 둔 원본 스크린샷도 같은
+    // Lightbox로 언제든 확인할 수 있게 했다). kind: "banner"는 배너 figure
+    // 전용(가로형, 전체 폭, object-fit 크롭 없음 — E-commerce 카드의
+    // 3:4 cover 미리보기와는 다른 목적이므로 그 스타일을 재사용하지 않는다),
+    // kind: "pair"는 기존 전단지와 동일하게 2열/1열 그리드를 그대로
+    // 재사용한다.
+    promotionSection: {
+      groups: [
         {
-          id: "print-promo",
-          groupLabel: "03",
-          groupTitle: "Print & Promotional Graphics",
+          id: "online-promotion",
+          groupLabel: "A",
+          groupTitle: "Online Promotion",
+          kind: "banner",
+          screens: ["/images/project-04-promo-online-banner.jpg"],
+          titles: ["7월 판매랭킹 TOP 5 메인 배너"],
+          captions: [
+            "쇼핑몰의 월간 인기 상품을 카테고리별 순위로 구성해 고객이 주요 상품을 직관적으로 확인할 수 있도록 디자인한 메인 프로모션 배너입니다.",
+          ],
+          fullImage: "/images/project-04-promo-online-full.jpg",
+          fullImageAlt:
+            "빠삭한 녀석들 쇼핑몰(고도몰) 실제 메인페이지 화면 — 7월 판매랭킹 TOP 5 배너 원본 (브라우저 UI 포함)",
+        },
+        {
+          id: "offline-promotion",
+          groupLabel: "B",
+          groupTitle: "Offline Promotion",
           kind: "pair",
           screens: [
             "/images/project-04-flyer-02.jpg",
