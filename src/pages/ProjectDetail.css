@@ -738,6 +738,33 @@ group's own last child. */
   margin-top: 2.8rem;
 }
 
+/* Promotion Design → Online Promotion's "원본 화면 전체보기" link (Ppasak
+Guys-only, see renderOnlinePromotionBanner in ProjectDetail.jsx). The
+banner figure's own Zoomable/Lightbox already opens the cropped banner at
+full size; this is a distinct secondary action (opens the untouched
+original screenshot, browser chrome and surrounding mall UI included), so
+it's a plain small text link under the caption rather than another image
+overlay badge. Scoped to this one class only — nothing else on the page
+uses it, and no shared class is modified. */
+.case__promo-full-link {
+  display: inline-block;
+  margin-top: 0.2rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-family: inherit;
+  font-size: var(--fs-sm);
+  color: var(--text-on-light-muted);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+
+.case__promo-full-link:hover,
+.case__promo-full-link:focus-visible {
+  color: var(--text-on-light);
+}
+
 /* 06. Publishing — now split into IMPLEMENTATION / RESPONSIVE / INTERACTION
 sub-blocks (see ProjectDetail.jsx), each stacked with the same spacing as
 the Design section's own sub-blocks. */

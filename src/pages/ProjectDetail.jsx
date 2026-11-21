@@ -1339,14 +1339,85 @@ export default function ProjectDetail() {
     );
   };
 
-  // 06. Promotion Design — the "pair" group from ecommerceSection (03
-  // Print & Promotional Graphics, the existing 2 offline flyers), unchanged
-  // full-ratio rendering via the shared renderMarketingFigure helper.
+  // Online Promotion's single banner figure (project.promotionSection,
+  // Ppasak Guys-only) — deliberately NOT the shared renderMarketingFigure
+  // helper, because this one figure needs one extra element the others
+  // don't: a small secondary link below the caption that opens the
+  // untouched *original* screenshot (browser chrome + mall sidebar/"인기상품"
+  // still intact) in the same Lightbox — a separate action from the
+  // figure's own Zoomable click, which opens the cropped banner-only image.
+  // Markup is otherwise identical to renderMarketingFigure (same classes,
+  // same Zoomable/Lightbox wiring) so it looks like every other full-width
+  // screenshot on this page; the banner crop itself is a pure region-crop
+  // of the real file (no redesign, no ratio change — see the data comment
+  // in projects.js), so case__screen--auto (natural height, no
+  // object-fit crop) is correct here, not the E-commerce card's 3:4 cover
+  // preview style.
+  const renderOnlinePromotionBanner = (group) => {
+    const src = group.screens[0];
+    const title = group.titles?.[0];
+    const caption = group.captions?.[0];
+    const alt = caption || title || `${project.title} 온라인 프로모션 배너`;
+    return (
+      <figure key={group.id} className="case__screen-figure">
+        <Zoomable onOpen={() => openLightbox(src, alt)} label={alt}>
+          <img
+            className="case__screen case__screen--real case__screen--auto"
+            src={src}
+            alt={alt}
+            loading="lazy"
+          />
+        </Zoomable>
+        {(title || caption) && (
+          <figcaption className="case__screen-caption">
+            {title && (
+              <strong className="case__screen-caption-title">{title}</strong>
+            )}
+            {caption}
+          </figcaption>
+        )}
+        {group.fullImage && (
+          <button
+            type="button"
+            className="case__promo-full-link"
+            onClick={() =>
+              openLightbox(
+                group.fullImage,
+                group.fullImageAlt ||
+                  `${title || group.groupTitle} — 원본 화면`,
+              )
+            }
+          >
+            실제 쇼핑몰 화면 전체보기 (브라우저 UI 포함) ↗
+          </button>
+        )}
+      </figure>
+    );
+  };
+
+  // 06. Promotion Design — project.promotionSection (Ppasak Guys-only),
+  // split into two explicit groups: A) Online Promotion, the real 고도몰
+  // 쇼핑몰 메인 배너(new this round — see renderOnlinePromotionBanner above),
+  // and B) Offline Promotion, the same 2 print flyers that used to be
+  // rendered from ecommerceSection's "pair" group, completely unchanged
+  // (same images, same captions, same case__screens--pair 2-col/1-col
+  // layout, same renderMarketingFigure markup as before this round — only
+  // *where* the data lives moved, not what gets rendered for them). Both
+  // groups share the exact .case__marketing-group / .case__marketing-group-
+  // title pattern Gimesee's Marketing Design section already established
+  // for "A. ..." / "B. ..." sub-groups under one numbered section, reused
+  // as-is rather than inventing a new grouping convention. Falls back to
+  // the old ecommerceSection "pair" lookup if some future project sets
+  // "promotionDesign" in sectionOrder without setting promotionSection, so
+  // nothing breaks if that ever happens — today only Ppasak Guys uses this
+  // section at all, and it always sets promotionSection.
   const renderPromotionDesign = () => {
-    const pairGroup = project.ecommerceSection?.groups.find(
+    const promo = project.promotionSection;
+    const legacyPairGroup = project.ecommerceSection?.groups.find(
       (g) => g.kind === "pair",
     );
-    if (!pairGroup) return null;
+    if (!promo && !legacyPairGroup) return null;
+
     return (
       <Reveal
         as="section"
@@ -1356,14 +1427,49 @@ export default function ProjectDetail() {
         <h2 id="promotion-design-title" className="case__section-title">
           <span className="case__section-num">{num()}</span> Promotion Design
         </h2>
-        {pairGroup.description && (
-          <p className="case__screens-desc">{pairGroup.description}</p>
+        {promo ? (
+          promo.groups.map((group) => (
+            <div key={group.id} className="case__marketing-group">
+              <h3 className="case__marketing-group-title">
+                {group.groupLabel
+                  ? `${group.groupLabel}. ${group.groupTitle}`
+                  : group.groupTitle}
+              </h3>
+              {group.description && (
+                <p className="case__screens-desc">{group.description}</p>
+              )}
+              {group.kind === "banner" ? (
+                <div className="case__screens">
+                  {renderOnlinePromotionBanner(group)}
+                </div>
+              ) : (
+                <div className="case__screens case__screens--pair">
+                  {group.screens.map((src, i) =>
+                    renderMarketingFigure(src, i, group.captions, group.titles),
+                  )}
+                </div>
+              )}
+            </div>
+          ))
+        ) : (
+          <>
+            {legacyPairGroup.description && (
+              <p className="case__screens-desc">
+                {legacyPairGroup.description}
+              </p>
+            )}
+            <div className="case__screens case__screens--pair">
+              {legacyPairGroup.screens.map((src, i) =>
+                renderMarketingFigure(
+                  src,
+                  i,
+                  legacyPairGroup.captions,
+                  legacyPairGroup.titles,
+                ),
+              )}
+            </div>
+          </>
         )}
-        <div className="case__screens case__screens--pair">
-          {pairGroup.screens.map((src, i) =>
-            renderMarketingFigure(src, i, pairGroup.captions, pairGroup.titles),
-          )}
-        </div>
       </Reveal>
     );
   };
