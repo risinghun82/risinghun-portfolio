@@ -653,8 +653,14 @@ export const projects = [
     // Design → 07 Result 순으로 재배치합니다. 각 섹션의 실제 내용/이미지는
     // 전혀 바꾸지 않았고, 순서와 일부 레이아웃만 다릅니다. 다른 프로젝트는 이
     // 필드가 없으므로 영향받지 않습니다.
+    // 이번 라운드: Overview & My Role 바로 다음, Web Design 바로 앞에
+    // "brandIdentity"(Brand Identity — 로고 디자인)를 신규 삽입. 그 외 7개
+    // 섹션의 순서/내용은 전혀 바꾸지 않았고, 번호(num())는 실제 렌더되는
+    // 섹션 개수를 세어 자동으로 매기므로 이 필드만 수정하면 02 이후 번호가
+    // 자연스럽게 한 칸씩 밀린다 — 별도로 번호를 손볼 필요 없음.
     sectionOrder: [
       "overviewRole",
+      "brandIdentity",
       "webDesign",
       "publishing",
       "challengeSolution",
@@ -662,6 +668,33 @@ export const projects = [
       "promotionDesign",
       "result",
     ],
+    // Brand Identity (project.brandIdentity, Ppasak Guys-only, renderBrandIdentity
+    // in ProjectDetail.jsx) — 신규 추가: 실제 제작한 브랜드 로고 2종(가로형
+    // 워드마크 + 엠블럼형 로고)을 보여주는 섹션. 두 파일 모두 투명 배경을 가진
+    // 원본 이미지를 무손실(lossless) WebP로만 재인코딩했을 뿐 색상·비율·배경
+    // 어느 것도 바꾸지 않았다(보이는 픽셀은 원본과 1비트도 다르지 않음 — 완전
+    // 투명 픽셀의 내부 RGB 값만 인코더가 재설정했을 뿐, 화면에는 어차피 보이지
+    // 않으므로 시각적으로 완전히 동일). 로고 제작 범위를 벗어난 브랜드 전략/
+    // 성과는 지어내지 않고, 실제 작업 사실만 한 문장으로 서술한다.
+    brandIdentity: {
+      title: "Brand Identity",
+      description:
+        "브랜드의 친근하고 개성 있는 이미지를 표현하기 위해 가로형 워드마크와 엠블럼형 로고를 제작했습니다.",
+      logos: [
+        {
+          id: "wordmark",
+          src: "/images/project-04-logo-wordmark.webp",
+          alt: "빠삭한 녀석들 가로형 워드마크 로고",
+          caption: "Horizontal Wordmark",
+        },
+        {
+          id: "emblem",
+          src: "/images/project-04-logo-emblem.webp",
+          alt: "빠삭한 녀석들 엠블럼형 로고",
+          caption: "Brand Emblem",
+        },
+      ],
+    },
     // Key UI Screens(B2B 랜딩페이지 본문)이 핵심 사례로 먼저 읽히도록 캡션 추가
     // — 아래 direction 배열에 이미 있는 실제 작업 내용을 그대로 가져와 연결.
     screenCaptions: [
