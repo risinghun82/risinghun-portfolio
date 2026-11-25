@@ -765,6 +765,33 @@ uses it, and no shared class is modified. */
   color: var(--text-on-light);
 }
 
+.case__brand-logo-frame {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: clamp(140px, 14vw, 200px);
+}
+
+/* Fill the fixed-height frame above so the <img>'s own max-width/
+max-height:100% (not object-fit — there's no fixed box for the image
+itself to fit *into*, only the frame around it) can bound it on both
+axes without stretching either logo off its own ratio. */
+.case__brand-logo-frame .case__zoomable {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.case__brand-logo {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+}
+
 /* 06. Publishing — now split into IMPLEMENTATION / RESPONSIVE / INTERACTION
 sub-blocks (see ProjectDetail.jsx), each stacked with the same spacing as
 the Design section's own sub-blocks. */
@@ -831,6 +858,32 @@ portrait image doesn't run the full width of the page at full height. */
 
 @media (max-width: 900px) {
   .case__screens--pair {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Brand Identity (project.brandIdentity, Ppasak Guys-only) — two logo
+marks side by side at PC width, stacked on mobile. Same 2-col/1-col
+breakpoint as every other paired gallery (.case__screens--pair above,
+900px). Unlike every other screens variant on this page, these are
+transparent-background logo files, not photos/screenshots, with two very
+different aspect ratios (the wordmark ~3.5:1, the emblem 1:1) that must
+never be forced to match — so each gets a fixed-height, center-aligned
+frame (.case__brand-logo-frame below) instead of being left to its own
+natural width. No new background box is introduced: the frame has no
+background/border of its own, so the logos' transparent PNG/WebP
+background shows the section's existing var(--bg-light) straight through,
+exactly like the rest of this page. Declared after the base .case__screens
+rule (same specificity, 1 class each) so this 2-column override actually
+wins the cascade — a modifier declared earlier in the file than the base
+rule it modifies gets silently overridden by it. */
+.case__screens--brand {
+  grid-template-columns: repeat(2, 1fr);
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .case__screens--brand {
     grid-template-columns: 1fr;
   }
 }

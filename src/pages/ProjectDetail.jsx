@@ -1081,6 +1081,65 @@ export default function ProjectDetail() {
     </Reveal>
   );
 
+  // Brand Identity (project.brandIdentity, Ppasak Guys-only) — sits
+  // between Overview & My Role and Web Design per this round's request.
+  // Two logo marks (horizontal wordmark + emblem) shown side by side,
+  // each at its OWN natural aspect ratio — never stretched to match the
+  // other, even though the wordmark is roughly 3.5:1 wide and the emblem
+  // is a 1:1 square. case__brand-logo-frame gives both cards the same
+  // fixed visual HEIGHT (so they still read as one paired set) via plain
+  // flex-centering; the <img> itself is only ever bounded by
+  // max-width/max-height:100% (no object-fit, no forced width/height), so
+  // every pixel of the transparent source stays exactly as designed —
+  // nothing cropped, nothing upscaled. No new card/background box is
+  // introduced: the logos' transparent background shows this page's own
+  // existing section background (var(--bg-light), same as everywhere
+  // else) straight through. Clicking either logo opens the same shared
+  // Lightbox every other image on this page uses.
+  const renderBrandIdentity = () => {
+    if (!project.brandIdentity) return null;
+    const { title, description, logos } = project.brandIdentity;
+    return (
+      <Reveal
+        as="section"
+        className="case__section"
+        aria-labelledby="brand-identity-title"
+      >
+        <h2 id="brand-identity-title" className="case__section-title">
+          <span className="case__section-num">{num()}</span> {title}
+        </h2>
+        {description && <p className="case__screens-desc">{description}</p>}
+        <div className="case__screens case__screens--brand">
+          {logos.map((logo) => (
+            <figure
+              key={logo.id}
+              className="case__screen-figure case__brand-figure"
+            >
+              <div className="case__brand-logo-frame">
+                <Zoomable
+                  onOpen={() => openLightbox(logo.src, logo.alt)}
+                  label={logo.alt}
+                >
+                  <img
+                    className="case__brand-logo"
+                    src={logo.src}
+                    alt={logo.alt}
+                    loading="lazy"
+                  />
+                </Zoomable>
+              </div>
+              {logo.caption && (
+                <figcaption className="case__screen-caption">
+                  {logo.caption}
+                </figcaption>
+              )}
+            </figure>
+          ))}
+        </div>
+      </Reveal>
+    );
+  };
+
   // 02. Web Design — Color & Typography + Key UI Screens, pulled out of
   // the shared Design section into their own top-level section so it can
   // sit directly before Publishing. Markup is identical to the
@@ -1484,6 +1543,7 @@ export default function ProjectDetail() {
     publishing: renderPublishing,
     result: renderResult,
     overviewRole: renderOverviewRole,
+    brandIdentity: renderBrandIdentity,
     webDesign: renderWebDesign,
     challengeSolution: renderChallengeSolution,
     ecommerceDesign: renderEcommerceDesign,
